@@ -17,6 +17,7 @@
         --green: #2f7f63;
         --blue: #2d5b95;
         --gold: #9a6a16;
+        --coral: #b75f45;
       }
       @media (prefers-color-scheme: dark) {
         :root {
@@ -30,6 +31,7 @@
           --green: #62c99d;
           --blue: #82b4f5;
           --gold: #d8ad5d;
+          --coral: #ef8f73;
         }
       }
       * { box-sizing: border-box; }
@@ -104,7 +106,7 @@
       .chart-plot {
         display: grid;
         grid-auto-flow: column;
-        grid-auto-columns: minmax(116px, 1fr);
+        grid-auto-columns: minmax(168px, 1fr);
         gap: 18px;
         align-items: end;
         overflow-x: auto;
@@ -120,13 +122,13 @@
         grid-template-rows: 220px 46px;
         gap: 10px;
         align-items: end;
-        min-width: 116px;
+        min-width: 168px;
       }
       .cycle-bar-wrap {
         display: flex;
         align-items: end;
         justify-content: center;
-        gap: 7px;
+        gap: 6px;
         height: 220px;
       }
       .throughput-bar {
@@ -137,13 +139,17 @@
         border-radius: 6px 6px 0 0;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24);
       }
-      .throughput-bar.cycles {
+      .throughput-bar.cycles,
+      .throughput-bar.consecutive {
         width: 36px;
+      }
+      .throughput-bar.cycles {
         background: linear-gradient(180deg, var(--green), var(--blue));
       }
       .throughput-bar.sections { background: var(--green); }
       .throughput-bar.pickups { background: var(--blue); }
       .throughput-bar.dropoffs { background: var(--gold); }
+      .throughput-bar.consecutive { background: var(--coral); }
       .throughput-bar strong {
         position: absolute;
         left: 50%;
@@ -152,7 +158,7 @@
         font-size: 13px;
         color: var(--ink);
       }
-      .throughput-bar:not(.cycles) strong { display: none; }
+      .throughput-bar:not(.cycles):not(.consecutive) strong { display: none; }
       .chart-legend {
         display: flex;
         flex-wrap: wrap;
@@ -171,6 +177,7 @@
       .legend-swatch.sections { width: 11px; background: var(--green); }
       .legend-swatch.pickups { width: 11px; background: var(--blue); }
       .legend-swatch.dropoffs { width: 11px; background: var(--gold); }
+      .legend-swatch.consecutive { width: 22px; background: var(--coral); }
       .cycle-label {
         color: var(--ink);
         font-size: 12px;
@@ -204,7 +211,7 @@
         header { align-items: flex-start; flex-direction: column; }
         #generated { white-space: normal; }
         .cycle-chart { grid-template-columns: 42px minmax(0, 1fr); }
-        .chart-plot { grid-auto-columns: 104px; }
+        .chart-plot { grid-auto-columns: 156px; }
       }
     </style>
   </head>
@@ -232,11 +239,11 @@
               <tr>
                 <th>Date</th>
                 <th>Updated</th>
-                <th>Cycles</th>
+                <th>Auto Cycles</th>
                 <th>Sections</th>
                 <th>Pickups</th>
                 <th>Dropoffs</th>
-                <th>Max Streak</th>
+                <th>Consecutive Auto Cycles</th>
                 <th>Build</th>
               </tr>
             </thead>
@@ -304,10 +311,11 @@
       function cycleChart(days) {
         if (!days.length) return "No counter history available";
         var metrics = [
-          {field: "daily_full_auto_cycles", label: "Full auto cycles", cls: "cycles"},
           {field: "daily_section", label: "Sections", cls: "sections"},
           {field: "daily_pickup", label: "Pickups", cls: "pickups"},
-          {field: "daily_dropoff", label: "Dropoffs", cls: "dropoffs"}
+          {field: "daily_dropoff", label: "Dropoffs", cls: "dropoffs"},
+          {field: "daily_full_auto_cycles", label: "Auto cycles", cls: "cycles"},
+          {field: "daily_max_consecutive_full_auto_cycles", label: "Consecutive auto cycles", cls: "consecutive"}
         ];
         var maxValue = Math.max(1, ...days.map(function(day) {
           return Math.max(...metrics.map(function(metric) {
@@ -344,11 +352,11 @@
           "Generated " + formatEasternTimestamp(payload.generated_at_utc);
         document.getElementById("summary").innerHTML =
           card("Days", num(summary.days)) +
-          card("Full Auto Cycles", num(summary.daily_full_auto_cycles)) +
+          card("Auto Cycles", num(summary.daily_full_auto_cycles)) +
           card("Sections", num(summary.daily_section)) +
           card("Pickups", num(summary.daily_pickup)) +
           card("Dropoffs", num(summary.daily_dropoff)) +
-          card("Best Streak", num(summary.best_daily_max_consecutive_full_auto_cycles));
+          card("Consecutive Auto Cycles", num(summary.best_daily_max_consecutive_full_auto_cycles));
         document.getElementById("day-rows").innerHTML = days.length ? days.map(row).join("") :
           '<tr><td colspan="8" class="muted">No counter history available</td></tr>';
         document.getElementById("cycle-chart").innerHTML = cycleChart(days);
