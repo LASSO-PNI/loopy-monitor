@@ -83,20 +83,83 @@
         text-transform: uppercase;
       }
       .card strong { display: block; margin-top: 8px; font-size: 30px; line-height: 1; }
-      .layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 18px; }
       .panel { padding: 16px; margin-bottom: 18px; }
-      .bar-row {
+      .cycle-chart {
         display: grid;
-        grid-template-columns: 104px minmax(120px, 1fr) 54px;
-        align-items: center;
-        gap: 10px;
-        margin: 9px 0;
-        font-size: 13px;
+        grid-template-columns: 52px minmax(0, 1fr);
+        gap: 14px;
+        min-height: 310px;
       }
-      .bar-track { height: 12px; background: var(--bar-track); border-radius: 999px; overflow: hidden; }
-      .bar-fill { display: block; height: 100%; background: var(--green); }
-      .bar-fill.pickups { background: var(--blue); }
-      .bar-fill.dropoffs { background: var(--gold); }
+      .chart-axis {
+        display: grid;
+        grid-template-rows: 1fr 1fr 1fr;
+        align-items: start;
+        justify-items: end;
+        color: var(--muted);
+        font-size: 12px;
+        padding-top: 22px;
+        padding-bottom: 48px;
+      }
+      .chart-axis span:last-child { align-self: end; }
+      .chart-plot {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(64px, 1fr);
+        gap: 14px;
+        align-items: end;
+        overflow-x: auto;
+        min-height: 300px;
+        padding: 22px 6px 0 0;
+        border-left: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        background:
+          linear-gradient(to bottom, var(--bar-track) 1px, transparent 1px) 0 22px / 100% 80px repeat-y;
+      }
+      .cycle-bar-group {
+        display: grid;
+        grid-template-rows: 220px 46px;
+        gap: 10px;
+        align-items: end;
+        min-width: 64px;
+      }
+      .cycle-bar-wrap {
+        display: flex;
+        align-items: end;
+        justify-content: center;
+        height: 220px;
+      }
+      .cycle-bar {
+        position: relative;
+        width: min(42px, 70%);
+        min-height: 2px;
+        height: var(--bar-height);
+        border-radius: 7px 7px 0 0;
+        background: linear-gradient(180deg, var(--green), var(--blue));
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24);
+      }
+      .cycle-bar strong {
+        position: absolute;
+        left: 50%;
+        top: -24px;
+        transform: translateX(-50%);
+        font-size: 13px;
+        color: var(--ink);
+      }
+      .cycle-label {
+        color: var(--ink);
+        font-size: 12px;
+        font-weight: 800;
+        line-height: 1.2;
+        text-align: center;
+        text-transform: uppercase;
+      }
+      .cycle-label span {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-weight: 700;
+        text-transform: none;
+      }
       table { width: 100%; min-width: 760px; border-collapse: collapse; }
       th, td { border-bottom: 1px solid var(--line); padding: 9px; text-align: left; vertical-align: top; }
       th {
@@ -114,7 +177,8 @@
         main { padding: 18px; }
         header { align-items: flex-start; flex-direction: column; }
         #generated { white-space: normal; }
-        .layout { grid-template-columns: 1fr; }
+        .cycle-chart { grid-template-columns: 42px minmax(0, 1fr); }
+        .chart-plot { grid-auto-columns: 58px; }
       }
     </style>
   </head>
@@ -129,20 +193,9 @@
 
       <section class="summary" id="summary"></section>
 
-      <section class="layout">
-        <div>
-          <section class="panel">
-            <h2>Daily Throughput</h2>
-            <div id="bars" class="muted">Loading</div>
-          </section>
-        </div>
-
-        <aside>
-          <section class="panel">
-            <h2>Range</h2>
-            <p id="range" class="muted"></p>
-          </section>
-        </aside>
+      <section class="panel">
+        <h2>Full Auto Cycles</h2>
+        <div id="cycle-chart" class="muted">Loading</div>
       </section>
 
       <section class="panel">
@@ -191,6 +244,28 @@
           timeZoneName: "short"
         }).format(date);
       }
+      function formatShortDate(value) {
+        var parts = String(value || "").split("-");
+        if (parts.length !== 3) return value || "";
+        return Number(parts[1]) + "/" + Number(parts[2]);
+      }
+      function isWeekend(day) {
+        var parts = String(day.date_eastern || "").split("-").map(Number);
+        if (parts.length !== 3 || parts.some(function(part) { return !Number.isFinite(part); })) return false;
+        var weekday = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2], 12)).getUTCDay();
+        return weekday === 0 || weekday === 6;
+      }
+      function dayHasRun(day) {
+        return num(day.daily_full_auto_cycles) > 0 ||
+          num(day.daily_section) > 0 ||
+          num(day.daily_pickup) > 0 ||
+          num(day.daily_dropoff) > 0;
+      }
+      function displayDays(days) {
+        return days.filter(function(day) {
+          return dayHasRun(day) || !isWeekend(day);
+        });
+      }
       function card(label, value) {
         return '<article class="card"><span>' + esc(label) + '</span><strong>' + esc(value) + '</strong></article>';
       }
@@ -200,16 +275,28 @@
           '</td><td>' + esc(day.daily_pickup) + '</td><td>' + esc(day.daily_dropoff) +
           '</td><td>' + esc(day.daily_max_consecutive_full_auto_cycles) + '</td><td>' + esc(day.build_sha) + '</td></tr>';
       }
-      function bar(day, field, label, cls, maxValue) {
-        var value = num(day[field]);
-        var width = maxValue > 0 ? Math.round((value / maxValue) * 100) : 0;
-        return '<div class="bar-row"><span>' + esc(day.date_eastern + " " + label) + '</span><div class="bar-track"><i class="bar-fill ' +
-          esc(cls) + '" style="width:' + esc(width) + '%"></i></div><strong>' + esc(value) + '</strong></div>';
+      function cycleChart(days) {
+        if (!days.length) return "No counter history available";
+        var maxValue = Math.max(1, ...days.map(function(day) {
+          return num(day.daily_full_auto_cycles);
+        }));
+        var halfValue = Math.round(maxValue / 2);
+        var bars = days.map(function(day, index) {
+          var value = num(day.daily_full_auto_cycles);
+          var height = maxValue > 0 ? Math.round((value / maxValue) * 100) : 0;
+          if (value > 0) height = Math.max(3, height);
+          return '<div class="cycle-bar-group"><div class="cycle-bar-wrap"><div class="cycle-bar" style="--bar-height:' +
+            esc(height) + '%"><strong>' + esc(value) + '</strong></div></div><div class="cycle-label">Day ' +
+            esc(index + 1) + '<span>' + esc(formatShortDate(day.date_eastern)) + '</span></div></div>';
+        }).join("");
+        return '<div class="cycle-chart" aria-label="Daily full auto cycle count chart"><div class="chart-axis"><span>' +
+          esc(maxValue) + '</span><span>' + esc(halfValue) + '</span><span>0</span></div><div class="chart-plot">' +
+          bars + '</div></div>';
       }
       function draw(payload) {
-        var days = Array.isArray(payload.days) ? payload.days : [];
+        var sourceDays = Array.isArray(payload.days) ? payload.days : [];
+        var days = displayDays(sourceDays);
         var summary = payload.summary || {};
-        var range = payload.range || {};
         document.getElementById("generated").textContent =
           "Generated " + formatEasternTimestamp(payload.generated_at_utc);
         document.getElementById("summary").innerHTML =
@@ -219,18 +306,9 @@
           card("Pickups", num(summary.daily_pickup)) +
           card("Dropoffs", num(summary.daily_dropoff)) +
           card("Best Streak", num(summary.best_daily_max_consecutive_full_auto_cycles));
-        document.getElementById("range").innerHTML = esc((range.from || "start") + " to " + (range.to || "end")) +
-          (payload.public_url ? '<br><a href="' + esc(payload.public_url) + '">' + esc(payload.public_url) + '</a>' : "");
         document.getElementById("day-rows").innerHTML = days.length ? days.map(row).join("") :
           '<tr><td colspan="8" class="muted">No counter history available</td></tr>';
-        var maxValue = Math.max(1, ...days.map(function(day) {
-          return Math.max(num(day.daily_section), num(day.daily_pickup), num(day.daily_dropoff));
-        }));
-        document.getElementById("bars").innerHTML = days.length ? days.map(function(day) {
-          return bar(day, "daily_section", "sections", "", maxValue) +
-            bar(day, "daily_pickup", "pickups", "pickups", maxValue) +
-            bar(day, "daily_dropoff", "dropoffs", "dropoffs", maxValue);
-        }).join("") : "No counter history available";
+        document.getElementById("cycle-chart").innerHTML = cycleChart(days);
       }
       window.onload = function() {
         fetch("history.json", {cache: "no-store"})
