@@ -679,7 +679,7 @@
           card("Sections", num(summary.daily_section)) +
           card("Pickups", num(summary.daily_pickup)) +
           card("Dropoffs", num(summary.daily_dropoff)) +
-          card("Consecutive Auto Cycles", num(summary.best_daily_max_consecutive_full_auto_cycles));
+          card("Best Streak", num(summary.best_daily_max_consecutive_full_auto_cycles));
         document.getElementById("day-rows").innerHTML = days.length ? days.map(row).join("") :
           '<tr><td colspan="8" class="muted">No counter history available</td></tr>';
         document.getElementById("cycle-chart").innerHTML = cycleChart(days);
