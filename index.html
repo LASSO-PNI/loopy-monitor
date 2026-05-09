@@ -6,17 +6,34 @@
     <title>Loopy Runs</title>
     <style>
       :root {
-        color-scheme: light;
+        color-scheme: light dark;
         --ink: #18211f;
         --muted: #65706c;
         --line: #d7ded8;
         --paper: #fbfcf8;
         --panel: #ffffff;
+        --hover: #f3f7f2;
+        --bar-track: #e9eee9;
         --green: #2f7f63;
         --blue: #2d5b95;
         --gold: #9a6a16;
       }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --ink: #edf4ef;
+          --muted: #aebab4;
+          --line: #2f3b35;
+          --paper: #101512;
+          --panel: #18201c;
+          --hover: #202a25;
+          --bar-track: #28332e;
+          --green: #62c99d;
+          --blue: #82b4f5;
+          --gold: #d8ad5d;
+        }
+      }
       * { box-sizing: border-box; }
+      html { background: var(--paper); }
       body {
         margin: 0;
         background: var(--paper);
@@ -37,6 +54,15 @@
       h1 { font-size: 34px; line-height: 1.08; font-weight: 800; }
       h2 { font-size: 18px; margin-bottom: 12px; }
       .muted { color: var(--muted); }
+      #generated {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 8px 12px;
+        background: var(--panel);
+        color: var(--muted);
+        font-size: 13px;
+        white-space: nowrap;
+      }
       .summary {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(158px, 1fr));
@@ -49,7 +75,7 @@
         border-radius: 8px;
       }
       .card { padding: 14px; }
-      .card span, th {
+      .card span {
         display: block;
         color: var(--muted);
         font-size: 12px;
@@ -57,7 +83,7 @@
         text-transform: uppercase;
       }
       .card strong { display: block; margin-top: 8px; font-size: 30px; line-height: 1; }
-      .layout { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 18px; }
+      .layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 18px; }
       .panel { padding: 16px; margin-bottom: 18px; }
       .bar-row {
         display: grid;
@@ -67,19 +93,27 @@
         margin: 9px 0;
         font-size: 13px;
       }
-      .bar-track { height: 12px; background: #e9eee9; border-radius: 999px; overflow: hidden; }
+      .bar-track { height: 12px; background: var(--bar-track); border-radius: 999px; overflow: hidden; }
       .bar-fill { display: block; height: 100%; background: var(--green); }
       .bar-fill.pickups { background: var(--blue); }
       .bar-fill.dropoffs { background: var(--gold); }
-      table { width: 100%; border-collapse: collapse; }
+      table { width: 100%; min-width: 760px; border-collapse: collapse; }
       th, td { border-bottom: 1px solid var(--line); padding: 9px; text-align: left; vertical-align: top; }
-      td { font-size: 13px; }
+      th {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+      td { font-size: 13px; white-space: nowrap; }
+      tbody tr:hover { background: var(--hover); }
       .table-wrap { overflow-x: auto; }
-      .build-list { display: flex; flex-direction: column; gap: 8px; overflow-wrap: anywhere; }
       a { color: var(--blue); }
       @media (max-width: 860px) {
         main { padding: 18px; }
         header { align-items: flex-start; flex-direction: column; }
+        #generated { white-space: normal; }
         .layout { grid-template-columns: 1fr; }
       }
     </style>
@@ -101,27 +135,6 @@
             <h2>Daily Throughput</h2>
             <div id="bars" class="muted">Loading</div>
           </section>
-
-          <section class="panel">
-            <h2>Daily Counters</h2>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Updated</th>
-                    <th>Cycles</th>
-                    <th>Sections</th>
-                    <th>Pickups</th>
-                    <th>Dropoffs</th>
-                    <th>Max Streak</th>
-                    <th>Build</th>
-                  </tr>
-                </thead>
-                <tbody id="day-rows"></tbody>
-              </table>
-            </div>
-          </section>
         </div>
 
         <aside>
@@ -129,11 +142,28 @@
             <h2>Range</h2>
             <p id="range" class="muted"></p>
           </section>
-          <section class="panel">
-            <h2>Build Metadata</h2>
-            <div id="builds" class="build-list muted"></div>
-          </section>
         </aside>
+      </section>
+
+      <section class="panel">
+        <h2>Daily Counters</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Updated</th>
+                <th>Cycles</th>
+                <th>Sections</th>
+                <th>Pickups</th>
+                <th>Dropoffs</th>
+                <th>Max Streak</th>
+                <th>Build</th>
+              </tr>
+            </thead>
+            <tbody id="day-rows"></tbody>
+          </table>
+        </div>
       </section>
     </main>
 
@@ -145,6 +175,21 @@
       }
       function num(value) {
         return typeof value === "number" && Number.isFinite(value) ? value : 0;
+      }
+      function formatEasternTimestamp(value) {
+        if (!value) return "";
+        var date = new Date(value);
+        if (!Number.isFinite(date.getTime())) return String(value);
+        return new Intl.DateTimeFormat("en-US", {
+          timeZone: "America/New_York",
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+          second: "2-digit",
+          timeZoneName: "short"
+        }).format(date);
       }
       function card(label, value) {
         return '<article class="card"><span>' + esc(label) + '</span><strong>' + esc(value) + '</strong></article>';
@@ -164,9 +209,9 @@
       function draw(payload) {
         var days = Array.isArray(payload.days) ? payload.days : [];
         var summary = payload.summary || {};
-        var meta = payload.build_metadata || {};
         var range = payload.range || {};
-        document.getElementById("generated").textContent = "Generated " + (payload.generated_at_utc || "");
+        document.getElementById("generated").textContent =
+          "Generated " + formatEasternTimestamp(payload.generated_at_utc);
         document.getElementById("summary").innerHTML =
           card("Days", num(summary.days)) +
           card("Full Auto Cycles", num(summary.daily_full_auto_cycles)) +
@@ -186,10 +231,6 @@
             bar(day, "daily_pickup", "pickups", "pickups", maxValue) +
             bar(day, "daily_dropoff", "dropoffs", "dropoffs", maxValue);
         }).join("") : "No counter history available";
-        var builds = Array.isArray(meta.source_build_shas) ? meta.source_build_shas : [];
-        document.getElementById("builds").innerHTML =
-          '<span>Site SHA: ' + esc(meta.site_repo_sha || "") + '</span>' +
-          (builds.length ? builds.map(function(sha) { return '<span>Source SHA: ' + esc(sha) + '</span>'; }).join("") : "");
       }
       window.onload = function() {
         fetch("history.json", {cache: "no-store"})
