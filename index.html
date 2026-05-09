@@ -232,33 +232,34 @@
         font-size: 12px;
         font-weight: 700;
       }
-      .timing-line {
-        fill: none;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        stroke-width: 2.5;
-      }
       .timing-whisker {
-        opacity: 0.4;
+        opacity: 0.75;
         stroke-linecap: round;
         stroke-width: 2;
       }
-      .timing-dot {
+      .timing-cap,
+      .timing-median {
+        stroke-linecap: round;
+        stroke-width: 2;
+      }
+      .timing-box {
         stroke: var(--panel);
         stroke-width: 2;
+        rx: 4;
       }
-      .timing-line.sections,
-      .timing-whisker.sections { stroke: var(--green); }
-      .timing-dot.sections { fill: var(--green); }
-      .timing-line.pickups,
-      .timing-whisker.pickups { stroke: var(--blue); }
-      .timing-dot.pickups { fill: var(--blue); }
-      .timing-line.dropoffs,
-      .timing-whisker.dropoffs { stroke: var(--gold); }
-      .timing-dot.dropoffs { fill: var(--gold); }
-      .timing-line.cycles,
-      .timing-whisker.cycles { stroke: var(--violet); }
-      .timing-dot.cycles { fill: var(--violet); }
+      .timing-box.sections { fill: var(--green); }
+      .timing-whisker.sections,
+      .timing-cap.sections { stroke: var(--green); }
+      .timing-box.pickups { fill: var(--blue); }
+      .timing-whisker.pickups,
+      .timing-cap.pickups { stroke: var(--blue); }
+      .timing-box.dropoffs { fill: var(--gold); }
+      .timing-whisker.dropoffs,
+      .timing-cap.dropoffs { stroke: var(--gold); }
+      .timing-box.cycles { fill: var(--violet); }
+      .timing-whisker.cycles,
+      .timing-cap.cycles { stroke: var(--violet); }
+      .timing-median { stroke: var(--ink); }
       .method-note {
         color: var(--muted);
         font-size: 12px;
@@ -537,29 +538,33 @@
         metrics.forEach(function(metric) {
           metric.daily.forEach(function(day) {
             if (isNumber(day.p90_sec)) values.push(day.p90_sec);
+            if (isNumber(day.p75_sec)) values.push(day.p75_sec);
             if (isNumber(day.median_sec)) values.push(day.median_sec);
           });
         });
         var maxValue = Math.max(10, ...values);
         maxValue = Math.ceil(maxValue / 10) * 10;
         var halfValue = Math.round(maxValue / 2);
-        var width = Math.max(680, days.length * 118);
-        var height = 310;
+        var width = Math.max(760, days.length * 164);
+        var height = 330;
         var left = 48;
         var right = 20;
         var top = 18;
-        var bottom = 54;
+        var bottom = 58;
         var innerWidth = width - left - right;
         var innerHeight = height - top - bottom;
-        function x(index) {
-          return days.length === 1 ? left + innerWidth / 2 :
-            left + index * (innerWidth / (days.length - 1));
+        var dayWidth = innerWidth / Math.max(1, days.length);
+        var boxWidth = Math.min(18, Math.max(12, dayWidth / (metrics.length + 2)));
+        var boxGap = Math.min(8, Math.max(4, boxWidth * 0.45));
+        var groupWidth = metrics.length * boxWidth + (metrics.length - 1) * boxGap;
+        function groupCenter(index) {
+          return left + dayWidth * index + dayWidth / 2;
+        }
+        function boxCenter(dayIndex, metricIndex) {
+          return groupCenter(dayIndex) - groupWidth / 2 + metricIndex * (boxWidth + boxGap) + boxWidth / 2;
         }
         function y(value) {
           return top + (1 - Math.max(0, Math.min(maxValue, value)) / maxValue) * innerHeight;
-        }
-        function point(index, value) {
-          return x(index).toFixed(1) + " " + y(value).toFixed(1);
         }
         var grid = [maxValue, halfValue, 0].map(function(value) {
           var yy = y(value).toFixed(1);
@@ -570,36 +575,55 @@
         }).join("");
         var labels = days.map(function(date, index) {
           return '<text class="timing-date-label" text-anchor="middle" x="' +
-            x(index).toFixed(1) + '" y="' + (height - 16) + '">' +
+            groupCenter(index).toFixed(1) + '" y="' + (height - 16) + '">' +
             esc(formatShortDate(date)) + '</text>';
         }).join("");
-        var series = metrics.map(function(metric) {
-          var points = [];
-          var marks = days.map(function(date, index) {
+        var boxes = days.map(function(date, dayIndex) {
+          return metrics.map(function(metric, metricIndex) {
             var stat = timingStatFor(metric, date);
             if (!stat || !isNumber(stat.median_sec)) return "";
-            points.push(point(index, stat.median_sec));
-            var xx = x(index).toFixed(1);
+            var p10 = isNumber(stat.p10_sec) ? stat.p10_sec : stat.median_sec;
+            var p25 = isNumber(stat.p25_sec) ? stat.p25_sec : stat.median_sec;
+            var p75 = isNumber(stat.p75_sec) ? stat.p75_sec : stat.median_sec;
+            var p90 = isNumber(stat.p90_sec) ? stat.p90_sec : stat.median_sec;
+            var cx = boxCenter(dayIndex, metricIndex);
+            var x0 = (cx - boxWidth / 2).toFixed(1);
+            var x1 = (cx + boxWidth / 2).toFixed(1);
+            var capLeft = (cx - boxWidth * 0.38).toFixed(1);
+            var capRight = (cx + boxWidth * 0.38).toFixed(1);
+            var topY = y(Math.max(p25, p75));
+            var bottomY = y(Math.min(p25, p75));
+            var boxHeight = Math.max(3, bottomY - topY);
             var medianY = y(stat.median_sec).toFixed(1);
-            var lowY = y(isNumber(stat.p10_sec) ? stat.p10_sec : stat.median_sec).toFixed(1);
-            var highY = y(isNumber(stat.p90_sec) ? stat.p90_sec : stat.median_sec).toFixed(1);
-            return '<line class="timing-whisker ' + esc(metric.class_name) +
-              '" x1="' + xx + '" y1="' + lowY + '" x2="' + xx + '" y2="' +
-              highY + '"></line><circle class="timing-dot ' + esc(metric.class_name) +
-              '" cx="' + xx + '" cy="' + medianY + '" r="4"><title>' +
-              esc(metric.label + " " + date + ": " + secondsText(stat.median_sec) +
-                " median, p10-p90 " + secondsText(stat.p10_sec) + "-" +
-                secondsText(stat.p90_sec)) + '</title></circle>';
+            var highY = y(p90).toFixed(1);
+            var lowY = y(p10).toFixed(1);
+            var title = metric.label + " " + date + ": median " +
+              secondsText(stat.median_sec) + ", p25-p75 " + secondsText(p25) +
+              "-" + secondsText(p75) + ", p10-p90 " + secondsText(p10) +
+              "-" + secondsText(p90) + ", n=" + stat.n;
+            return '<g><title>' + esc(title) + '</title>' +
+              '<line class="timing-whisker ' + esc(metric.class_name) +
+              '" x1="' + cx.toFixed(1) + '" y1="' + highY + '" x2="' +
+              cx.toFixed(1) + '" y2="' + lowY + '"></line>' +
+              '<line class="timing-cap ' + esc(metric.class_name) +
+              '" x1="' + capLeft + '" y1="' + highY + '" x2="' + capRight +
+              '" y2="' + highY + '"></line>' +
+              '<line class="timing-cap ' + esc(metric.class_name) +
+              '" x1="' + capLeft + '" y1="' + lowY + '" x2="' + capRight +
+              '" y2="' + lowY + '"></line>' +
+              '<rect class="timing-box ' + esc(metric.class_name) + '" x="' +
+              x0 + '" y="' + topY.toFixed(1) + '" width="' +
+              boxWidth.toFixed(1) + '" height="' + boxHeight.toFixed(1) +
+              '" rx="4"></rect>' +
+              '<line class="timing-median" x1="' + x0 + '" y1="' + medianY +
+              '" x2="' + x1 + '" y2="' + medianY + '"></line></g>';
           }).join("");
-          var line = points.length > 1 ? '<path class="timing-line ' +
-            esc(metric.class_name) + '" d="M ' + points.join(" L ") + '"></path>' : "";
-          return line + marks;
         }).join("");
         return timingLegend(metrics) +
           '<div class="timing-chart-wrap"><svg class="timing-svg" viewBox="0 0 ' +
           width + ' ' + height + '" width="' + width + '" height="' + height +
-          '" role="img" aria-label="Daily cycle timing medians in seconds">' +
-          grid + series + labels + '</svg></div>';
+          '" role="img" aria-label="Daily cycle timing box-and-whisker plots in seconds">' +
+          grid + boxes + labels + '</svg></div>';
       }
       function timingTable(timing) {
         var metrics = timingMetrics(timing);
