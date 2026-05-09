@@ -300,6 +300,8 @@
         font-size: 13px;
         padding: 6px 0 24px;
       }
+      .site-footer p { margin: 0 0 8px; }
+      .site-footer .method-note { margin-top: 8px; }
       a { color: var(--blue); }
       @media (max-width: 860px) {
         main { padding: 18px; }
@@ -330,7 +332,6 @@
         <h2>Cycle Timing</h2>
         <div id="timing-summary" class="timing-summary"></div>
         <div id="timing-chart" class="muted">Loading</div>
-        <p id="timing-method" class="method-note"></p>
         <div class="table-wrap timing-table">
           <table>
             <thead>
@@ -387,7 +388,10 @@
           </table>
         </div>
       </section>
-      <footer class="site-footer">* - consecutive counter was not working at this point</footer>
+      <footer class="site-footer">
+        <p>* - consecutive counter was not working at this point</p>
+        <p id="timing-method" class="method-note"></p>
+      </footer>
     </main>
 
     <script>

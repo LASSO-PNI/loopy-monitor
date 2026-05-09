@@ -1,7 +1,7 @@
 {
   "build_metadata": {
     "latest_source_build_sha": "ebe318b2",
-    "site_repo_sha": "944580432ae5c5120fda1b188ca53e3d18013479",
+    "site_repo_sha": "28407d8bd1d5b6d01a8baf9989ff0977ffe2f67f",
     "source_build_shas": [
       "750e282e",
       "88e62b4b",
@@ -10,7 +10,7 @@
   },
   "cycle_timing": {
     "max_pair_seconds": 300,
-    "method": "Completion-pair timings; pairs over 300 seconds and app starts/resets/date rollovers are excluded.",
+    "method": "Cycle timing definitions: Sectioning = pickup_completed to section_completed; Pickup = section_completed to pickup_completed; Dropoff = pickup_completed to dropoff_completed; Full Auto = full_auto_cycle_completed to next full_auto_cycle_completed. Boxes show p25-p75, median is the center line, whiskers show p10-p90. Pairs over 300 seconds and app starts/resets/date rollovers are excluded.",
     "metrics": [
       {
         "class_name": "sections",
@@ -512,7 +512,7 @@
       "last_updated_utc": "2026-05-09 03:06:44"
     }
   ],
-  "generated_at_utc": "2026-05-09T08:11:27Z",
+  "generated_at_utc": "2026-05-09T08:17:34Z",
   "history_schema_version": 1,
   "ok": true,
   "public_url": "https://lasso-pni.github.io/loopy-monitor",
