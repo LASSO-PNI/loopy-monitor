@@ -18,22 +18,22 @@
         --blue: #2d5b95;
         --gold: #9a6a16;
         --coral: #b75f45;
-        --auto-cycle: #c2410c;
+        --violet: #7b5bc6;
       }
       @media (prefers-color-scheme: dark) {
         :root {
-          --ink: #edf4ef;
-          --muted: #aebab4;
-          --line: #2f3b35;
-          --paper: #101512;
-          --panel: #18201c;
-          --hover: #202a25;
-          --bar-track: #28332e;
+          --ink: #f4f0ea;
+          --muted: #b8afa6;
+          --line: #3b352f;
+          --paper: #12100e;
+          --panel: #1d1915;
+          --hover: #29231e;
+          --bar-track: #342e28;
           --green: #62c99d;
           --blue: #82b4f5;
           --gold: #d8ad5d;
           --coral: #ef8f73;
-          --auto-cycle: #fb923c;
+          --violet: #b99cff;
         }
       }
       * { box-sizing: border-box; }
@@ -146,7 +146,7 @@
         width: 36px;
       }
       .throughput-bar.cycles {
-        background: var(--auto-cycle);
+        background: var(--violet);
       }
       .throughput-bar.sections { background: var(--green); }
       .throughput-bar.pickups { background: var(--blue); }
@@ -175,7 +175,7 @@
         height: 10px;
         border-radius: 999px;
       }
-      .legend-swatch.cycles { width: 22px; background: var(--auto-cycle); }
+      .legend-swatch.cycles { width: 22px; background: var(--violet); }
       .legend-swatch.sections { width: 11px; background: var(--green); }
       .legend-swatch.pickups { width: 11px; background: var(--blue); }
       .legend-swatch.dropoffs { width: 11px; background: var(--gold); }
