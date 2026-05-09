@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Loopy Counter History</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #18211f;
+        --muted: #65706c;
+        --line: #d7ded8;
+        --paper: #fbfcf8;
+        --panel: #ffffff;
+        --green: #2f7f63;
+        --blue: #2d5b95;
+        --gold: #9a6a16;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      main { max-width: 1180px; margin: 0 auto; padding: 28px; }
+      header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+      }
+      h1, h2, p { margin: 0; }
+      h1 { font-size: 34px; line-height: 1.08; font-weight: 800; }
+      h2 { font-size: 18px; margin-bottom: 12px; }
+      .muted { color: var(--muted); }
+      .summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(158px, 1fr));
+        gap: 12px;
+        margin: 20px 0;
+      }
+      .card, .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+      .card { padding: 14px; }
+      .card span, th {
+        display: block;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+      .card strong { display: block; margin-top: 8px; font-size: 30px; line-height: 1; }
+      .layout { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 18px; }
+      .panel { padding: 16px; margin-bottom: 18px; }
+      .bar-row {
+        display: grid;
+        grid-template-columns: 104px minmax(120px, 1fr) 54px;
+        align-items: center;
+        gap: 10px;
+        margin: 9px 0;
+        font-size: 13px;
+      }
+      .bar-track { height: 12px; background: #e9eee9; border-radius: 999px; overflow: hidden; }
+      .bar-fill { display: block; height: 100%; background: var(--green); }
+      .bar-fill.pickups { background: var(--blue); }
+      .bar-fill.dropoffs { background: var(--gold); }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { border-bottom: 1px solid var(--line); padding: 9px; text-align: left; vertical-align: top; }
+      td { font-size: 13px; }
+      .table-wrap { overflow-x: auto; }
+      .build-list { display: flex; flex-direction: column; gap: 8px; overflow-wrap: anywhere; }
+      a { color: var(--blue); }
+      @media (max-width: 860px) {
+        main { padding: 18px; }
+        header { align-items: flex-start; flex-direction: column; }
+        .layout { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <p class="muted">Public counter report</p>
+          <h1>Loopy Counter History</h1>
+        </div>
+        <div class="muted" id="generated">Loading history.json</div>
+      </header>
+
+      <section class="summary" id="summary"></section>
+
+      <section class="layout">
+        <div>
+          <section class="panel">
+            <h2>Daily Throughput</h2>
+            <div id="bars" class="muted">Loading</div>
+          </section>
+
+          <section class="panel">
+            <h2>Daily Counters</h2>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Updated</th>
+                    <th>Cycles</th>
+                    <th>Sections</th>
+                    <th>Pickups</th>
+                    <th>Dropoffs</th>
+                    <th>Max Streak</th>
+                    <th>Build</th>
+                  </tr>
+                </thead>
+                <tbody id="day-rows"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <aside>
+          <section class="panel">
+            <h2>Range</h2>
+            <p id="range" class="muted"></p>
+          </section>
+          <section class="panel">
+            <h2>Build Metadata</h2>
+            <div id="builds" class="build-list muted"></div>
+          </section>
+        </aside>
+      </section>
+    </main>
+
+    <script>
+      function esc(value) {
+        return String(value == null ? "" : value).replace(/[&<>"']/g, function(ch) {
+          return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch];
+        });
+      }
+      function num(value) {
+        return typeof value === "number" && Number.isFinite(value) ? value : 0;
+      }
+      function card(label, value) {
+        return '<article class="card"><span>' + esc(label) + '</span><strong>' + esc(value) + '</strong></article>';
+      }
+      function row(day) {
+        return '<tr><td>' + esc(day.date_eastern) + '</td><td>' + esc(day.last_updated_eastern || day.last_updated_utc) +
+          '</td><td>' + esc(day.daily_full_auto_cycles) + '</td><td>' + esc(day.daily_section) +
+          '</td><td>' + esc(day.daily_pickup) + '</td><td>' + esc(day.daily_dropoff) +
+          '</td><td>' + esc(day.daily_max_consecutive_full_auto_cycles) + '</td><td>' + esc(day.build_sha) + '</td></tr>';
+      }
+      function bar(day, field, label, cls, maxValue) {
+        var value = num(day[field]);
+        var width = maxValue > 0 ? Math.round((value / maxValue) * 100) : 0;
+        return '<div class="bar-row"><span>' + esc(day.date_eastern + " " + label) + '</span><div class="bar-track"><i class="bar-fill ' +
+          esc(cls) + '" style="width:' + esc(width) + '%"></i></div><strong>' + esc(value) + '</strong></div>';
+      }
+      function draw(payload) {
+        var days = Array.isArray(payload.days) ? payload.days : [];
+        var summary = payload.summary || {};
+        var meta = payload.build_metadata || {};
+        var range = payload.range || {};
+        document.getElementById("generated").textContent = "Generated " + (payload.generated_at_utc || "");
+        document.getElementById("summary").innerHTML =
+          card("Days", num(summary.days)) +
+          card("Full Auto Cycles", num(summary.daily_full_auto_cycles)) +
+          card("Sections", num(summary.daily_section)) +
+          card("Pickups", num(summary.daily_pickup)) +
+          card("Dropoffs", num(summary.daily_dropoff)) +
+          card("Best Streak", num(summary.best_daily_max_consecutive_full_auto_cycles));
+        document.getElementById("range").innerHTML = esc((range.from || "start") + " to " + (range.to || "end")) +
+          (payload.public_url ? '<br><a href="' + esc(payload.public_url) + '">' + esc(payload.public_url) + '</a>' : "");
+        document.getElementById("day-rows").innerHTML = days.length ? days.map(row).join("") :
+          '<tr><td colspan="8" class="muted">No counter history available</td></tr>';
+        var maxValue = Math.max(1, ...days.map(function(day) {
+          return Math.max(num(day.daily_section), num(day.daily_pickup), num(day.daily_dropoff));
+        }));
+        document.getElementById("bars").innerHTML = days.length ? days.map(function(day) {
+          return bar(day, "daily_section", "sections", "", maxValue) +
+            bar(day, "daily_pickup", "pickups", "pickups", maxValue) +
+            bar(day, "daily_dropoff", "dropoffs", "dropoffs", maxValue);
+        }).join("") : "No counter history available";
+        var builds = Array.isArray(meta.source_build_shas) ? meta.source_build_shas : [];
+        document.getElementById("builds").innerHTML =
+          '<span>Site SHA: ' + esc(meta.site_repo_sha || "") + '</span>' +
+          (builds.length ? builds.map(function(sha) { return '<span>Source SHA: ' + esc(sha) + '</span>'; }).join("") : "");
+      }
+      window.onload = function() {
+        fetch("history.json", {cache: "no-store"})
+          .then(function(response) { return response.json(); })
+          .then(draw)
+          .catch(function() {
+            document.getElementById("generated").textContent = "Unable to load history.json";
+          });
+      };
+    </script>
+  </body>
+</html>
