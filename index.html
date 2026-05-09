@@ -18,7 +18,7 @@
         --blue: #2d5b95;
         --gold: #9a6a16;
         --coral: #b75f45;
-        --violet: #7b5bc6;
+        --auto-cycle: #c2410c;
       }
       @media (prefers-color-scheme: dark) {
         :root {
@@ -33,7 +33,7 @@
           --blue: #82b4f5;
           --gold: #d8ad5d;
           --coral: #ef8f73;
-          --violet: #b99cff;
+          --auto-cycle: #fb923c;
         }
       }
       * { box-sizing: border-box; }
@@ -146,7 +146,7 @@
         width: 36px;
       }
       .throughput-bar.cycles {
-        background: var(--violet);
+        background: var(--auto-cycle);
       }
       .throughput-bar.sections { background: var(--green); }
       .throughput-bar.pickups { background: var(--blue); }
@@ -175,7 +175,7 @@
         height: 10px;
         border-radius: 999px;
       }
-      .legend-swatch.cycles { width: 22px; background: var(--violet); }
+      .legend-swatch.cycles { width: 22px; background: var(--auto-cycle); }
       .legend-swatch.sections { width: 11px; background: var(--green); }
       .legend-swatch.pickups { width: 11px; background: var(--blue); }
       .legend-swatch.dropoffs { width: 11px; background: var(--gold); }
