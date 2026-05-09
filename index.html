@@ -104,8 +104,8 @@
       .chart-plot {
         display: grid;
         grid-auto-flow: column;
-        grid-auto-columns: minmax(64px, 1fr);
-        gap: 14px;
+        grid-auto-columns: minmax(116px, 1fr);
+        gap: 18px;
         align-items: end;
         overflow-x: auto;
         min-height: 300px;
@@ -120,24 +120,31 @@
         grid-template-rows: 220px 46px;
         gap: 10px;
         align-items: end;
-        min-width: 64px;
+        min-width: 116px;
       }
       .cycle-bar-wrap {
         display: flex;
         align-items: end;
         justify-content: center;
+        gap: 7px;
         height: 220px;
       }
-      .cycle-bar {
+      .throughput-bar {
         position: relative;
-        width: min(42px, 70%);
+        width: 18px;
         min-height: 2px;
         height: var(--bar-height);
-        border-radius: 7px 7px 0 0;
-        background: linear-gradient(180deg, var(--green), var(--blue));
+        border-radius: 6px 6px 0 0;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24);
       }
-      .cycle-bar strong {
+      .throughput-bar.cycles {
+        width: 36px;
+        background: linear-gradient(180deg, var(--green), var(--blue));
+      }
+      .throughput-bar.sections { background: var(--green); }
+      .throughput-bar.pickups { background: var(--blue); }
+      .throughput-bar.dropoffs { background: var(--gold); }
+      .throughput-bar strong {
         position: absolute;
         left: 50%;
         top: -24px;
@@ -145,6 +152,25 @@
         font-size: 13px;
         color: var(--ink);
       }
+      .throughput-bar:not(.cycles) strong { display: none; }
+      .chart-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 16px;
+        margin-bottom: 16px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .legend-item { display: inline-flex; align-items: center; gap: 7px; }
+      .legend-swatch {
+        display: inline-block;
+        height: 10px;
+        border-radius: 999px;
+      }
+      .legend-swatch.cycles { width: 22px; background: linear-gradient(90deg, var(--green), var(--blue)); }
+      .legend-swatch.sections { width: 11px; background: var(--green); }
+      .legend-swatch.pickups { width: 11px; background: var(--blue); }
+      .legend-swatch.dropoffs { width: 11px; background: var(--gold); }
       .cycle-label {
         color: var(--ink);
         font-size: 12px;
@@ -178,7 +204,7 @@
         header { align-items: flex-start; flex-direction: column; }
         #generated { white-space: normal; }
         .cycle-chart { grid-template-columns: 42px minmax(0, 1fr); }
-        .chart-plot { grid-auto-columns: 58px; }
+        .chart-plot { grid-auto-columns: 104px; }
       }
     </style>
   </head>
@@ -194,7 +220,7 @@
       <section class="summary" id="summary"></section>
 
       <section class="panel">
-        <h2>Full Auto Cycles</h2>
+        <h2>Daily Throughput</h2>
         <div id="cycle-chart" class="muted">Loading</div>
       </section>
 
@@ -277,19 +303,36 @@
       }
       function cycleChart(days) {
         if (!days.length) return "No counter history available";
+        var metrics = [
+          {field: "daily_full_auto_cycles", label: "Full auto cycles", cls: "cycles"},
+          {field: "daily_section", label: "Sections", cls: "sections"},
+          {field: "daily_pickup", label: "Pickups", cls: "pickups"},
+          {field: "daily_dropoff", label: "Dropoffs", cls: "dropoffs"}
+        ];
         var maxValue = Math.max(1, ...days.map(function(day) {
-          return num(day.daily_full_auto_cycles);
+          return Math.max(...metrics.map(function(metric) {
+            return num(day[metric.field]);
+          }));
         }));
         var halfValue = Math.round(maxValue / 2);
+        var legend = '<div class="chart-legend">' + metrics.map(function(metric) {
+          return '<span class="legend-item"><i class="legend-swatch ' + esc(metric.cls) +
+            '"></i>' + esc(metric.label) + '</span>';
+        }).join("") + '</div>';
         var bars = days.map(function(day, index) {
-          var value = num(day.daily_full_auto_cycles);
-          var height = maxValue > 0 ? Math.round((value / maxValue) * 100) : 0;
-          if (value > 0) height = Math.max(3, height);
-          return '<div class="cycle-bar-group"><div class="cycle-bar-wrap"><div class="cycle-bar" style="--bar-height:' +
-            esc(height) + '%"><strong>' + esc(value) + '</strong></div></div><div class="cycle-label">Day ' +
+          var metricBars = metrics.map(function(metric) {
+            var value = num(day[metric.field]);
+            var height = maxValue > 0 ? Math.round((value / maxValue) * 100) : 0;
+            if (value > 0) height = Math.max(3, height);
+            return '<div class="throughput-bar ' + esc(metric.cls) + '" title="' +
+              esc(metric.label + ": " + value) + '" style="--bar-height:' +
+              esc(height) + '%"><strong>' + esc(value) + '</strong></div>';
+          }).join("");
+          return '<div class="cycle-bar-group"><div class="cycle-bar-wrap">' +
+            metricBars + '</div><div class="cycle-label">Day ' +
             esc(index + 1) + '<span>' + esc(formatShortDate(day.date_eastern)) + '</span></div></div>';
         }).join("");
-        return '<div class="cycle-chart" aria-label="Daily full auto cycle count chart"><div class="chart-axis"><span>' +
+        return legend + '<div class="cycle-chart" aria-label="Daily throughput count chart"><div class="chart-axis"><span>' +
           esc(maxValue) + '</span><span>' + esc(halfValue) + '</span><span>0</span></div><div class="chart-plot">' +
           bars + '</div></div>';
       }
