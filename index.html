@@ -160,6 +160,12 @@
         font-size: 13px;
         color: var(--ink);
       }
+      .counter-note-marker {
+        font-size: 10px;
+        line-height: 0;
+        margin-left: 1px;
+        vertical-align: super;
+      }
       .throughput-bar:not(.cycles):not(.consecutive) strong { display: none; }
       .chart-legend {
         display: flex;
@@ -207,6 +213,11 @@
       td { font-size: 13px; white-space: nowrap; }
       tbody tr:hover { background: var(--hover); }
       .table-wrap { overflow-x: auto; }
+      .site-footer {
+        color: var(--muted);
+        font-size: 13px;
+        padding: 6px 0 24px;
+      }
       a { color: var(--blue); }
       @media (max-width: 860px) {
         main { padding: 18px; }
@@ -253,6 +264,7 @@
           </table>
         </div>
       </section>
+      <footer class="site-footer">* - consecutive counter was not working at this point</footer>
     </main>
 
     <script>
@@ -334,9 +346,11 @@
             var value = num(day[metric.field]);
             var height = maxValue > 0 ? Math.round((value / maxValue) * 100) : 0;
             if (value > 0) height = Math.max(3, height);
+            var noteMarker = index === 0 && metric.cls === "consecutive" && value === 0 ?
+              '<sup class="counter-note-marker">*</sup>' : "";
             return '<div class="throughput-bar ' + esc(metric.cls) + '" title="' +
               esc(metric.label + ": " + value) + '" style="--bar-height:' +
-              esc(height) + '%"><strong>' + esc(value) + '</strong></div>';
+              esc(height) + '%"><strong>' + esc(value) + noteMarker + '</strong></div>';
           }).join("");
           return '<div class="cycle-bar-group"><div class="cycle-bar-wrap">' +
             metricBars + '</div><div class="cycle-label">Day ' +
