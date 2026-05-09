@@ -186,6 +186,85 @@
       .legend-swatch.pickups { width: 11px; background: var(--blue); }
       .legend-swatch.dropoffs { width: 11px; background: var(--gold); }
       .legend-swatch.consecutive { width: 22px; background: var(--coral); }
+      .timing-summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      .timing-stat {
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 10px;
+      }
+      .timing-stat span {
+        color: var(--muted);
+        display: block;
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+      .timing-stat strong {
+        display: block;
+        font-size: 28px;
+        line-height: 1;
+        margin-top: 7px;
+      }
+      .timing-stat small {
+        color: var(--muted);
+        display: block;
+        font-size: 12px;
+        margin-top: 5px;
+      }
+      .timing-chart-wrap {
+        border-left: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        overflow-x: auto;
+        padding-top: 8px;
+      }
+      .timing-svg {
+        display: block;
+        min-width: 100%;
+      }
+      .timing-grid { stroke: var(--bar-track); stroke-width: 1; }
+      .timing-axis-label,
+      .timing-date-label {
+        fill: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .timing-line {
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 2.5;
+      }
+      .timing-whisker {
+        opacity: 0.4;
+        stroke-linecap: round;
+        stroke-width: 2;
+      }
+      .timing-dot {
+        stroke: var(--panel);
+        stroke-width: 2;
+      }
+      .timing-line.sections,
+      .timing-whisker.sections { stroke: var(--green); }
+      .timing-dot.sections { fill: var(--green); }
+      .timing-line.pickups,
+      .timing-whisker.pickups { stroke: var(--blue); }
+      .timing-dot.pickups { fill: var(--blue); }
+      .timing-line.dropoffs,
+      .timing-whisker.dropoffs { stroke: var(--gold); }
+      .timing-dot.dropoffs { fill: var(--gold); }
+      .timing-line.cycles,
+      .timing-whisker.cycles { stroke: var(--violet); }
+      .timing-dot.cycles { fill: var(--violet); }
+      .method-note {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+        margin-top: 12px;
+      }
       .cycle-label {
         color: var(--ink);
         font-size: 12px;
@@ -213,6 +292,8 @@
       td { font-size: 13px; white-space: nowrap; }
       tbody tr:hover { background: var(--hover); }
       .table-wrap { overflow-x: auto; }
+      .timing-table { margin-top: 16px; }
+      .timing-table table { min-width: 860px; }
       .site-footer {
         color: var(--muted);
         font-size: 13px;
@@ -242,6 +323,47 @@
       <section class="panel">
         <h2>Daily Throughput</h2>
         <div id="cycle-chart" class="muted">Loading</div>
+      </section>
+
+      <section class="panel">
+        <h2>Cycle Timing</h2>
+        <div id="timing-summary" class="timing-summary"></div>
+        <div id="timing-chart" class="muted">Loading</div>
+        <p id="timing-method" class="method-note"></p>
+        <div class="table-wrap timing-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Sectioning</th>
+                <th>Pickup</th>
+                <th>Dropoff</th>
+                <th>Full Auto</th>
+                <th>Full Auto P90</th>
+              </tr>
+            </thead>
+            <tbody id="timing-rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Recent Cycle Timing</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Completed</th>
+                <th>Cycle</th>
+                <th>Sectioning</th>
+                <th>Pickup</th>
+                <th>Dropoff</th>
+                <th>Full Auto</th>
+              </tr>
+            </thead>
+            <tbody id="recent-timing-rows"></tbody>
+          </table>
+        </div>
       </section>
 
       <section class="panel">
@@ -360,10 +482,167 @@
           esc(maxValue) + '</span><span>' + esc(halfValue) + '</span><span>0</span></div><div class="chart-plot">' +
           bars + '</div></div>';
       }
+      function isNumber(value) {
+        return typeof value === "number" && Number.isFinite(value);
+      }
+      function secondsText(value) {
+        return isNumber(value) ? Math.round(value) + "s" : "n/a";
+      }
+      function timingMetrics(timing) {
+        return timing && Array.isArray(timing.metrics) ? timing.metrics : [];
+      }
+      function timingDays(metrics) {
+        var seen = {};
+        var days = [];
+        metrics.forEach(function(metric) {
+          (metric.daily || []).forEach(function(day) {
+            var date = String(day.date_eastern || "");
+            if (date && !seen[date]) {
+              seen[date] = true;
+              days.push(date);
+            }
+          });
+        });
+        return days.sort();
+      }
+      function timingStatFor(metric, date) {
+        return (metric.daily || []).find(function(day) {
+          return day.date_eastern === date;
+        }) || null;
+      }
+      function timingLatestCards(timing) {
+        var metrics = timingMetrics(timing);
+        if (!metrics.length) return '<p class="muted">No cycle timing available</p>';
+        return metrics.map(function(metric) {
+          var latest = metric.latest || null;
+          return '<div class="timing-stat"><span>' + esc(metric.label) +
+            '</span><strong>' + esc(secondsText(latest && latest.median_sec)) +
+            '</strong><small>Latest median' +
+            (latest ? ' | n=' + esc(latest.n) : '') + '</small></div>';
+        }).join("");
+      }
+      function timingLegend(metrics) {
+        return '<div class="chart-legend">' + metrics.map(function(metric) {
+          return '<span class="legend-item"><i class="legend-swatch ' +
+            esc(metric.class_name) + '"></i>' + esc(metric.label) + '</span>';
+        }).join("") + '</div>';
+      }
+      function timingChart(timing) {
+        var metrics = timingMetrics(timing).filter(function(metric) {
+          return Array.isArray(metric.daily) && metric.daily.length;
+        });
+        if (!metrics.length) return "No cycle timing available";
+        var days = timingDays(metrics);
+        var values = [];
+        metrics.forEach(function(metric) {
+          metric.daily.forEach(function(day) {
+            if (isNumber(day.p90_sec)) values.push(day.p90_sec);
+            if (isNumber(day.median_sec)) values.push(day.median_sec);
+          });
+        });
+        var maxValue = Math.max(10, ...values);
+        maxValue = Math.ceil(maxValue / 10) * 10;
+        var halfValue = Math.round(maxValue / 2);
+        var width = Math.max(680, days.length * 118);
+        var height = 310;
+        var left = 48;
+        var right = 20;
+        var top = 18;
+        var bottom = 54;
+        var innerWidth = width - left - right;
+        var innerHeight = height - top - bottom;
+        function x(index) {
+          return days.length === 1 ? left + innerWidth / 2 :
+            left + index * (innerWidth / (days.length - 1));
+        }
+        function y(value) {
+          return top + (1 - Math.max(0, Math.min(maxValue, value)) / maxValue) * innerHeight;
+        }
+        function point(index, value) {
+          return x(index).toFixed(1) + " " + y(value).toFixed(1);
+        }
+        var grid = [maxValue, halfValue, 0].map(function(value) {
+          var yy = y(value).toFixed(1);
+          return '<line class="timing-grid" x1="' + left + '" y1="' + yy +
+            '" x2="' + (width - right) + '" y2="' + yy + '"></line>' +
+            '<text class="timing-axis-label" x="6" y="' + (Number(yy) + 4) +
+            '">' + esc(value) + 's</text>';
+        }).join("");
+        var labels = days.map(function(date, index) {
+          return '<text class="timing-date-label" text-anchor="middle" x="' +
+            x(index).toFixed(1) + '" y="' + (height - 16) + '">' +
+            esc(formatShortDate(date)) + '</text>';
+        }).join("");
+        var series = metrics.map(function(metric) {
+          var points = [];
+          var marks = days.map(function(date, index) {
+            var stat = timingStatFor(metric, date);
+            if (!stat || !isNumber(stat.median_sec)) return "";
+            points.push(point(index, stat.median_sec));
+            var xx = x(index).toFixed(1);
+            var medianY = y(stat.median_sec).toFixed(1);
+            var lowY = y(isNumber(stat.p10_sec) ? stat.p10_sec : stat.median_sec).toFixed(1);
+            var highY = y(isNumber(stat.p90_sec) ? stat.p90_sec : stat.median_sec).toFixed(1);
+            return '<line class="timing-whisker ' + esc(metric.class_name) +
+              '" x1="' + xx + '" y1="' + lowY + '" x2="' + xx + '" y2="' +
+              highY + '"></line><circle class="timing-dot ' + esc(metric.class_name) +
+              '" cx="' + xx + '" cy="' + medianY + '" r="4"><title>' +
+              esc(metric.label + " " + date + ": " + secondsText(stat.median_sec) +
+                " median, p10-p90 " + secondsText(stat.p10_sec) + "-" +
+                secondsText(stat.p90_sec)) + '</title></circle>';
+          }).join("");
+          var line = points.length > 1 ? '<path class="timing-line ' +
+            esc(metric.class_name) + '" d="M ' + points.join(" L ") + '"></path>' : "";
+          return line + marks;
+        }).join("");
+        return timingLegend(metrics) +
+          '<div class="timing-chart-wrap"><svg class="timing-svg" viewBox="0 0 ' +
+          width + ' ' + height + '" width="' + width + '" height="' + height +
+          '" role="img" aria-label="Daily cycle timing medians in seconds">' +
+          grid + series + labels + '</svg></div>';
+      }
+      function timingTable(timing) {
+        var metrics = timingMetrics(timing);
+        var days = timingDays(metrics);
+        if (!days.length) {
+          return '<tr><td colspan="6" class="muted">No cycle timing available</td></tr>';
+        }
+        function metricByKey(key) {
+          return metrics.find(function(metric) { return metric.key === key; }) || {};
+        }
+        function cell(key, date) {
+          var stat = timingStatFor(metricByKey(key), date);
+          if (!stat) return "n/a";
+          return esc(secondsText(stat.median_sec)) + ' <span class="muted">(n=' +
+            esc(stat.n) + ')</span>';
+        }
+        return days.map(function(date) {
+          var fullAuto = timingStatFor(metricByKey("full_auto"), date);
+          return '<tr><td>' + esc(date) + '</td><td>' + cell("sectioning", date) +
+            '</td><td>' + cell("pickup", date) + '</td><td>' + cell("dropoff", date) +
+            '</td><td>' + cell("full_auto", date) + '</td><td>' +
+            esc(secondsText(fullAuto && fullAuto.p90_sec)) + '</td></tr>';
+        }).join("");
+      }
+      function recentTimingTable(timing) {
+        var rows = timing && Array.isArray(timing.recent_cycles) ? timing.recent_cycles : [];
+        if (!rows.length) {
+          return '<tr><td colspan="6" class="muted">No recent cycle timing available</td></tr>';
+        }
+        return rows.slice().reverse().map(function(row) {
+          return '<tr><td>' + esc(row.completed_eastern) + '</td><td>' +
+            esc(row.daily_full_auto_cycle) + '</td><td>' +
+            esc(secondsText(row.sectioning_sec)) + '</td><td>' +
+            esc(secondsText(row.pickup_sec)) + '</td><td>' +
+            esc(secondsText(row.dropoff_sec)) + '</td><td>' +
+            esc(secondsText(row.full_auto_sec)) + '</td></tr>';
+        }).join("");
+      }
       function draw(payload) {
         var sourceDays = Array.isArray(payload.days) ? payload.days : [];
         var days = displayDays(sourceDays);
         var summary = payload.summary || {};
+        var timing = payload.cycle_timing || {};
         document.getElementById("generated").textContent =
           "Generated " + formatEasternTimestamp(payload.generated_at_utc);
         document.getElementById("summary").innerHTML =
@@ -376,6 +655,11 @@
         document.getElementById("day-rows").innerHTML = days.length ? days.map(row).join("") :
           '<tr><td colspan="8" class="muted">No counter history available</td></tr>';
         document.getElementById("cycle-chart").innerHTML = cycleChart(days);
+        document.getElementById("timing-summary").innerHTML = timingLatestCards(timing);
+        document.getElementById("timing-chart").innerHTML = timingChart(timing);
+        document.getElementById("timing-method").textContent = timing.method || "";
+        document.getElementById("timing-rows").innerHTML = timingTable(timing);
+        document.getElementById("recent-timing-rows").innerHTML = recentTimingTable(timing);
       }
       window.onload = function() {
         fetch("history.json", {cache: "no-store"})
