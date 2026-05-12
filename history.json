@@ -71,10 +71,10 @@
             "mean_sec": 23.6,
             "median_sec": 13.0,
             "min_sec": 10.0,
-            "n": 63,
+            "n": 64,
             "p10_sec": 11.0,
             "p25_sec": 12.0,
-            "p75_sec": 18.0,
+            "p75_sec": 20.0,
             "p90_sec": 40.0
           }
         ],
@@ -87,17 +87,17 @@
           "mean_sec": 23.6,
           "median_sec": 13.0,
           "min_sec": 10.0,
-          "n": 63,
+          "n": 64,
           "p10_sec": 11.0,
           "p25_sec": 12.0,
-          "p75_sec": 18.0,
+          "p75_sec": 20.0,
           "p90_sec": 40.0
         },
         "latest_pair": {
           "date_eastern": "2026-05-12",
-          "seconds": 35.0,
-          "start_eastern": "2026-05-12 14:37:18",
-          "target_eastern": "2026-05-12 14:37:53"
+          "seconds": 22.0,
+          "start_eastern": "2026-05-12 14:41:32",
+          "target_eastern": "2026-05-12 14:41:54"
         }
       },
       {
@@ -243,7 +243,7 @@
             "mean_sec": 23.3,
             "median_sec": 22.0,
             "min_sec": 21.0,
-            "n": 67,
+            "n": 68,
             "p10_sec": 21.0,
             "p25_sec": 21.0,
             "p75_sec": 26.0,
@@ -259,7 +259,7 @@
           "mean_sec": 23.3,
           "median_sec": 22.0,
           "min_sec": 21.0,
-          "n": 67,
+          "n": 68,
           "p10_sec": 21.0,
           "p25_sec": 21.0,
           "p75_sec": 26.0,
@@ -267,9 +267,9 @@
         },
         "latest_pair": {
           "date_eastern": "2026-05-12",
-          "seconds": 21.0,
-          "start_eastern": "2026-05-12 14:37:18",
-          "target_eastern": "2026-05-12 14:37:39"
+          "seconds": 22.0,
+          "start_eastern": "2026-05-12 14:41:32",
+          "target_eastern": "2026-05-12 14:41:54"
         }
       },
       {
@@ -326,14 +326,14 @@
           {
             "date_eastern": "2026-05-12",
             "max_sec": 287.0,
-            "mean_sec": 63.9,
+            "mean_sec": 66.9,
             "median_sec": 50.0,
             "min_sec": 38.0,
-            "n": 63,
+            "n": 64,
             "p10_sec": 40.0,
             "p25_sec": 45.0,
-            "p75_sec": 65.0,
-            "p90_sec": 101.0
+            "p75_sec": 67.0,
+            "p90_sec": 119.0
           }
         ],
         "definition": "Full-auto completion to next full-auto completion",
@@ -342,33 +342,24 @@
         "latest": {
           "date_eastern": "2026-05-12",
           "max_sec": 287.0,
-          "mean_sec": 63.9,
+          "mean_sec": 66.9,
           "median_sec": 50.0,
           "min_sec": 38.0,
-          "n": 63,
+          "n": 64,
           "p10_sec": 40.0,
           "p25_sec": 45.0,
-          "p75_sec": 65.0,
-          "p90_sec": 101.0
+          "p75_sec": 67.0,
+          "p90_sec": 119.0
         },
         "latest_pair": {
           "date_eastern": "2026-05-12",
-          "seconds": 65.0,
-          "start_eastern": "2026-05-12 14:36:34",
-          "target_eastern": "2026-05-12 14:37:39"
+          "seconds": 255.0,
+          "start_eastern": "2026-05-12 14:37:39",
+          "target_eastern": "2026-05-12 14:41:54"
         }
       }
     ],
     "recent_cycles": [
-      {
-        "completed_eastern": "2026-05-12 13:54:09",
-        "daily_full_auto_cycle": 41,
-        "date_eastern": "2026-05-12",
-        "dropoff_sec": 22.0,
-        "full_auto_sec": 45.0,
-        "pickup_sec": 23.0,
-        "sectioning_sec": 13.0
-      },
       {
         "completed_eastern": "2026-05-12 13:54:51",
         "daily_full_auto_cycle": 42,
@@ -584,6 +575,15 @@
         "full_auto_sec": 65.0,
         "pickup_sec": 44.0,
         "sectioning_sec": 35.0
+      },
+      {
+        "completed_eastern": "2026-05-12 14:41:54",
+        "daily_full_auto_cycle": 68,
+        "date_eastern": "2026-05-12",
+        "dropoff_sec": 22.0,
+        "full_auto_sec": 255.0,
+        "pickup_sec": 42.0,
+        "sectioning_sec": 22.0
       }
     ]
   },
@@ -650,21 +650,21 @@
     },
     {
       "build_sha": "12c67cd9",
-      "consecutive_full_auto_cycles": 0,
-      "current_dropoff": 67,
+      "consecutive_full_auto_cycles": 1,
+      "current_dropoff": 68,
       "current_pickup": 70,
-      "current_section": 69,
-      "daily_dropoff": 67,
-      "daily_full_auto_cycles": 67,
+      "current_section": 70,
+      "daily_dropoff": 68,
+      "daily_full_auto_cycles": 68,
       "daily_max_consecutive_full_auto_cycles": 39,
       "daily_pickup": 70,
-      "daily_section": 69,
+      "daily_section": 70,
       "date_eastern": "2026-05-12",
-      "last_updated_eastern": "2026-05-12 14:41:32",
-      "last_updated_utc": "2026-05-12 18:41:32"
+      "last_updated_eastern": "2026-05-12 14:41:54",
+      "last_updated_utc": "2026-05-12 18:41:54"
     }
   ],
-  "generated_at_utc": "2026-05-12T18:41:36Z",
+  "generated_at_utc": "2026-05-12T18:41:56Z",
   "history_schema_version": 1,
   "ok": true,
   "public_url": "https://lasso-pni.github.io/loopy-monitor",
@@ -675,14 +675,14 @@
   },
   "summary": {
     "best_daily_max_consecutive_full_auto_cycles": 189,
-    "consecutive_full_auto_cycles": 0,
-    "current_dropoff": 67,
+    "consecutive_full_auto_cycles": 1,
+    "current_dropoff": 68,
     "current_pickup": 70,
-    "current_section": 69,
-    "daily_dropoff": 566,
-    "daily_full_auto_cycles": 541,
+    "current_section": 70,
+    "daily_dropoff": 567,
+    "daily_full_auto_cycles": 542,
     "daily_pickup": 595,
-    "daily_section": 564,
+    "daily_section": 565,
     "days": 5
   }
 }
