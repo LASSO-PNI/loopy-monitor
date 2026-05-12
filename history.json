@@ -240,10 +240,10 @@
           {
             "date_eastern": "2026-05-12",
             "max_sec": 27.0,
-            "mean_sec": 25.8,
+            "mean_sec": 25.7,
             "median_sec": 26.0,
             "min_sec": 21.0,
-            "n": 28,
+            "n": 29,
             "p10_sec": 22.0,
             "p25_sec": 26.0,
             "p75_sec": 27.0,
@@ -256,10 +256,10 @@
         "latest": {
           "date_eastern": "2026-05-12",
           "max_sec": 27.0,
-          "mean_sec": 25.8,
+          "mean_sec": 25.7,
           "median_sec": 26.0,
           "min_sec": 21.0,
-          "n": 28,
+          "n": 29,
           "p10_sec": 22.0,
           "p25_sec": 26.0,
           "p75_sec": 27.0,
@@ -267,9 +267,9 @@
         },
         "latest_pair": {
           "date_eastern": "2026-05-12",
-          "seconds": 22.0,
-          "start_eastern": "2026-05-12 13:42:23",
-          "target_eastern": "2026-05-12 13:42:45"
+          "seconds": 21.0,
+          "start_eastern": "2026-05-12 13:43:17",
+          "target_eastern": "2026-05-12 13:43:38"
         }
       },
       {
@@ -326,10 +326,10 @@
           {
             "date_eastern": "2026-05-12",
             "max_sec": 287.0,
-            "mean_sec": 72.5,
-            "median_sec": 55.5,
+            "mean_sec": 71.8,
+            "median_sec": 53.0,
             "min_sec": 43.0,
-            "n": 26,
+            "n": 27,
             "p10_sec": 44.0,
             "p25_sec": 46.0,
             "p75_sec": 71.0,
@@ -342,10 +342,10 @@
         "latest": {
           "date_eastern": "2026-05-12",
           "max_sec": 287.0,
-          "mean_sec": 72.5,
-          "median_sec": 55.5,
+          "mean_sec": 71.8,
+          "median_sec": 53.0,
           "min_sec": 43.0,
-          "n": 26,
+          "n": 27,
           "p10_sec": 44.0,
           "p25_sec": 46.0,
           "p75_sec": 71.0,
@@ -353,22 +353,13 @@
         },
         "latest_pair": {
           "date_eastern": "2026-05-12",
-          "seconds": 63.0,
-          "start_eastern": "2026-05-12 13:41:42",
-          "target_eastern": "2026-05-12 13:42:45"
+          "seconds": 53.0,
+          "start_eastern": "2026-05-12 13:42:45",
+          "target_eastern": "2026-05-12 13:43:38"
         }
       }
     ],
     "recent_cycles": [
-      {
-        "completed_eastern": "2026-05-12 13:01:38",
-        "daily_full_auto_cycle": 3,
-        "date_eastern": "2026-05-12",
-        "dropoff_sec": 27.0,
-        "full_auto_sec": 43.0,
-        "pickup_sec": 16.0,
-        "sectioning_sec": null
-      },
       {
         "completed_eastern": "2026-05-12 13:02:22",
         "daily_full_auto_cycle": 4,
@@ -584,6 +575,15 @@
         "full_auto_sec": 63.0,
         "pickup_sec": 39.0,
         "sectioning_sec": null
+      },
+      {
+        "completed_eastern": "2026-05-12 13:43:38",
+        "daily_full_auto_cycle": 29,
+        "date_eastern": "2026-05-12",
+        "dropoff_sec": 21.0,
+        "full_auto_sec": 53.0,
+        "pickup_sec": null,
+        "sectioning_sec": null
       }
     ]
   },
@@ -650,21 +650,21 @@
     },
     {
       "build_sha": "12c67cd9",
-      "consecutive_full_auto_cycles": 7,
-      "current_dropoff": 28,
+      "consecutive_full_auto_cycles": 8,
+      "current_dropoff": 29,
       "current_pickup": 30,
       "current_section": 27,
-      "daily_dropoff": 28,
-      "daily_full_auto_cycles": 28,
+      "daily_dropoff": 29,
+      "daily_full_auto_cycles": 29,
       "daily_max_consecutive_full_auto_cycles": 20,
       "daily_pickup": 30,
       "daily_section": 27,
       "date_eastern": "2026-05-12",
-      "last_updated_eastern": "2026-05-12 13:43:17",
-      "last_updated_utc": "2026-05-12 17:43:17"
+      "last_updated_eastern": "2026-05-12 13:43:38",
+      "last_updated_utc": "2026-05-12 17:43:38"
     }
   ],
-  "generated_at_utc": "2026-05-12T17:43:37Z",
+  "generated_at_utc": "2026-05-12T17:43:44Z",
   "history_schema_version": 1,
   "ok": true,
   "public_url": "https://lasso-pni.github.io/loopy-monitor",
@@ -675,12 +675,12 @@
   },
   "summary": {
     "best_daily_max_consecutive_full_auto_cycles": 189,
-    "consecutive_full_auto_cycles": 7,
-    "current_dropoff": 28,
+    "consecutive_full_auto_cycles": 8,
+    "current_dropoff": 29,
     "current_pickup": 30,
     "current_section": 27,
-    "daily_dropoff": 527,
-    "daily_full_auto_cycles": 502,
+    "daily_dropoff": 528,
+    "daily_full_auto_cycles": 503,
     "daily_pickup": 555,
     "daily_section": 522,
     "days": 5
