@@ -302,6 +302,70 @@
       }
       .site-footer p { margin: 0 0 8px; }
       .site-footer .method-note { margin-top: 8px; }
+      .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 18px 0 20px;
+      }
+      .tab-button {
+        appearance: none;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        color: var(--ink);
+        cursor: pointer;
+        font: inherit;
+        font-size: 13px;
+        font-weight: 800;
+        padding: 9px 13px;
+      }
+      .tab-button.active {
+        background: var(--ink);
+        border-color: var(--ink);
+        color: var(--paper);
+      }
+      .tab-panel[hidden] { display: none; }
+      .controls {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+      .controls select,
+      .controls button {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        color: var(--ink);
+        font: inherit;
+        padding: 8px 10px;
+      }
+      .controls button { cursor: pointer; font-weight: 800; }
+      .sectioning-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 18px;
+      }
+      .sectioning-chart svg {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      .chart-grid-line { stroke: var(--line); stroke-width: 1; }
+      .chart-axis,
+      .chart-label,
+      .chart-legend {
+        fill: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .notice {
+        color: var(--muted);
+        font-size: 13px;
+        padding: 18px 0;
+      }
       a { color: var(--blue); }
       @media (max-width: 860px) {
         main { padding: 18px; }
@@ -321,6 +385,12 @@
         <div class="muted" id="generated">Loading history.json</div>
       </header>
 
+      <nav class="tabs" aria-label="Dashboard views">
+        <button type="button" class="tab-button active" data-tab="history">Counter History</button>
+        <button type="button" class="tab-button" data-tab="sectioning">Sectioning Model</button>
+      </nav>
+
+      <section id="tab-history" class="tab-panel" data-tab-panel="history">
       <section class="summary" id="summary"></section>
 
       <section class="panel">
@@ -387,6 +457,120 @@
             <tbody id="day-rows"></tbody>
           </table>
         </div>
+      </section>
+      </section>
+
+      <section id="tab-sectioning" class="tab-panel" data-tab-panel="sectioning" hidden>
+        <section class="panel">
+          <div class="controls">
+            <label>
+              <span class="muted">Run</span>
+              <select id="sectioning-run-select"></select>
+            </label>
+            <button type="button" id="sectioning-latest">Latest Run</button>
+            <span class="muted" id="sectioning-generated">Loading sectioning/index.json</span>
+          </div>
+          <section class="summary" id="sectioning-summary"></section>
+        </section>
+
+        <section id="sectioning-empty" class="panel notice" hidden>No sectioning model data available.</section>
+
+        <section id="sectioning-content" hidden>
+          <section class="sectioning-grid">
+            <article class="panel">
+              <h2>Cut Outcomes</h2>
+              <div id="sectioning-outcome-chart" class="sectioning-chart"></div>
+            </article>
+            <article class="panel">
+              <h2>Cycle Timing</h2>
+              <div id="sectioning-timing-chart" class="sectioning-chart"></div>
+            </article>
+            <article class="panel">
+              <h2>Cut Cycle Gap</h2>
+              <div id="sectioning-gap-chart" class="sectioning-chart"></div>
+            </article>
+            <article class="panel">
+              <h2>Feed Advance</h2>
+              <div id="sectioning-feed-chart" class="sectioning-chart"></div>
+            </article>
+            <article class="panel">
+              <h2>Accepted Gap By Thickness</h2>
+              <div id="sectioning-thickness-gap-chart" class="sectioning-chart"></div>
+            </article>
+          </section>
+
+          <section class="panel">
+            <h2>Thickness Breakdown (Selected Run)</h2>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Thickness</th>
+                    <th>Cuts</th>
+                    <th>Accepted</th>
+                    <th>Accepted %</th>
+                    <th>Missed %</th>
+                    <th>Partial %</th>
+                    <th>Accepted Gap</th>
+                    <th>Attach</th>
+                    <th>Separation</th>
+                    <th>Cut Gap</th>
+                    <th>N/S Delta</th>
+                    <th>Conf</th>
+                  </tr>
+                </thead>
+                <tbody id="sectioning-thickness-rows"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="panel">
+            <h2>Thickness Breakdown (All Runs)</h2>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Thickness</th>
+                    <th>Cuts</th>
+                    <th>Accepted</th>
+                    <th>Accepted %</th>
+                    <th>Missed %</th>
+                    <th>Partial %</th>
+                    <th>Accepted Gap</th>
+                    <th>Attach</th>
+                    <th>Separation</th>
+                    <th>Cut Gap</th>
+                    <th>N/S Delta</th>
+                    <th>Conf</th>
+                  </tr>
+                </thead>
+                <tbody id="sectioning-thickness-all-rows"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="panel">
+            <h2>Bad Cut Inspector</h2>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Cut</th>
+                    <th>Time</th>
+                    <th>Outcome</th>
+                    <th>Reason</th>
+                    <th>Cut Gap</th>
+                    <th>Total</th>
+                    <th>Feed</th>
+                    <th>Partial</th>
+                    <th>Separation</th>
+                  </tr>
+                </thead>
+                <tbody id="sectioning-bad-rows"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
       </section>
       <footer class="site-footer">
         <p>* - consecutive counter was not working at this point</p>
@@ -492,6 +676,37 @@
       }
       function secondsText(value) {
         return isNumber(value) ? Math.round(value) + "s" : "n/a";
+      }
+      function percentText(value) {
+        return isNumber(value) ? Math.round(value) + "%" : "n/a";
+      }
+      function nmText(value) {
+        if (!isNumber(value)) return "n/a";
+        if (Math.abs(value) >= 1000) return (value / 1000).toFixed(2) + " um";
+        return Math.round(value) + " nm";
+      }
+      function msText(value) {
+        return isNumber(value) && value >= 0 ? secondsText(value / 1000) : "n/a";
+      }
+      function titleize(value) {
+        return String(value || "unknown").replaceAll("_", " ");
+      }
+      function setupTabs() {
+        Array.prototype.forEach.call(document.querySelectorAll("[data-tab]"), function(button) {
+          button.addEventListener("click", function() {
+            switchTab(button.getAttribute("data-tab"));
+          });
+        });
+      }
+      function switchTab(tab) {
+        Array.prototype.forEach.call(document.querySelectorAll("[data-tab]"), function(button) {
+          button.classList.toggle("active", button.getAttribute("data-tab") === tab);
+        });
+        Array.prototype.forEach.call(document.querySelectorAll("[data-tab-panel]"), function(panel) {
+          panel.hidden = panel.getAttribute("data-tab-panel") !== tab;
+        });
+        if (tab === "sectioning" && !window.__sectioningLoaded) loadSectioningIndex();
+        window.location.hash = tab === "sectioning" ? "#sectioning" : "#history";
       }
       function timingMetrics(timing) {
         return timing && Array.isArray(timing.metrics) ? timing.metrics : [];
@@ -666,6 +881,206 @@
             esc(secondsText(row.full_auto_sec)) + '</td></tr>';
         }).join("");
       }
+      function loadSectioningIndex() {
+        window.__sectioningLoaded = true;
+        return Promise.all([
+          fetch("sectioning/index.json", {cache: "no-store"}).then(function(response) { return response.json(); }),
+          fetch("sectioning/thickness.json", {cache: "no-store"}).then(function(response) { return response.json(); }).catch(function() { return null; })
+        ]).then(function(values) {
+          window.__sectioningIndex = values[0];
+          window.__sectioningThickness = values[1];
+          drawSectioningIndex(values[0]);
+          drawSectioningAllThickness(values[1]);
+          if (values[0] && values[0].latest_run) {
+            return loadSectioningRun(values[0].latest_run.json_path);
+          }
+          document.getElementById("sectioning-empty").hidden = false;
+          document.getElementById("sectioning-content").hidden = true;
+        }).catch(function() {
+          document.getElementById("sectioning-generated").textContent = "Unable to load sectioning/index.json";
+          document.getElementById("sectioning-empty").hidden = false;
+        });
+      }
+      function drawSectioningIndex(index) {
+        var select = document.getElementById("sectioning-run-select");
+        var runs = index && Array.isArray(index.runs) ? index.runs : [];
+        select.innerHTML = runs.length ? runs.map(function(run) {
+          return '<option value="' + esc(run.json_path) + '">' + esc(run.date_eastern + " / " + run.run_id) + '</option>';
+        }).join("") : '<option value="">No runs found</option>';
+        document.getElementById("sectioning-generated").textContent = runs.length ?
+          "Generated " + formatEasternTimestamp(index.generated_at_utc) + " | " + runs.length + " runs" :
+          "No sectioning model runs";
+        select.onchange = function() {
+          if (select.value) loadSectioningRun(select.value);
+        };
+        document.getElementById("sectioning-latest").onclick = function() {
+          if (index && index.latest_run) {
+            select.value = index.latest_run.json_path;
+            loadSectioningRun(index.latest_run.json_path);
+          }
+        };
+      }
+      function loadSectioningRun(path) {
+        if (!path) return Promise.resolve();
+        return fetch(path, {cache: "no-store"})
+          .then(function(response) { return response.json(); })
+          .then(function(payload) {
+            drawSectioningRun(payload);
+            var select = document.getElementById("sectioning-run-select");
+            if (select.value !== path) select.value = path;
+          });
+      }
+      function drawSectioningRun(payload) {
+        var rows = payload && Array.isArray(payload.rows) ? payload.rows : [];
+        var run = payload && payload.run ? payload.run : null;
+        var hasRun = Boolean(run);
+        document.getElementById("sectioning-empty").hidden = hasRun;
+        document.getElementById("sectioning-content").hidden = !hasRun;
+        if (!hasRun) return;
+        document.getElementById("sectioning-summary").innerHTML = sectioningSummary(payload.summary || {});
+        document.getElementById("sectioning-outcome-chart").innerHTML = sectioningOutcomeChart(rows);
+        document.getElementById("sectioning-timing-chart").innerHTML = sectioningTimingChart(rows);
+        document.getElementById("sectioning-gap-chart").innerHTML = sectioningGapChart(rows);
+        document.getElementById("sectioning-feed-chart").innerHTML = sectioningFeedChart(rows);
+        document.getElementById("sectioning-thickness-gap-chart").innerHTML = sectioningThicknessGapChart(rows);
+        document.getElementById("sectioning-thickness-rows").innerHTML = sectioningThicknessRows(payload.thickness_breakdown || []);
+        document.getElementById("sectioning-bad-rows").innerHTML = sectioningBadRows(payload.bad_rows || []);
+      }
+      function sectioningSummary(summary) {
+        var fields = [
+          ["cuts", "Cuts"],
+          ["accepted_sections", "Accepted"],
+          ["missed_no_section", "Missed"],
+          ["partial_section", "Partial"],
+          ["current_miss_streak", "Miss Streak"],
+          ["latest_nominal_thickness_nm", "Thickness"],
+          ["median_total_cycle_sec", "Median Cycle"],
+          ["median_cut_cycle_gap_sec", "Median Cut Gap"],
+          ["median_accepted_cut_gap_sec", "Median Accepted Gap"],
+          ["latest_outcome", "Last Outcome"]
+        ];
+        return fields.map(function(field) {
+          var key = field[0];
+          var value = summary[key];
+          if (key.indexOf("_sec") >= 0) value = secondsText(value);
+          else if (key.indexOf("_nm") >= 0) value = nmText(value);
+          else if (key === "latest_outcome") value = titleize(value);
+          else value = value == null ? 0 : value;
+          return card(field[1], value);
+        }).join("");
+      }
+      function sectioningOutcomeChart(rows) {
+        if (!rows.length) return '<div class="notice">No finalized cut rows available.</div>';
+        var order = ["success", "partial_section", "missed_no_section", "timeout", "preempted", "suppressed_edge", "manual_override", "unknown"];
+        var colors = {success: "var(--green)", partial_section: "var(--gold)", missed_no_section: "var(--coral)", timeout: "var(--coral)", preempted: "var(--coral)", suppressed_edge: "var(--gold)", manual_override: "var(--gold)", unknown: "var(--muted)"};
+        var width = 760, height = 250, left = 114, right = 22, top = 18, bottom = 42;
+        var plotW = width - left - right;
+        var laneH = (height - top - bottom) / order.length;
+        function x(index) { return left + (rows.length === 1 ? plotW / 2 : plotW * index / (rows.length - 1)); }
+        function outcome(row) { return order.indexOf(row.outcome) >= 0 ? row.outcome : "unknown"; }
+        function y(outcomeName) { return top + laneH * Math.max(0, order.indexOf(outcomeName)) + laneH / 2; }
+        var lanes = order.map(function(name) {
+          var yy = y(name);
+          return '<line class="chart-grid-line" x1="' + left + '" y1="' + yy + '" x2="' + (width - right) + '" y2="' + yy + '"></line><text class="chart-axis" x="8" y="' + (yy + 4) + '">' + esc(titleize(name)) + '</text>';
+        }).join("");
+        var dots = rows.map(function(row, index) {
+          var name = outcome(row);
+          return '<circle cx="' + x(index) + '" cy="' + y(name) + '" r="5" fill="' + esc(colors[name]) + '"><title>cut ' + esc(row.cut_id) + ': ' + esc(titleize(name)) + '</title></circle>';
+        }).join("");
+        return '<svg viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Sectioning cut outcomes"><rect width="' + width + '" height="' + height + '" fill="var(--panel)"></rect>' + lanes + dots + sectioningXAxis(rows, width, height, left, right) + '</svg>';
+      }
+      function sectioningTimingChart(rows) {
+        return sectioningBarChart(rows, "total_cycle_duration_ms", "cut_window_duration_ms", "Total", "Cut window", "Sectioning cycle timing");
+      }
+      function sectioningBarChart(rows, totalField, innerField, totalLabel, innerLabel, label) {
+        if (!rows.length) return '<div class="notice">No cycle timing rows available.</div>';
+        var width = 760, height = 260, left = 54, right = 24, top = 22, bottom = 44;
+        var plotW = width - left - right, plotH = height - top - bottom;
+        var maxMs = Math.max(1, ...rows.map(function(row) { return num(row[totalField]); }));
+        var yMax = Math.ceil(maxMs / 1000) * 1000 || 1;
+        function x(index) { return left + (rows.length === 1 ? plotW / 2 : plotW * index / (rows.length - 1)); }
+        function y(value) { return top + plotH - plotH * num(value) / yMax; }
+        var barW = Math.max(3, Math.min(14, plotW / Math.max(1, rows.length) * 0.5));
+        var bars = rows.map(function(row, index) {
+          var xx = x(index), totalY = y(row[totalField]), innerY = y(row[innerField]);
+          return '<g><title>cut ' + esc(row.cut_id) + ': total ' + esc(msText(row[totalField])) + '</title><rect x="' + (xx - barW / 2) + '" y="' + totalY + '" width="' + barW + '" height="' + Math.max(1, top + plotH - totalY) + '" fill="var(--blue)"></rect><rect x="' + (xx - barW / 4) + '" y="' + innerY + '" width="' + (barW / 2) + '" height="' + Math.max(1, top + plotH - innerY) + '" fill="var(--green)"></rect></g>';
+        }).join("");
+        return '<svg viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="' + esc(label) + '"><rect width="' + width + '" height="' + height + '" fill="var(--panel)"></rect>' + timingGridSvg(width, height, left, right, top, bottom, yMax / 1000) + bars + '<text class="chart-legend" x="' + left + '" y="16" fill="var(--blue)">' + esc(totalLabel) + '</text><text class="chart-legend" x="' + (left + 74) + '" y="16" fill="var(--green)">' + esc(innerLabel) + '</text>' + sectioningXAxis(rows, width, height, left, right) + '</svg>';
+      }
+      function sectioningGapChart(rows) {
+        var points = rows.filter(function(row) { return isNumber(row.cut_window_start_gap_ms) && row.cut_window_start_gap_ms > 0; });
+        if (!points.length) return '<div class="notice">Waiting for cut cycle gap data.</div>';
+        var width = 760, height = 250, left = 58, right = 24, top = 22, bottom = 44;
+        var maxSec = Math.max(1, ...points.map(function(row) { return row.cut_window_start_gap_ms / 1000; }));
+        var plotW = width - left - right, plotH = height - top - bottom;
+        var dots = points.map(function(row, index) {
+          var sec = row.cut_window_start_gap_ms / 1000;
+          var xx = left + plotW * index / Math.max(1, points.length - 1);
+          var yy = top + plotH - plotH * sec / maxSec;
+          return '<circle cx="' + xx + '" cy="' + yy + '" r="5" fill="var(--violet)"><title>cut ' + esc(row.cut_id) + ': ' + esc(secondsText(sec)) + '</title></circle>';
+        }).join("");
+        return '<svg viewBox="0 0 ' + width + ' ' + height + '"><rect width="' + width + '" height="' + height + '" fill="var(--panel)"></rect>' + timingGridSvg(width, height, left, right, top, bottom, maxSec) + dots + sectioningXAxis(points, width, height, left, right) + '</svg>';
+      }
+      function sectioningFeedChart(rows) {
+        var points = rows.filter(function(row) { return isNumber(row.nominal_cumulative_feed_nm); });
+        if (!points.length) return '<div class="notice">Feed advance data is unavailable for this run.</div>';
+        var width = 760, height = 260, left = 70, right = 24, top = 22, bottom = 44;
+        var plotW = width - left - right, plotH = height - top - bottom;
+        var maxFeed = Math.max(1, ...points.map(function(row) { return num(row.nominal_cumulative_feed_nm); }));
+        function x(index) { return left + (points.length === 1 ? plotW / 2 : plotW * index / (points.length - 1)); }
+        function y(value) { return top + plotH - plotH * num(value) / maxFeed; }
+        var poly = points.map(function(row, index) { return x(index) + "," + y(row.nominal_cumulative_feed_nm); }).join(" ");
+        var dots = points.map(function(row, index) {
+          return '<circle cx="' + x(index) + '" cy="' + y(row.nominal_cumulative_feed_nm) + '" r="4" fill="var(--blue)"><title>cut ' + esc(row.cut_id) + ': ' + esc(nmText(row.nominal_cumulative_feed_nm)) + '</title></circle>';
+        }).join("");
+        return '<svg viewBox="0 0 ' + width + ' ' + height + '"><rect width="' + width + '" height="' + height + '" fill="var(--panel)"></rect><text class="chart-axis" x="8" y="' + (top + 4) + '">' + esc(nmText(maxFeed)) + '</text><text class="chart-axis" x="8" y="' + (height - bottom + 4) + '">0</text><polyline fill="none" stroke="var(--blue)" stroke-width="3" points="' + poly + '"></polyline>' + dots + sectioningXAxis(points, width, height, left, right) + '</svg>';
+      }
+      function sectioningThicknessGapChart(rows) {
+        var points = rows.filter(function(row) { return isNumber(row.nominal_thickness_nm) && isNumber(row.accepted_cut_gap_sec); });
+        if (!points.length) return '<div class="notice">Waiting for accepted gap by thickness data.</div>';
+        var thicknesses = Array.from(new Set(points.map(function(row) { return row.nominal_thickness_nm; }))).sort(function(a, b) { return a - b; });
+        var width = 760, height = 260, left = 58, right = 24, top = 22, bottom = 48;
+        var plotW = width - left - right, plotH = height - top - bottom;
+        var maxSec = Math.max(1, ...points.map(function(row) { return num(row.accepted_cut_gap_sec); }));
+        function x(thickness) { var index = thicknesses.indexOf(thickness); return left + (thicknesses.length === 1 ? plotW / 2 : plotW * index / (thicknesses.length - 1)); }
+        function y(seconds) { return top + plotH - plotH * num(seconds) / maxSec; }
+        var dots = points.map(function(row) {
+          var jitter = (((Number(row.cut_id) || 0) % 7) - 3) * 3;
+          return '<circle cx="' + (x(row.nominal_thickness_nm) + jitter) + '" cy="' + y(row.accepted_cut_gap_sec) + '" r="5" fill="var(--green)"><title>cut ' + esc(row.cut_id) + ': ' + esc(nmText(row.nominal_thickness_nm)) + ', ' + esc(secondsText(row.accepted_cut_gap_sec)) + '</title></circle>';
+        }).join("");
+        var axis = thicknesses.map(function(thickness) { return '<text class="chart-label" text-anchor="middle" x="' + x(thickness) + '" y="' + (height - 14) + '">' + esc(nmText(thickness)) + '</text>'; }).join("");
+        return '<svg viewBox="0 0 ' + width + ' ' + height + '"><rect width="' + width + '" height="' + height + '" fill="var(--panel)"></rect>' + timingGridSvg(width, height, left, right, top, bottom, maxSec) + dots + axis + '</svg>';
+      }
+      function sectioningThicknessRows(rows) {
+        if (!rows.length) return '<tr><td colspan="12" class="muted">No thickness groups available</td></tr>';
+        return rows.map(function(row) {
+          return '<tr><td>' + esc(nmText(row.thickness_nm)) + '</td><td>' + esc(row.cuts || 0) + '</td><td>' + esc(row.accepted || 0) + '</td><td>' + esc(percentText(row.accepted_rate_pct)) + '</td><td>' + esc(percentText(row.missed_rate_pct)) + '</td><td>' + esc(percentText(row.partial_rate_pct)) + '</td><td>' + esc(secondsText(row.median_accepted_cut_gap_sec)) + '</td><td>' + esc(secondsText(row.median_attach_time_sec)) + '</td><td>' + esc(secondsText(row.median_separation_time_sec)) + '</td><td>' + esc(secondsText(row.median_cut_gap_sec)) + '</td><td>' + esc(nmText(row.median_ns_accepted_delta_nm)) + '</td><td>' + esc(isNumber(row.median_detector_confidence) ? row.median_detector_confidence.toFixed(2) : "n/a") + '</td></tr>';
+        }).join("");
+      }
+      function drawSectioningAllThickness(payload) {
+        var rows = payload && Array.isArray(payload.thickness_breakdown) ? payload.thickness_breakdown : [];
+        document.getElementById("sectioning-thickness-all-rows").innerHTML = sectioningThicknessRows(rows);
+      }
+      function sectioningBadRows(rows) {
+        if (!rows.length) return '<tr><td colspan="9" class="muted">No bad cut rows in this run</td></tr>';
+        return rows.slice().reverse().map(function(row) {
+          var partial = [row.alignment_partial_decision, row.loopy_partial_decision].filter(Boolean).join(" / ") || "none";
+          var feed = nmText(row.nominal_cumulative_feed_nm);
+          if (isNumber(row.nominal_feed_advance_nm)) feed += " (+" + nmText(row.nominal_feed_advance_nm) + ")";
+          return '<tr><td>' + esc(row.cut_id || "") + '</td><td>' + esc(row.finalized_eastern || row.cut_stopped_eastern || "") + '</td><td>' + esc(titleize(row.outcome)) + '</td><td>' + esc(row.outcome_reason || row.separation_failure_reason || "") + '</td><td>' + esc(msText(row.cut_window_start_gap_ms)) + '</td><td>' + esc(msText(row.total_cycle_duration_ms)) + '</td><td>' + esc(feed) + '</td><td>' + esc(partial) + '</td><td>' + esc(msText(row.dt_separation_ms)) + '</td></tr>';
+        }).join("");
+      }
+      function timingGridSvg(width, height, left, right, top, bottom, maxSeconds) {
+        return [0, 0.5, 1].map(function(step) {
+          var y = top + (height - top - bottom) * (1 - step);
+          return '<line class="chart-grid-line" x1="' + left + '" y1="' + y + '" x2="' + (width - right) + '" y2="' + y + '"></line><text class="chart-axis" x="8" y="' + (y + 4) + '">' + esc(Math.round(maxSeconds * step)) + 's</text>';
+        }).join("");
+      }
+      function sectioningXAxis(rows, width, height, left, right) {
+        var first = rows[0] && rows[0].cut_id || "";
+        var last = rows[rows.length - 1] && rows[rows.length - 1].cut_id || first;
+        return '<text class="chart-label" x="' + left + '" y="' + (height - 12) + '">cut ' + esc(first) + '</text><text class="chart-label" x="' + (width - right - 70) + '" y="' + (height - 12) + '">cut ' + esc(last) + '</text>';
+      }
       function draw(payload) {
         var sourceDays = Array.isArray(payload.days) ? payload.days : [];
         var days = displayDays(sourceDays);
@@ -690,12 +1105,15 @@
         document.getElementById("recent-timing-rows").innerHTML = recentTimingTable(timing);
       }
       window.onload = function() {
+        setupTabs();
+        if (window.location.hash === "#sectioning") switchTab("sectioning");
         fetch("history.json", {cache: "no-store"})
           .then(function(response) { return response.json(); })
           .then(draw)
           .catch(function() {
             document.getElementById("generated").textContent = "Unable to load history.json";
           });
+        if (window.location.hash === "#sectioning" && !window.__sectioningLoaded) loadSectioningIndex();
       };
     </script>
   </body>
