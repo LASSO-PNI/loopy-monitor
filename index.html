@@ -451,6 +451,10 @@
                 <th>Pickups</th>
                 <th>Dropoffs</th>
                 <th>Consecutive Auto Cycles</th>
+                <th>Session Wall</th>
+                <th>Session Active</th>
+                <th>Streak Wall</th>
+                <th>Streak Active</th>
                 <th>Build</th>
               </tr>
             </thead>
@@ -631,7 +635,12 @@
         return '<tr><td>' + esc(day.date_eastern) + '</td><td>' + esc(day.last_updated_eastern || day.last_updated_utc) +
           '</td><td>' + esc(day.daily_full_auto_cycles) + '</td><td>' + esc(day.daily_section) +
           '</td><td>' + esc(day.daily_pickup) + '</td><td>' + esc(day.daily_dropoff) +
-          '</td><td>' + esc(day.daily_max_consecutive_full_auto_cycles) + '</td><td>' + esc(day.build_sha) + '</td></tr>';
+          '</td><td>' + esc(day.daily_max_consecutive_full_auto_cycles) + '</td><td>' +
+          esc(secondsText(day.full_auto_session_wall_sec)) + '</td><td>' +
+          esc(secondsText(day.full_auto_session_active_sec)) + '</td><td>' +
+          esc(secondsText(day.consecutive_full_auto_wall_sec)) + '</td><td>' +
+          esc(secondsText(day.consecutive_full_auto_active_sec)) + '</td><td>' +
+          esc(day.build_sha) + '</td></tr>';
       }
       function cycleChart(days) {
         if (!days.length) return "No counter history available";
@@ -1094,9 +1103,13 @@
           card("Sections", num(summary.daily_section)) +
           card("Pickups", num(summary.daily_pickup)) +
           card("Dropoffs", num(summary.daily_dropoff)) +
-          card("Max Streak", num(summary.best_daily_max_consecutive_full_auto_cycles));
+          card("Max Streak", num(summary.best_daily_max_consecutive_full_auto_cycles)) +
+          card("Session Wall", secondsText(summary.full_auto_session_wall_sec)) +
+          card("Session Active", secondsText(summary.full_auto_session_active_sec)) +
+          card("Streak Wall", secondsText(summary.consecutive_full_auto_wall_sec)) +
+          card("Streak Active", secondsText(summary.consecutive_full_auto_active_sec));
         document.getElementById("day-rows").innerHTML = days.length ? days.map(row).join("") :
-          '<tr><td colspan="8" class="muted">No counter history available</td></tr>';
+          '<tr><td colspan="12" class="muted">No counter history available</td></tr>';
         document.getElementById("cycle-chart").innerHTML = cycleChart(days);
         document.getElementById("timing-summary").innerHTML = timingLatestCards(timing);
         document.getElementById("timing-chart").innerHTML = timingChart(timing);
