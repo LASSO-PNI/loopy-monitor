@@ -516,11 +516,8 @@
                     <th>Missed %</th>
                     <th>Partial %</th>
                     <th>Accepted Gap</th>
-                    <th>Attach</th>
                     <th>Separation</th>
                     <th>Cut Gap</th>
-                    <th>N/S Delta</th>
-                    <th>Conf</th>
                   </tr>
                 </thead>
                 <tbody id="sectioning-thickness-rows"></tbody>
@@ -541,11 +538,8 @@
                     <th>Missed %</th>
                     <th>Partial %</th>
                     <th>Accepted Gap</th>
-                    <th>Attach</th>
                     <th>Separation</th>
                     <th>Cut Gap</th>
-                    <th>N/S Delta</th>
-                    <th>Conf</th>
                   </tr>
                 </thead>
                 <tbody id="sectioning-thickness-all-rows"></tbody>
@@ -980,23 +974,24 @@
       }
       function sectioningOutcomeChart(rows) {
         if (!rows.length) return '<div class="notice">No finalized cut rows available.</div>';
-        var order = ["success", "partial_section", "missed_no_section", "timeout", "preempted", "suppressed_edge", "manual_override", "unknown"];
-        var colors = {success: "var(--green)", partial_section: "var(--gold)", missed_no_section: "var(--coral)", timeout: "var(--coral)", preempted: "var(--coral)", suppressed_edge: "var(--gold)", manual_override: "var(--gold)", unknown: "var(--muted)"};
+        var order = ["success", "partial_section", "missed_no_section"];
+        var colors = {success: "var(--green)", partial_section: "var(--gold)", missed_no_section: "var(--coral)"};
+        var visibleRows = rows.filter(function(row) { return order.indexOf(row.outcome) >= 0; });
+        if (!visibleRows.length) return '<div class="notice">No success, partial, or missed cut outcomes available.</div>';
         var width = 760, height = 250, left = 114, right = 22, top = 18, bottom = 42;
         var plotW = width - left - right;
         var laneH = (height - top - bottom) / order.length;
-        function x(index) { return left + (rows.length === 1 ? plotW / 2 : plotW * index / (rows.length - 1)); }
-        function outcome(row) { return order.indexOf(row.outcome) >= 0 ? row.outcome : "unknown"; }
+        function x(index) { return left + (visibleRows.length === 1 ? plotW / 2 : plotW * index / (visibleRows.length - 1)); }
         function y(outcomeName) { return top + laneH * Math.max(0, order.indexOf(outcomeName)) + laneH / 2; }
         var lanes = order.map(function(name) {
           var yy = y(name);
           return '<line class="chart-grid-line" x1="' + left + '" y1="' + yy + '" x2="' + (width - right) + '" y2="' + yy + '"></line><text class="chart-axis" x="8" y="' + (yy + 4) + '">' + esc(titleize(name)) + '</text>';
         }).join("");
-        var dots = rows.map(function(row, index) {
-          var name = outcome(row);
+        var dots = visibleRows.map(function(row, index) {
+          var name = row.outcome;
           return '<circle cx="' + x(index) + '" cy="' + y(name) + '" r="5" fill="' + esc(colors[name]) + '"><title>cut ' + esc(row.cut_id) + ': ' + esc(titleize(name)) + '</title></circle>';
         }).join("");
-        return '<svg viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Sectioning cut outcomes"><rect width="' + width + '" height="' + height + '" fill="var(--panel)"></rect>' + lanes + dots + sectioningXAxis(rows, width, height, left, right) + '</svg>';
+        return '<svg viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Sectioning cut outcomes"><rect width="' + width + '" height="' + height + '" fill="var(--panel)"></rect>' + lanes + dots + sectioningXAxis(visibleRows, width, height, left, right) + '</svg>';
       }
       function sectioningTimingChart(rows) {
         return sectioningBarChart(rows, "total_cycle_duration_ms", "cut_window_duration_ms", "Total", "Cut window", "Sectioning cycle timing");
@@ -1061,9 +1056,9 @@
         return '<svg viewBox="0 0 ' + width + ' ' + height + '"><rect width="' + width + '" height="' + height + '" fill="var(--panel)"></rect>' + timingGridSvg(width, height, left, right, top, bottom, maxSec) + dots + axis + '</svg>';
       }
       function sectioningThicknessRows(rows) {
-        if (!rows.length) return '<tr><td colspan="12" class="muted">No thickness groups available</td></tr>';
+        if (!rows.length) return '<tr><td colspan="9" class="muted">No thickness groups available</td></tr>';
         return rows.map(function(row) {
-          return '<tr><td>' + esc(nmText(row.thickness_nm)) + '</td><td>' + esc(row.cuts || 0) + '</td><td>' + esc(row.accepted || 0) + '</td><td>' + esc(percentText(row.accepted_rate_pct)) + '</td><td>' + esc(percentText(row.missed_rate_pct)) + '</td><td>' + esc(percentText(row.partial_rate_pct)) + '</td><td>' + esc(secondsText(row.median_accepted_cut_gap_sec)) + '</td><td>' + esc(secondsText(row.median_attach_time_sec)) + '</td><td>' + esc(secondsText(row.median_separation_time_sec)) + '</td><td>' + esc(secondsText(row.median_cut_gap_sec)) + '</td><td>' + esc(nmText(row.median_ns_accepted_delta_nm)) + '</td><td>' + esc(isNumber(row.median_detector_confidence) ? row.median_detector_confidence.toFixed(2) : "n/a") + '</td></tr>';
+          return '<tr><td>' + esc(nmText(row.thickness_nm)) + '</td><td>' + esc(row.cuts || 0) + '</td><td>' + esc(row.accepted || 0) + '</td><td>' + esc(percentText(row.accepted_rate_pct)) + '</td><td>' + esc(percentText(row.missed_rate_pct)) + '</td><td>' + esc(percentText(row.partial_rate_pct)) + '</td><td>' + esc(secondsText(row.median_accepted_cut_gap_sec)) + '</td><td>' + esc(secondsText(row.median_separation_time_sec)) + '</td><td>' + esc(secondsText(row.median_cut_gap_sec)) + '</td></tr>';
         }).join("");
       }
       function drawSectioningAllThickness(payload) {
