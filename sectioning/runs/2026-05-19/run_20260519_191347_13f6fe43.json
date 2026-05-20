@@ -3080,6 +3080,8 @@
   "summary": {
     "accepted_cut_gap_count": 28,
     "accepted_sections": 57,
+    "complete_rate_pct": 81.66666666666667,
+    "complete_sections": 49,
     "current_miss_streak": 0,
     "cuts": 60,
     "latest_cut_id": 60,
@@ -3089,6 +3091,7 @@
     "latest_nominal_thickness_nm": 40,
     "latest_ns_position_nm": 32633,
     "latest_outcome": "partial_section",
+    "latest_section_result": "partial_section",
     "latest_uc7_feedrate_position_nm": 67040,
     "latest_uc7_total_feed_nm": 40,
     "manual_override": 0,
@@ -3098,6 +3101,8 @@
     "median_sectioning_gap_sec": 42.023853603000006,
     "median_total_cycle_sec": 17.731508,
     "missed_no_section": 3,
+    "missed_section_rate_pct": 5.0,
+    "missed_sections": 3,
     "ns_delta_available": 56,
     "outcome_counts": {
       "missed_no_section": 3,
@@ -3105,7 +3110,10 @@
       "success": 49
     },
     "partial_section": 8,
+    "partial_section_rate_pct": 13.333333333333334,
+    "partial_sections": 8,
     "preempted": 0,
+    "separated_sections": 57,
     "success": 49,
     "suppressed_edge": 0,
     "timeout": 0
@@ -3115,6 +3123,8 @@
       "accepted": 3,
       "accepted_cut_gap_count": 1,
       "accepted_rate_pct": 50.0,
+      "complete": 3,
+      "complete_rate_pct": 50.0,
       "cuts": 6,
       "median_accepted_cut_gap_sec": 105.823876024,
       "median_attach_time_sec": 0.0,
@@ -3122,20 +3132,26 @@
       "median_detector_confidence": 0.0,
       "median_ns_accepted_delta_nm": 0.0,
       "median_separation_time_sec": 2.2665100000000002,
+      "missed": 3,
       "missed_no_section": 3,
       "missed_rate_pct": 50.0,
       "outcome_counts": {
         "missed_no_section": 3,
         "success": 3
       },
+      "partial": 0,
       "partial_rate_pct": 0.0,
       "partial_section": 0,
+      "separated": 3,
+      "separated_rate_pct": 50.0,
       "thickness_nm": 20
     },
     {
       "accepted": 54,
       "accepted_cut_gap_count": 27,
       "accepted_rate_pct": 100.0,
+      "complete": 46,
+      "complete_rate_pct": 85.18518518518519,
       "cuts": 54,
       "median_accepted_cut_gap_sec": 21.223341402,
       "median_attach_time_sec": 0.0,
@@ -3143,14 +3159,18 @@
       "median_detector_confidence": 0.0,
       "median_ns_accepted_delta_nm": 0.0,
       "median_separation_time_sec": 2.2748525,
+      "missed": 0,
       "missed_no_section": 0,
       "missed_rate_pct": 0.0,
       "outcome_counts": {
         "partial_section": 8,
         "success": 46
       },
+      "partial": 8,
       "partial_rate_pct": 14.814814814814815,
       "partial_section": 8,
+      "separated": 54,
+      "separated_rate_pct": 100.0,
       "thickness_nm": 40
     }
   ],

@@ -35029,6 +35029,8 @@
   "summary": {
     "accepted_cut_gap_count": 754,
     "accepted_sections": 1290,
+    "complete_rate_pct": 78.47840986977381,
+    "complete_sections": 1145,
     "current_miss_streak": 0,
     "cuts": 1459,
     "latest_cut_id": 1456,
@@ -35038,6 +35040,7 @@
     "latest_nominal_thickness_nm": 40,
     "latest_ns_position_nm": 32633,
     "latest_outcome": "success",
+    "latest_section_result": "complete_section",
     "latest_uc7_feedrate_position_nm": 125280,
     "latest_uc7_total_feed_nm": 40,
     "manual_override": 0,
@@ -35047,6 +35050,8 @@
     "median_sectioning_gap_sec": 44.8808281505,
     "median_total_cycle_sec": 17.7434485,
     "missed_no_section": 105,
+    "missed_section_rate_pct": 7.402330363262508,
+    "missed_sections": 108,
     "ns_delta_available": 1455,
     "outcome_counts": {
       "missed_no_section": 105,
@@ -35055,16 +35060,21 @@
       "suppressed_edge": 3
     },
     "partial_section": 206,
+    "partial_section_rate_pct": 14.119259766963674,
+    "partial_sections": 206,
     "preempted": 0,
+    "separated_sections": 1351,
     "success": 1145,
     "suppressed_edge": 3,
     "timeout": 0
   },
   "thickness_breakdown": [
     {
-      "accepted": 1290,
+      "accepted": 1351,
       "accepted_cut_gap_count": 754,
-      "accepted_rate_pct": 88.4167237834133,
+      "accepted_rate_pct": 92.59766963673749,
+      "complete": 1145,
+      "complete_rate_pct": 78.47840986977381,
       "cuts": 1459,
       "median_accepted_cut_gap_sec": 24.379415659,
       "median_attach_time_sec": 0.0,
@@ -35072,16 +35082,20 @@
       "median_detector_confidence": 0.0,
       "median_ns_accepted_delta_nm": 0.0,
       "median_separation_time_sec": 2.2951515,
-      "missed_no_section": 105,
-      "missed_rate_pct": 7.196710075394106,
+      "missed": 108,
+      "missed_no_section": 108,
+      "missed_rate_pct": 7.402330363262508,
       "outcome_counts": {
         "missed_no_section": 105,
         "partial_section": 206,
         "success": 1145,
         "suppressed_edge": 3
       },
+      "partial": 206,
       "partial_rate_pct": 14.119259766963674,
       "partial_section": 206,
+      "separated": 1351,
+      "separated_rate_pct": 92.59766963673749,
       "thickness_nm": 40
     }
   ],

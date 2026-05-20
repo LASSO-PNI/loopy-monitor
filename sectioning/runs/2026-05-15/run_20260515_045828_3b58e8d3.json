@@ -8412,6 +8412,8 @@
   "summary": {
     "accepted_cut_gap_count": 24,
     "accepted_sections": 35,
+    "complete_rate_pct": 30.434782608695652,
+    "complete_sections": 35,
     "current_miss_streak": 0,
     "cuts": 115,
     "latest_cut_id": 114,
@@ -8421,6 +8423,7 @@
     "latest_nominal_thickness_nm": 40,
     "latest_ns_position_nm": 4598,
     "latest_outcome": "success",
+    "latest_section_result": "complete_section",
     "latest_uc7_feedrate_position_nm": null,
     "latest_uc7_total_feed_nm": null,
     "manual_override": 0,
@@ -8430,6 +8433,8 @@
     "median_sectioning_gap_sec": 11.838045329,
     "median_total_cycle_sec": 11.358939999999999,
     "missed_no_section": 78,
+    "missed_section_rate_pct": 69.56521739130434,
+    "missed_sections": 80,
     "ns_delta_available": 65,
     "outcome_counts": {
       "missed_no_section": 78,
@@ -8438,7 +8443,10 @@
       "timeout": 1
     },
     "partial_section": 0,
+    "partial_section_rate_pct": 0.0,
+    "partial_sections": 0,
     "preempted": 0,
+    "separated_sections": 35,
     "success": 35,
     "suppressed_edge": 1,
     "timeout": 1
@@ -8448,6 +8456,8 @@
       "accepted": 29,
       "accepted_cut_gap_count": 20,
       "accepted_rate_pct": 31.182795698924732,
+      "complete": 29,
+      "complete_rate_pct": 31.182795698924732,
       "cuts": 93,
       "median_accepted_cut_gap_sec": 28.956956771999998,
       "median_attach_time_sec": 0.0,
@@ -8455,21 +8465,27 @@
       "median_detector_confidence": 0.0,
       "median_ns_accepted_delta_nm": 0.0,
       "median_separation_time_sec": 2.573291,
-      "missed_no_section": 63,
-      "missed_rate_pct": 67.74193548387096,
+      "missed": 64,
+      "missed_no_section": 64,
+      "missed_rate_pct": 68.81720430107526,
       "outcome_counts": {
         "missed_no_section": 63,
         "success": 29,
         "suppressed_edge": 1
       },
+      "partial": 0,
       "partial_rate_pct": 0.0,
       "partial_section": 0,
+      "separated": 29,
+      "separated_rate_pct": 31.182795698924732,
       "thickness_nm": 40
     },
     {
       "accepted": 6,
       "accepted_cut_gap_count": 4,
       "accepted_rate_pct": 27.272727272727273,
+      "complete": 6,
+      "complete_rate_pct": 27.272727272727273,
       "cuts": 22,
       "median_accepted_cut_gap_sec": 27.914474006,
       "median_attach_time_sec": 0.0,
@@ -8477,15 +8493,19 @@
       "median_detector_confidence": 0.0,
       "median_ns_accepted_delta_nm": 0.0,
       "median_separation_time_sec": 2.5133270000000003,
-      "missed_no_section": 15,
-      "missed_rate_pct": 68.18181818181819,
+      "missed": 16,
+      "missed_no_section": 16,
+      "missed_rate_pct": 72.72727272727273,
       "outcome_counts": {
         "missed_no_section": 15,
         "success": 6,
         "timeout": 1
       },
+      "partial": 0,
       "partial_rate_pct": 0.0,
       "partial_section": 0,
+      "separated": 6,
+      "separated_rate_pct": 27.272727272727273,
       "thickness_nm": 60
     }
   ],

@@ -43027,6 +43027,8 @@
   "summary": {
     "accepted_cut_gap_count": 458,
     "accepted_sections": 560,
+    "complete_rate_pct": 49.08212560386473,
+    "complete_sections": 508,
     "current_miss_streak": 20,
     "cuts": 1035,
     "latest_cut_id": 1035,
@@ -43036,6 +43038,7 @@
     "latest_nominal_thickness_nm": 80,
     "latest_ns_position_nm": 4562,
     "latest_outcome": "missed_no_section",
+    "latest_section_result": "missed_section",
     "latest_uc7_feedrate_position_nm": 1520,
     "latest_uc7_total_feed_nm": 80,
     "manual_override": 0,
@@ -43045,6 +43048,8 @@
     "median_sectioning_gap_sec": 30.965351039499996,
     "median_total_cycle_sec": 11.399827,
     "missed_no_section": 440,
+    "missed_section_rate_pct": 42.51207729468599,
+    "missed_sections": 440,
     "ns_delta_available": 1027,
     "outcome_counts": {
       "missed_no_section": 440,
@@ -43052,16 +43057,21 @@
       "success": 508
     },
     "partial_section": 87,
+    "partial_section_rate_pct": 8.405797101449275,
+    "partial_sections": 87,
     "preempted": 0,
+    "separated_sections": 595,
     "success": 508,
     "suppressed_edge": 0,
     "timeout": 0
   },
   "thickness_breakdown": [
     {
-      "accepted": 301,
+      "accepted": 327,
       "accepted_cut_gap_count": 231,
-      "accepted_rate_pct": 50.67340067340067,
+      "accepted_rate_pct": 55.05050505050505,
+      "complete": 271,
+      "complete_rate_pct": 45.622895622895626,
       "cuts": 594,
       "median_accepted_cut_gap_sec": 28.895744679,
       "median_attach_time_sec": 0.0,
@@ -43069,6 +43079,7 @@
       "median_detector_confidence": 0.0,
       "median_ns_accepted_delta_nm": 0.0,
       "median_separation_time_sec": 2.5256190000000003,
+      "missed": 267,
       "missed_no_section": 267,
       "missed_rate_pct": 44.94949494949495,
       "outcome_counts": {
@@ -43076,14 +43087,19 @@
         "partial_section": 56,
         "success": 271
       },
+      "partial": 56,
       "partial_rate_pct": 9.427609427609427,
       "partial_section": 56,
+      "separated": 327,
+      "separated_rate_pct": 55.05050505050505,
       "thickness_nm": 40
     },
     {
-      "accepted": 116,
+      "accepted": 119,
       "accepted_cut_gap_count": 94,
-      "accepted_rate_pct": 54.205607476635514,
+      "accepted_rate_pct": 55.60747663551402,
+      "complete": 112,
+      "complete_rate_pct": 52.33644859813084,
       "cuts": 214,
       "median_accepted_cut_gap_sec": 29.241112513,
       "median_attach_time_sec": 0.0,
@@ -43091,6 +43107,7 @@
       "median_detector_confidence": 0.0,
       "median_ns_accepted_delta_nm": 0.0,
       "median_separation_time_sec": 2.5504985,
+      "missed": 95,
       "missed_no_section": 95,
       "missed_rate_pct": 44.39252336448598,
       "outcome_counts": {
@@ -43098,14 +43115,19 @@
         "partial_section": 7,
         "success": 112
       },
+      "partial": 7,
       "partial_rate_pct": 3.2710280373831777,
       "partial_section": 7,
+      "separated": 119,
+      "separated_rate_pct": 55.60747663551402,
       "thickness_nm": 60
     },
     {
-      "accepted": 103,
+      "accepted": 107,
       "accepted_cut_gap_count": 96,
-      "accepted_rate_pct": 57.86516853932584,
+      "accepted_rate_pct": 60.1123595505618,
+      "complete": 89,
+      "complete_rate_pct": 50.0,
       "cuts": 178,
       "median_accepted_cut_gap_sec": 20.130345077,
       "median_attach_time_sec": 0.0,
@@ -43113,6 +43135,7 @@
       "median_detector_confidence": 0.0,
       "median_ns_accepted_delta_nm": 0.0,
       "median_separation_time_sec": 2.4992010000000002,
+      "missed": 71,
       "missed_no_section": 71,
       "missed_rate_pct": 39.8876404494382,
       "outcome_counts": {
@@ -43120,14 +43143,19 @@
         "partial_section": 18,
         "success": 89
       },
+      "partial": 18,
       "partial_rate_pct": 10.112359550561798,
       "partial_section": 18,
+      "separated": 107,
+      "separated_rate_pct": 60.1123595505618,
       "thickness_nm": 80
     },
     {
-      "accepted": 40,
+      "accepted": 42,
       "accepted_cut_gap_count": 37,
-      "accepted_rate_pct": 81.63265306122449,
+      "accepted_rate_pct": 85.71428571428571,
+      "complete": 36,
+      "complete_rate_pct": 73.46938775510205,
       "cuts": 49,
       "median_accepted_cut_gap_sec": 17.154969797,
       "median_attach_time_sec": 0.0,
@@ -43135,6 +43163,7 @@
       "median_detector_confidence": 0.0,
       "median_ns_accepted_delta_nm": 0.0,
       "median_separation_time_sec": 2.5131680000000003,
+      "missed": 7,
       "missed_no_section": 7,
       "missed_rate_pct": 14.285714285714286,
       "outcome_counts": {
@@ -43142,8 +43171,11 @@
         "partial_section": 6,
         "success": 36
       },
+      "partial": 6,
       "partial_rate_pct": 12.244897959183673,
       "partial_section": 6,
+      "separated": 42,
+      "separated_rate_pct": 85.71428571428571,
       "thickness_nm": 100
     }
   ],
