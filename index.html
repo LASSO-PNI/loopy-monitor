@@ -630,10 +630,10 @@
           '</td><td>' + esc(day.daily_full_auto_cycles) + '</td><td>' + esc(day.daily_section) +
           '</td><td>' + esc(day.daily_pickup) + '</td><td>' + esc(day.daily_dropoff) +
           '</td><td>' + esc(day.daily_max_consecutive_full_auto_cycles) + '</td><td>' +
-          esc(secondsText(day.full_auto_session_wall_sec)) + '</td><td>' +
-          esc(secondsText(day.full_auto_session_active_sec)) + '</td><td>' +
-          esc(secondsText(day.consecutive_full_auto_wall_sec)) + '</td><td>' +
-          esc(secondsText(day.consecutive_full_auto_active_sec)) + '</td><td>' +
+          esc(durationText(day.full_auto_session_wall_sec)) + '</td><td>' +
+          esc(durationText(day.full_auto_session_active_sec)) + '</td><td>' +
+          esc(durationText(day.consecutive_full_auto_wall_sec)) + '</td><td>' +
+          esc(durationText(day.consecutive_full_auto_active_sec)) + '</td><td>' +
           esc(day.build_sha) + '</td></tr>';
       }
       function cycleChart(days) {
@@ -679,6 +679,16 @@
       }
       function secondsText(value) {
         return isNumber(value) ? Math.round(value) + "s" : "n/a";
+      }
+      function durationText(value) {
+        if (!isNumber(value)) return "n/a";
+        var totalSeconds = Math.max(0, Math.round(value));
+        var hours = Math.floor(totalSeconds / 3600);
+        var minutes = Math.floor((totalSeconds % 3600) / 60);
+        var seconds = totalSeconds % 60;
+        return String(hours).padStart(2, "0") + "h " +
+          String(minutes).padStart(2, "0") + "m " +
+          String(seconds).padStart(2, "0") + "s";
       }
       function percentText(value) {
         return isNumber(value) ? Math.round(value) + "%" : "n/a";
@@ -1099,10 +1109,10 @@
           card("Pickups", num(summary.daily_pickup)) +
           card("Dropoffs", num(summary.daily_dropoff)) +
           card("Max Streak", num(summary.best_daily_max_consecutive_full_auto_cycles)) +
-          card("Session Wall", secondsText(summary.full_auto_session_wall_sec)) +
-          card("Session Active", secondsText(summary.full_auto_session_active_sec)) +
-          card("Streak Wall", secondsText(summary.consecutive_full_auto_wall_sec)) +
-          card("Streak Active", secondsText(summary.consecutive_full_auto_active_sec));
+          card("Session Wall", durationText(summary.full_auto_session_wall_sec)) +
+          card("Session Active", durationText(summary.full_auto_session_active_sec)) +
+          card("Streak Wall", durationText(summary.consecutive_full_auto_wall_sec)) +
+          card("Streak Active", durationText(summary.consecutive_full_auto_active_sec));
         document.getElementById("day-rows").innerHTML = days.length ? days.map(row).join("") :
           '<tr><td colspan="12" class="muted">No counter history available</td></tr>';
         document.getElementById("cycle-chart").innerHTML = cycleChart(days);
