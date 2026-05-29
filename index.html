@@ -498,6 +498,14 @@
               <div id="sectioning-evidence-interval-chart" class="sectioning-chart"></div>
             </article>
             <article class="panel">
+              <h2>Alignment Camera Area</h2>
+              <div id="sectioning-alignment-area-chart" class="sectioning-chart"></div>
+            </article>
+            <article class="panel">
+              <h2>Loopy Arm Camera Area</h2>
+              <div id="sectioning-loopy-area-chart" class="sectioning-chart"></div>
+            </article>
+            <article class="panel">
               <h2>Feed Advance</h2>
               <div id="sectioning-feed-chart" class="sectioning-chart"></div>
             </article>
@@ -965,6 +973,8 @@
         document.getElementById("sectioning-timing-chart").innerHTML = sectioningTimingChart(rows);
         document.getElementById("sectioning-gap-chart").innerHTML = sectioningGapChart(rows);
         document.getElementById("sectioning-evidence-interval-chart").innerHTML = sectioningEvidenceIntervalChart(rows);
+        document.getElementById("sectioning-alignment-area-chart").innerHTML = sectioningAreaBarChart(rows, "alignment_partial_area_px", "Alignment Camera", "var(--gold)");
+        document.getElementById("sectioning-loopy-area-chart").innerHTML = sectioningAreaBarChart(rows, "loopy_partial_area_px", "Loopy Arm Camera", "var(--blue)");
         document.getElementById("sectioning-feed-chart").innerHTML = sectioningFeedChart(rows);
         document.getElementById("sectioning-thickness-gap-chart").innerHTML = sectioningThicknessGapChart(rows);
         document.getElementById("sectioning-thickness-rows").innerHTML = sectioningThicknessRows(payload.thickness_breakdown || []);
@@ -1056,12 +1066,40 @@
         var plotW = width - left - right, plotH = height - top - bottom;
         var maxSec = Math.max(1, ...points.map(function(row) { return num(row.section_evidence_interval_sec); }));
         var yMax = Math.ceil(maxSec / 5) * 5 || 1;
-        function x(index) { return left + (points.length === 1 ? plotW / 2 : plotW * index / (points.length - 1)); }
         function y(seconds) { return top + plotH - plotH * num(seconds) / yMax; }
-        var dots = points.map(function(row, index) {
-          return '<circle cx="' + x(index) + '" cy="' + y(row.section_evidence_interval_sec) + '" r="5" fill="var(--green)"><title>evidence ' + esc(row.section_evidence_index) + ' / cut ' + esc(row.cut_id) + ': ' + esc(secondsText(row.section_evidence_interval_sec)) + ' since previous section-attached evidence / ' + esc(titleize(row.outcome)) + '</title></circle>';
+        var slotW = plotW / points.length;
+        var barW = Math.max(3, Math.min(32, slotW * 0.72));
+        var bars = points.map(function(row, index) {
+          var yy = y(row.section_evidence_interval_sec);
+          var barH = Math.max(1, top + plotH - yy);
+          var xx = left + index * slotW + (slotW - barW) / 2;
+          return '<rect x="' + xx + '" y="' + yy + '" width="' + barW + '" height="' + barH + '" rx="2" fill="var(--green)"><title>evidence ' + esc(row.section_evidence_index) + ' / cut ' + esc(row.cut_id) + ': ' + esc(secondsText(row.section_evidence_interval_sec)) + ' since previous section-attached evidence / ' + esc(titleize(row.outcome)) + '</title></rect>';
         }).join("");
-        return '<svg viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Section evidence interval"><rect width="' + width + '" height="' + height + '" fill="var(--panel)"></rect>' + timingGridSvg(width, height, left, right, top, bottom, yMax) + dots + '<text class="chart-legend" x="' + left + '" y="16" fill="var(--green)">Section-attached evidence interval</text>' + sectioningEvidenceXAxis(points, width, height, left, right) + '</svg>';
+        return '<svg viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Section evidence interval"><rect width="' + width + '" height="' + height + '" fill="var(--panel)"></rect>' + timingGridSvg(width, height, left, right, top, bottom, yMax) + bars + '<text class="chart-legend" x="' + left + '" y="16" fill="var(--green)">Section-attached evidence interval</text>' + sectioningEvidenceXAxis(points, width, height, left, right) + '</svg>';
+      }
+      function sectioningAreaBarChart(rows, field, label, color) {
+        var points = rows.map(function(row, index) {
+          return {row: row, sectionNumber: index + 1, area: num(row[field])};
+        }).filter(function(point) { return point.area > 0; });
+        if (!points.length) return '<div class="notice">Waiting for ' + esc(label.toLowerCase()) + ' area data.</div>';
+        var width = 760, height = 260, left = 66, right = 24, top = 22, bottom = 44;
+        var plotW = width - left - right, plotH = height - top - bottom;
+        var maxArea = Math.max(1, ...points.map(function(point) { return point.area; }));
+        var yMax = Math.ceil(maxArea / 1000) * 1000 || 1;
+        function x(index) { return left + (points.length === 1 ? plotW / 2 : plotW * index / (points.length - 1)); }
+        function y(value) { return top + plotH - plotH * num(value) / yMax; }
+        var barW = Math.max(3, Math.min(18, plotW / Math.max(1, points.length) * 0.55));
+        var bars = points.map(function(point, index) {
+          var xx = x(index);
+          var yy = y(point.area);
+          var h = Math.max(1, top + plotH - yy);
+          return '<rect x="' + (xx - barW / 2) + '" y="' + yy + '" width="' + barW + '" height="' + h + '" fill="' + esc(color) + '"><title>Section ' + esc(point.sectionNumber) + ' / cut ' + esc(point.row.cut_id || '') + ': ' + esc(Math.round(point.area)) + ' px / ' + esc(titleize(point.row.outcome)) + '</title></rect>';
+        }).join("");
+        var xLabels = points.map(function(point, index) {
+          if (points.length > 18 && index % Math.ceil(points.length / 18) !== 0 && index !== points.length - 1) return "";
+          return '<text class="chart-label" text-anchor="middle" x="' + x(index) + '" y="' + (height - 14) + '">' + esc(point.sectionNumber) + '</text>';
+        }).join("");
+        return '<svg viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="' + esc(label) + ' section area in pixels"><rect width="' + width + '" height="' + height + '" fill="var(--panel)"></rect>' + timingGridSvg(width, height, left, right, top, bottom, yMax) + bars + '<text class="chart-legend" x="' + left + '" y="16" fill="' + esc(color) + '">' + esc(label) + ' area px</text>' + xLabels + '</svg>';
       }
       function sectioningFeedChart(rows) {
         var points = rows.filter(function(row) { return isNumber(row.nominal_cumulative_feed_nm); });
