@@ -494,6 +494,10 @@
               <div id="sectioning-gap-chart" class="sectioning-chart"></div>
             </article>
             <article class="panel">
+              <h2>Section Evidence Interval</h2>
+              <div id="sectioning-evidence-interval-chart" class="sectioning-chart"></div>
+            </article>
+            <article class="panel">
               <h2>Feed Advance</h2>
               <div id="sectioning-feed-chart" class="sectioning-chart"></div>
             </article>
@@ -954,6 +958,7 @@
         document.getElementById("sectioning-outcome-chart").innerHTML = sectioningOutcomeChart(rows);
         document.getElementById("sectioning-timing-chart").innerHTML = sectioningTimingChart(rows);
         document.getElementById("sectioning-gap-chart").innerHTML = sectioningGapChart(rows);
+        document.getElementById("sectioning-evidence-interval-chart").innerHTML = sectioningEvidenceIntervalChart(rows);
         document.getElementById("sectioning-feed-chart").innerHTML = sectioningFeedChart(rows);
         document.getElementById("sectioning-thickness-gap-chart").innerHTML = sectioningThicknessGapChart(rows);
         document.getElementById("sectioning-thickness-rows").innerHTML = sectioningThicknessRows(payload.thickness_breakdown || []);
@@ -969,6 +974,7 @@
           ["latest_nominal_thickness_nm", "Thickness"],
           ["median_total_cycle_sec", "Median Cycle"],
           ["median_cut_cycle_gap_sec", "Median Cut Gap"],
+          ["median_section_evidence_interval_sec", "Median Evidence Gap"],
           ["median_accepted_cut_gap_sec", "Median Accepted Gap"],
           ["latest_outcome", "Last Outcome"]
         ];
@@ -1035,6 +1041,22 @@
         }).join("");
         return '<svg viewBox="0 0 ' + width + ' ' + height + '"><rect width="' + width + '" height="' + height + '" fill="var(--panel)"></rect>' + timingGridSvg(width, height, left, right, top, bottom, maxSec) + dots + sectioningXAxis(points, width, height, left, right) + '</svg>';
       }
+      function sectioningEvidenceIntervalChart(rows) {
+        var points = rows.filter(function(row) {
+          return isNumber(row.section_evidence_index) && isNumber(row.section_evidence_interval_sec) && row.section_evidence_interval_sec > 0;
+        });
+        if (!points.length) return '<div class="notice">Waiting for at least two section-attached evidence events.</div>';
+        var width = 760, height = 260, left = 58, right = 24, top = 22, bottom = 44;
+        var plotW = width - left - right, plotH = height - top - bottom;
+        var maxSec = Math.max(1, ...points.map(function(row) { return num(row.section_evidence_interval_sec); }));
+        var yMax = Math.ceil(maxSec / 5) * 5 || 1;
+        function x(index) { return left + (points.length === 1 ? plotW / 2 : plotW * index / (points.length - 1)); }
+        function y(seconds) { return top + plotH - plotH * num(seconds) / yMax; }
+        var dots = points.map(function(row, index) {
+          return '<circle cx="' + x(index) + '" cy="' + y(row.section_evidence_interval_sec) + '" r="5" fill="var(--green)"><title>evidence ' + esc(row.section_evidence_index) + ' / cut ' + esc(row.cut_id) + ': ' + esc(secondsText(row.section_evidence_interval_sec)) + ' since previous section-attached evidence / ' + esc(titleize(row.outcome)) + '</title></circle>';
+        }).join("");
+        return '<svg viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Section evidence interval"><rect width="' + width + '" height="' + height + '" fill="var(--panel)"></rect>' + timingGridSvg(width, height, left, right, top, bottom, yMax) + dots + '<text class="chart-legend" x="' + left + '" y="16" fill="var(--green)">Section-attached evidence interval</text>' + sectioningEvidenceXAxis(points, width, height, left, right) + '</svg>';
+      }
       function sectioningFeedChart(rows) {
         var points = rows.filter(function(row) { return isNumber(row.nominal_cumulative_feed_nm); });
         if (!points.length) return '<div class="notice">Feed advance data is unavailable for this run.</div>';
@@ -1094,6 +1116,11 @@
         var first = rows[0] && rows[0].cut_id || "";
         var last = rows[rows.length - 1] && rows[rows.length - 1].cut_id || first;
         return '<text class="chart-label" x="' + left + '" y="' + (height - 12) + '">cut ' + esc(first) + '</text><text class="chart-label" x="' + (width - right - 70) + '" y="' + (height - 12) + '">cut ' + esc(last) + '</text>';
+      }
+      function sectioningEvidenceXAxis(rows, width, height, left, right) {
+        var first = rows[0] && rows[0].section_evidence_index || "";
+        var last = rows[rows.length - 1] && rows[rows.length - 1].section_evidence_index || first;
+        return '<text class="chart-label" x="' + left + '" y="' + (height - 12) + '">evidence ' + esc(first) + '</text><text class="chart-label" x="' + (width - right - 104) + '" y="' + (height - 12) + '">evidence ' + esc(last) + '</text>';
       }
       function draw(payload) {
         var sourceDays = Array.isArray(payload.days) ? payload.days : [];
