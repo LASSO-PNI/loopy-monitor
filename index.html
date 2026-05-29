@@ -649,7 +649,11 @@
           {field: "daily_full_auto_cycles", label: "Auto cycles", cls: "cycles"},
           {field: "daily_max_consecutive_full_auto_cycles", label: "Consecutive auto cycles", cls: "consecutive"}
         ];
-        var maxValue = Math.max(1, ...days.map(function(day) {
+        var chartDays = days.map(function(day, sourceIndex) {
+          return {day: day, sourceIndex: sourceIndex};
+        }).reverse();
+        var maxValue = Math.max(1, ...chartDays.map(function(entry) {
+          var day = entry.day;
           return Math.max(...metrics.map(function(metric) {
             return num(day[metric.field]);
           }));
@@ -659,12 +663,14 @@
           return '<span class="legend-item"><i class="legend-swatch ' + esc(metric.cls) +
             '"></i>' + esc(metric.label) + '</span>';
         }).join("") + '</div>';
-        var bars = days.map(function(day, index) {
+        var bars = chartDays.map(function(entry) {
+          var day = entry.day;
+          var sourceIndex = entry.sourceIndex;
           var metricBars = metrics.map(function(metric) {
             var value = num(day[metric.field]);
             var height = maxValue > 0 ? Math.round((value / maxValue) * 100) : 0;
             if (value > 0) height = Math.max(3, height);
-            var noteMarker = index === 0 && metric.cls === "consecutive" && value === 0 ?
+            var noteMarker = sourceIndex === 0 && metric.cls === "consecutive" && value === 0 ?
               '<sup class="counter-note-marker">*</sup>' : "";
             return '<div class="throughput-bar ' + esc(metric.cls) + '" title="' +
               esc(metric.label + ": " + value) + '" style="--bar-height:' +
@@ -672,7 +678,7 @@
           }).join("");
           return '<div class="cycle-bar-group"><div class="cycle-bar-wrap">' +
             metricBars + '</div><div class="cycle-label">Day ' +
-            esc(index + 1) + '<span>' + esc(formatShortDate(day.date_eastern)) + '</span></div></div>';
+            esc(sourceIndex + 1) + '<span>' + esc(formatShortDate(day.date_eastern)) + '</span></div></div>';
         }).join("");
         return legend + '<div class="cycle-chart" aria-label="Daily throughput count chart"><div class="chart-axis"><span>' +
           esc(maxValue) + '</span><span>' + esc(halfValue) + '</span><span>0</span></div><div class="chart-plot">' +
