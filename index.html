@@ -498,11 +498,11 @@
               <div id="sectioning-evidence-interval-chart" class="sectioning-chart"></div>
             </article>
             <article class="panel">
-              <h2>Alignment Camera Area</h2>
+              <h2>Section Area - Alignment Camera</h2>
               <div id="sectioning-alignment-area-chart" class="sectioning-chart"></div>
             </article>
             <article class="panel">
-              <h2>Loopy Arm Camera Area</h2>
+              <h2>Section Area - Loopy Arm Camera</h2>
               <div id="sectioning-loopy-area-chart" class="sectioning-chart"></div>
             </article>
             <article class="panel">
@@ -707,6 +707,14 @@
         return String(hours).padStart(2, "0") + "h " +
           String(minutes).padStart(2, "0") + "m " +
           String(seconds).padStart(2, "0") + "s";
+      }
+      function durationShortText(value) {
+        if (!isNumber(value)) return "n/a";
+        var totalSeconds = Math.max(0, Math.round(value));
+        var hours = Math.floor(totalSeconds / 3600);
+        var minutes = Math.floor((totalSeconds % 3600) / 60);
+        return String(hours).padStart(2, "0") + "h " +
+          String(minutes).padStart(2, "0") + "m";
       }
       function percentText(value) {
         return isNumber(value) ? Math.round(value) + "%" : "n/a";
@@ -1183,10 +1191,10 @@
           card("Pickups", num(summary.daily_pickup)) +
           card("Dropoffs", num(summary.daily_dropoff)) +
           card("Max Streak", num(summary.best_daily_max_consecutive_full_auto_cycles)) +
-          card("Session Wall", durationText(summary.full_auto_session_wall_sec)) +
-          card("Session Active", durationText(summary.full_auto_session_active_sec)) +
-          card("Streak Wall", durationText(summary.consecutive_full_auto_wall_sec)) +
-          card("Streak Active", durationText(summary.consecutive_full_auto_active_sec));
+          card("Session Wall", durationShortText(summary.full_auto_session_wall_sec)) +
+          card("Session Active", durationShortText(summary.full_auto_session_active_sec)) +
+          card("Streak Wall", durationShortText(summary.consecutive_full_auto_wall_sec)) +
+          card("Streak Active", durationShortText(summary.consecutive_full_auto_active_sec));
         document.getElementById("day-rows").innerHTML = days.length ? days.map(row).join("") :
           '<tr><td colspan="12" class="muted">No counter history available</td></tr>';
         document.getElementById("cycle-chart").innerHTML = cycleChart(days);
