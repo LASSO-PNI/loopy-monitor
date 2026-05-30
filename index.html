@@ -756,6 +756,9 @@
         });
         return days.sort();
       }
+      function timingDisplayDays(metrics) {
+        return timingDays(metrics).slice().reverse();
+      }
       function timingStatFor(metric, date) {
         return (metric.daily || []).find(function(day) {
           return day.date_eastern === date;
@@ -783,7 +786,7 @@
           return Array.isArray(metric.daily) && metric.daily.length;
         });
         if (!metrics.length) return "No cycle timing available";
-        var days = timingDays(metrics);
+        var days = timingDisplayDays(metrics);
         var values = [];
         metrics.forEach(function(metric) {
           metric.daily.forEach(function(day) {
@@ -877,7 +880,7 @@
       }
       function timingTable(timing) {
         var metrics = timingMetrics(timing);
-        var days = timingDays(metrics);
+        var days = timingDisplayDays(metrics);
         if (!days.length) {
           return '<tr><td colspan="6" class="muted">No cycle timing available</td></tr>';
         }
