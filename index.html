@@ -502,6 +502,18 @@
               <div id="sectioning-alignment-area-chart" class="sectioning-chart"></div>
             </article>
             <article class="panel">
+              <h2>Alignment Brightness</h2>
+              <div id="sectioning-alignment-brightness-chart" class="sectioning-chart"></div>
+            </article>
+            <article class="panel">
+              <h2>Alignment Color</h2>
+              <div id="sectioning-alignment-color-swatch-chart" class="sectioning-chart"></div>
+            </article>
+            <article class="panel">
+              <h2>Alignment Color Drift</h2>
+              <div id="sectioning-alignment-color-drift-chart" class="sectioning-chart"></div>
+            </article>
+            <article class="panel">
               <h2>Section Area - Loopy Arm Camera</h2>
               <div id="sectioning-loopy-area-chart" class="sectioning-chart"></div>
             </article>
@@ -985,6 +997,9 @@
         document.getElementById("sectioning-gap-chart").innerHTML = sectioningGapChart(rows);
         document.getElementById("sectioning-evidence-interval-chart").innerHTML = sectioningEvidenceIntervalChart(rows);
         document.getElementById("sectioning-alignment-area-chart").innerHTML = sectioningAreaBarChart(rows, "alignment_partial_area_px", "Alignment Camera", "var(--gold)");
+        document.getElementById("sectioning-alignment-brightness-chart").innerHTML = sectioningAlignmentBrightnessChart(rows);
+        document.getElementById("sectioning-alignment-color-swatch-chart").innerHTML = sectioningAlignmentColorSwatchChart(rows);
+        document.getElementById("sectioning-alignment-color-drift-chart").innerHTML = sectioningAlignmentColorDriftChart(rows);
         document.getElementById("sectioning-loopy-area-chart").innerHTML = sectioningAreaBarChart(rows, "loopy_partial_area_px", "Loopy Arm Camera", "var(--blue)");
         document.getElementById("sectioning-feed-chart").innerHTML = sectioningFeedChart(rows);
         document.getElementById("sectioning-thickness-gap-chart").innerHTML = sectioningThicknessGapChart(rows);
@@ -1111,6 +1126,96 @@
           return '<text class="chart-label" text-anchor="middle" x="' + x(index) + '" y="' + (height - 14) + '">' + esc(point.sectionNumber) + '</text>';
         }).join("");
         return '<svg viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="' + esc(label) + ' section area in pixels"><rect width="' + width + '" height="' + height + '" fill="var(--panel)"></rect>' + timingGridSvg(width, height, left, right, top, bottom, yMax) + bars + '<text class="chart-legend" x="' + left + '" y="16" fill="' + esc(color) + '">' + esc(label) + ' area px</text>' + xLabels + '</svg>';
+      }
+      function validColorHex(value) {
+        return typeof value === "string" && /^#[0-9a-fA-F]{6}$/.test(value);
+      }
+      function alignmentColorRows(rows) {
+        return rows.map(function(row, index) {
+          return {
+            row: row,
+            sectionNumber: index + 1,
+            labL: isNumber(row.alignment_section_lab_l_median) ? row.alignment_section_lab_l_median : null,
+            labA: isNumber(row.alignment_section_lab_a_median) ? row.alignment_section_lab_a_median : null,
+            labB: isNumber(row.alignment_section_lab_b_median) ? row.alignment_section_lab_b_median : null,
+            luma: isNumber(row.alignment_section_luma_median) ? row.alignment_section_luma_median : null,
+            deltaE: isNumber(row.alignment_section_delta_e_from_baseline) ? row.alignment_section_delta_e_from_baseline : null,
+            hex: validColorHex(row.alignment_section_color_hex) ? row.alignment_section_color_hex : "",
+            samplePx: isNumber(row.alignment_section_color_sample_px) ? row.alignment_section_color_sample_px : 0,
+            baseline: row.alignment_section_delta_e_baseline || "first_valid_section"
+          };
+        });
+      }
+      function sectioningAlignmentBrightnessChart(rows) {
+        var all = alignmentColorRows(rows);
+        var points = all.filter(function(point) { return point.labL !== null && point.samplePx > 0; });
+        if (!points.length) return '<div class="notice">Alignment section brightness data is unavailable for this run.</div>';
+        var width = 760, height = 250, left = 58, right = 24, top = 24, bottom = 44;
+        var plotW = width - left - right, plotH = height - top - bottom;
+        function x(index) { return left + (all.length === 1 ? plotW / 2 : plotW * index / Math.max(1, all.length - 1)); }
+        function y(value) { return top + plotH - plotH * Math.max(0, Math.min(100, value)) / 100; }
+        var grid = [0, 50, 100].map(function(value) {
+          var yy = y(value);
+          return '<line class="chart-grid-line" x1="' + left + '" y1="' + yy + '" x2="' + (width - right) + '" y2="' + yy + '"></line><text class="chart-axis" x="8" y="' + (yy + 4) + '">' + value + '</text>';
+        }).join("");
+        var dots = all.map(function(point, index) {
+          var xx = x(index);
+          if (point.labL === null || point.samplePx <= 0) {
+            return '<circle cx="' + xx + '" cy="' + (height - bottom) + '" r="3" fill="#9aa3ad"><title>section ' + esc(point.sectionNumber) + ' / cut ' + esc(point.row.cut_id || "?") + ': no alignment color sample</title></circle>';
+          }
+          return '<circle cx="' + xx + '" cy="' + y(point.labL) + '" r="5" fill="var(--blue)"><title>section ' + esc(point.sectionNumber) + ' / cut ' + esc(point.row.cut_id || "?") + ': L* ' + esc(point.labL.toFixed(1)) + ', luma ' + esc(point.luma === null ? "n/a" : point.luma.toFixed(1)) + ', sample ' + esc(point.samplePx) + ' px</title></circle>';
+        }).join("");
+        return '<svg viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Alignment section Lab L brightness"><rect width="' + width + '" height="' + height + '" fill="var(--panel)"></rect>' + grid + dots + '<text class="chart-legend" x="' + left + '" y="16" fill="var(--blue)">Median Lab L*</text>' + sectioningXAxis(all.map(function(point) { return point.row; }), width, height, left, right) + '</svg>';
+      }
+      function sectioningAlignmentColorSwatchChart(rows) {
+        var all = alignmentColorRows(rows);
+        if (!all.some(function(point) { return point.hex; })) return '<div class="notice">Alignment section color swatches are unavailable for this run.</div>';
+        var width = 760, height = 150, left = 24, right = 24, top = 24, bottom = 40;
+        var plotW = width - left - right;
+        var slotW = plotW / Math.max(1, all.length);
+        var swatchH = 54;
+        var swatches = all.map(function(point, index) {
+          var xx = left + index * slotW;
+          var ww = Math.max(4, slotW - 2);
+          var title = point.hex
+            ? 'section ' + point.sectionNumber + ' / cut ' + (point.row.cut_id || "?") + ': ' + point.hex + ', L* ' + (point.labL === null ? "n/a" : point.labL.toFixed(1)) + ', a* ' + (point.labA === null ? "n/a" : point.labA.toFixed(1)) + ', b* ' + (point.labB === null ? "n/a" : point.labB.toFixed(1))
+            : 'section ' + point.sectionNumber + ' / cut ' + (point.row.cut_id || "?") + ': no alignment color sample';
+          if (!point.hex) {
+            return '<g><rect x="' + xx + '" y="' + top + '" width="' + ww + '" height="' + swatchH + '" fill="#eef1f4" stroke="#9aa3ad"></rect><line x1="' + xx + '" y1="' + (top + swatchH) + '" x2="' + (xx + ww) + '" y2="' + top + '" stroke="#9aa3ad"></line><title>' + esc(title) + '</title></g>';
+          }
+          return '<rect x="' + xx + '" y="' + top + '" width="' + ww + '" height="' + swatchH + '" fill="' + point.hex + '" stroke="#25282d"><title>' + esc(title) + '</title></rect>';
+        }).join("");
+        var labels = all.map(function(point, index) {
+          if (all.length > 18 && index % Math.ceil(all.length / 18) !== 0 && index !== all.length - 1) return "";
+          return '<text class="chart-label" text-anchor="middle" x="' + (left + index * slotW + slotW / 2) + '" y="' + (height - 14) + '">' + esc(point.sectionNumber) + '</text>';
+        }).join("");
+        return '<svg viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Alignment section median color swatches"><rect width="' + width + '" height="' + height + '" fill="var(--panel)"></rect><text class="chart-legend" x="' + left + '" y="16" fill="var(--ink)">Median section color</text>' + swatches + labels + '</svg>';
+      }
+      function sectioningAlignmentColorDriftChart(rows) {
+        var all = alignmentColorRows(rows);
+        var points = all.filter(function(point) { return point.deltaE !== null && point.samplePx > 0; });
+        if (!points.length) return '<div class="notice">Alignment color drift data is unavailable for this run.</div>';
+        var width = 760, height = 250, left = 58, right = 24, top = 24, bottom = 44;
+        var plotW = width - left - right, plotH = height - top - bottom;
+        var maxDelta = Math.max(1, ...points.map(function(point) { return num(point.deltaE); }));
+        var yMax = Math.ceil(maxDelta * 1.15) || 1;
+        function x(index) { return left + (all.length === 1 ? plotW / 2 : plotW * index / Math.max(1, all.length - 1)); }
+        function y(value) { return top + plotH - plotH * Math.max(0, value) / yMax; }
+        var grid = [0, 0.5, 1].map(function(step) {
+          var yy = top + plotH * (1 - step);
+          var label = (yMax * step).toFixed(yMax < 10 ? 1 : 0);
+          return '<line class="chart-grid-line" x1="' + left + '" y1="' + yy + '" x2="' + (width - right) + '" y2="' + yy + '"></line><text class="chart-axis" x="8" y="' + (yy + 4) + '">' + esc(label) + '</text>';
+        }).join("");
+        var barW = Math.max(3, Math.min(16, plotW / Math.max(1, all.length) * 0.55));
+        var bars = all.map(function(point, index) {
+          var xx = x(index);
+          if (point.deltaE === null || point.samplePx <= 0) {
+            return '<circle cx="' + xx + '" cy="' + (height - bottom) + '" r="3" fill="#9aa3ad"><title>section ' + esc(point.sectionNumber) + ' / cut ' + esc(point.row.cut_id || "?") + ': no alignment color drift sample</title></circle>';
+          }
+          var yy = y(point.deltaE);
+          return '<rect x="' + (xx - barW / 2) + '" y="' + yy + '" width="' + barW + '" height="' + Math.max(1, height - bottom - yy) + '" fill="var(--coral)"><title>section ' + esc(point.sectionNumber) + ' / cut ' + esc(point.row.cut_id || "?") + ': Delta E ' + esc(point.deltaE.toFixed(2)) + ' from ' + esc(point.baseline) + '</title></rect>';
+        }).join("");
+        return '<svg viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Alignment section color drift from baseline"><rect width="' + width + '" height="' + height + '" fill="var(--panel)"></rect>' + grid + bars + '<text class="chart-legend" x="' + left + '" y="16" fill="var(--coral)">Delta E from first valid section</text>' + sectioningXAxis(all.map(function(point) { return point.row; }), width, height, left, right) + '</svg>';
       }
       function sectioningFeedChart(rows) {
         var points = rows.filter(function(row) { return isNumber(row.nominal_cumulative_feed_nm); });
