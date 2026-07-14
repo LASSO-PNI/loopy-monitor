@@ -671,7 +671,12 @@
         ];
         var chartDays = days.map(function(day, sourceIndex) {
           return {day: day, sourceIndex: sourceIndex};
+        }).filter(function(entry) {
+          return metrics.some(function(metric) {
+            return num(entry.day[metric.field]) !== 0;
+          });
         }).reverse();
+        if (!chartDays.length) return "No daily throughput recorded";
         var maxValue = Math.max(1, ...chartDays.map(function(entry) {
           var day = entry.day;
           return Math.max(...metrics.map(function(metric) {
@@ -697,8 +702,8 @@
               esc(height) + '%"><strong>' + esc(value) + noteMarker + '</strong></div>';
           }).join("");
           return '<div class="cycle-bar-group"><div class="cycle-bar-wrap">' +
-            metricBars + '</div><div class="cycle-label">Day ' +
-            esc(sourceIndex + 1) + '<span>' + esc(formatShortDate(day.date_eastern)) + '</span></div></div>';
+            metricBars + '</div><div class="cycle-label"><span>' +
+            esc(formatShortDate(day.date_eastern)) + '</span></div></div>';
         }).join("");
         return legend + '<div class="cycle-chart" aria-label="Daily throughput count chart"><div class="chart-axis"><span>' +
           esc(maxValue) + '</span><span>' + esc(halfValue) + '</span><span>0</span></div><div class="chart-plot">' +
