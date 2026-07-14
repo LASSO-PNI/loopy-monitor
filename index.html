@@ -672,11 +672,9 @@
         var chartDays = days.map(function(day, sourceIndex) {
           return {day: day, sourceIndex: sourceIndex};
         }).filter(function(entry) {
-          return metrics.some(function(metric) {
-            return num(entry.day[metric.field]) !== 0;
-          });
+          return num(entry.day.daily_full_auto_cycles) > 0;
         }).reverse();
-        if (!chartDays.length) return "No daily throughput recorded";
+        if (!chartDays.length) return "No completed Auto cycles recorded";
         var maxValue = Math.max(1, ...chartDays.map(function(entry) {
           var day = entry.day;
           return Math.max(...metrics.map(function(metric) {
