@@ -6,6 +6,80 @@
     "total_rows": 0,
     "truncated_rows": false
   },
+  "ns_command_relationship": {
+    "command_measurement": "request/enqueued estimate = signed raw UC7 step command x scale divisor; not hardware completion",
+    "counts": {
+      "all_cuts": 0,
+      "displayed_point_cuts": 0,
+      "eligible_cuts": 0,
+      "excluded_cuts": 0,
+      "explicit_command_cuts": 0,
+      "incomplete_attribution_cuts": 0,
+      "legacy_attribution_cuts": 0,
+      "missing_interval_cuts": 0,
+      "missing_thickness_cuts": 0,
+      "net_zero_command_cuts": 0,
+      "no_command_cuts": 0,
+      "nonzero_command_cuts": 0,
+      "other_quantified_command_cuts": 0,
+      "run_count": 0,
+      "unique_command_level_count": 0,
+      "unique_interval_level_count": 0,
+      "unique_thickness_level_count": 0,
+      "unknown_outcome_cuts": 0,
+      "unquantified_command_cuts": 0
+    },
+    "coverage_by_thickness": [],
+    "denominators_reconcile": true,
+    "exclusion_precedence": [
+      "legacy_attribution",
+      "unquantified_command",
+      "incomplete_attribution",
+      "missing_thickness",
+      "missing_interval",
+      "unknown_outcome"
+    ],
+    "exclusions": {
+      "incomplete_attribution": 0,
+      "legacy_attribution": 0,
+      "missing_interval": 0,
+      "missing_thickness": 0,
+      "unknown_outcome": 0,
+      "unquantified_command": 0
+    },
+    "levels": {
+      "estimated_command_nm": [],
+      "thickness_nm": []
+    },
+    "observed_delta_diagnostic": {
+      "available_cuts": 0,
+      "max_raw": null,
+      "measurement": "observed UC7 coordinate delta; diagnostic only; not a command",
+      "median_raw": null,
+      "min_raw": null,
+      "nonzero_cuts": 0,
+      "nonzero_unknown_attribution_cuts": 0,
+      "nonzero_without_explicit_command_cuts": 0,
+      "outlier_assessment_available": false,
+      "outlier_count": 0,
+      "outlier_rule": "absolute nonzero delta above Q3 + 1.5 IQR; never excluded",
+      "outlier_threshold_abs_raw": null,
+      "outliers": [],
+      "units": "raw UC7 coordinate units"
+    },
+    "observed_measurement": "UC7 coordinate delta is diagnostic only and is not an explicit command",
+    "points": [],
+    "recommendation_available": false,
+    "recommendation_blockers": [
+      "physical_sign_unconfirmed",
+      "safe_trial_bounds_unconfigured",
+      "optimization_target_unselected",
+      "controlled_grid_coverage_missing",
+      "cross_run_repetition_missing",
+      "held_out_validation_missing"
+    ],
+    "status": "insufficient_controlled_data"
+  },
   "ok": true,
   "rows": [],
   "run": {
@@ -17,7 +91,7 @@
     "run_id": "run_20260608_174956_93448520",
     "schema_version": 3
   },
-  "sectioning_schema_version": 1,
+  "sectioning_schema_version": 2,
   "source": {
     "format": "csv",
     "row_count": 0

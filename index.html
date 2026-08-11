@@ -528,6 +528,29 @@
           </section>
 
           <section class="panel">
+            <h2>Explicit N/S Command vs Pre-Cut Interval</h2>
+            <div id="sectioning-ns-command-status" class="muted">Not loaded</div>
+            <div id="sectioning-ns-command-chart" class="sectioning-chart"></div>
+            <p id="sectioning-ns-observed-diagnostic" class="muted"></p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Thickness</th>
+                    <th>Eligible / All</th>
+                    <th>No Command</th>
+                    <th>Explicit Step</th>
+                    <th>Net Zero</th>
+                    <th>Nonzero</th>
+                    <th>Estimated Command Levels</th>
+                  </tr>
+                </thead>
+                <tbody id="sectioning-ns-command-coverage"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="panel">
             <h2>Thickness Breakdown (Selected Run)</h2>
             <div class="table-wrap">
               <table>
@@ -1006,6 +1029,7 @@
         document.getElementById("sectioning-loopy-area-chart").innerHTML = sectioningAreaBarChart(rows, "loopy_partial_area_px", "Loopy Arm Camera", "var(--blue)");
         document.getElementById("sectioning-feed-chart").innerHTML = sectioningFeedChart(rows);
         document.getElementById("sectioning-thickness-gap-chart").innerHTML = sectioningThicknessGapChart(rows);
+        drawSectioningNsCommandRelationship(payload.ns_command_relationship || {});
         document.getElementById("sectioning-thickness-rows").innerHTML = sectioningThicknessRows(payload.thickness_breakdown || []);
         document.getElementById("sectioning-bad-rows").innerHTML = sectioningBadRows(payload.bad_rows || []);
       }
@@ -1249,6 +1273,141 @@
         }).join("");
         var axis = thicknesses.map(function(thickness) { return '<text class="chart-label" text-anchor="middle" x="' + x(thickness) + '" y="' + (height - 14) + '">' + esc(nmText(thickness)) + '</text>'; }).join("");
         return '<svg viewBox="0 0 ' + width + ' ' + height + '"><rect width="' + width + '" height="' + height + '" fill="var(--panel)"></rect>' + timingGridSvg(width, height, left, right, top, bottom, maxSec) + dots + axis + '</svg>';
+      }
+      function drawSectioningNsCommandRelationship(relationship) {
+        relationship = relationship || {};
+        var counts = relationship.counts || {};
+        document.getElementById("sectioning-ns-command-status").textContent =
+          num(counts.eligible_cuts) + " / " + num(counts.all_cuts) + " eligible | " +
+          num(counts.displayed_point_cuts) + " shown | insufficient controlled data";
+        document.getElementById("sectioning-ns-command-chart").innerHTML = sectioningNsCommandChart(relationship);
+        document.getElementById("sectioning-ns-observed-diagnostic").textContent =
+          sectioningNsObservedDiagnosticText(relationship.observed_delta_diagnostic || {}, counts);
+        document.getElementById("sectioning-ns-command-coverage").innerHTML =
+          sectioningNsCoverageRows(relationship.coverage_by_thickness || []);
+      }
+      function sectioningNsCommandChart(relationship) {
+        var points = Array.isArray(relationship.points) ? relationship.points : [];
+        var counts = relationship.counts || {};
+        var exclusions = relationship.exclusions || {};
+        var blockers = Array.isArray(relationship.recommendation_blockers)
+          ? relationship.recommendation_blockers.map(titleize).join(', ')
+          : 'not reported';
+        var meta = '<p class="muted">Showing ' + esc(num(counts.displayed_point_cuts)) +
+          ' attributed points | eligible ' + esc(num(counts.eligible_cuts)) + ' / ' +
+          esc(num(counts.all_cuts)) + ' cuts | explicit step ' +
+          esc(num(counts.explicit_command_cuts)) + ' | nonzero ' +
+          esc(num(counts.nonzero_command_cuts)) + ' | excluded ' +
+          esc(num(counts.excluded_cuts)) +
+          '. Y is the request/enqueued estimate (signed raw UC7 step x scale), not motion completion.</p>' +
+          '<p class="muted">Excluded - legacy ' + esc(num(exclusions.legacy_attribution)) +
+          '; unquantified motion ' + esc(num(exclusions.unquantified_command)) +
+          '; incomplete attribution ' + esc(num(exclusions.incomplete_attribution)) +
+          '; missing thickness ' + esc(num(exclusions.missing_thickness)) +
+          '; missing interval ' + esc(num(exclusions.missing_interval)) +
+          '; unknown outcome ' + esc(num(exclusions.unknown_outcome)) +
+          '. Coverage - ' + esc(num(counts.unique_thickness_level_count)) +
+          ' thickness, ' + esc(num(counts.unique_interval_level_count)) +
+          ' interval, ' + esc(num(counts.unique_command_level_count)) +
+          ' command levels across ' + esc(num(counts.run_count)) +
+          ' run(s). Recommendation blockers: ' + esc(blockers) +
+          '. Pixel-near marks are grouped; a numeric marker is the number of observations in that rendered cell.</p>';
+        if (!points.length) {
+          var message = num(counts.eligible_cuts) > 0
+            ? 'No eligible points fall inside the displayed row window.'
+            : 'No eligible explicitly attributed N/S command rows yet.';
+          return meta + '<div class="notice">' + esc(message) + '</div>';
+        }
+        var thicknesses = Array.from(new Set(points.map(function(point) { return point.nominal_thickness_nm; }))).sort(function(a, b) { return a - b; });
+        var width = 760, left = 82, right = 22, top = 46, facetH = 132, plotH = 82, bottom = 38;
+        var height = top + thicknesses.length * facetH + bottom, plotW = width - left - right;
+        var xMax = Math.max(1, ...points.map(function(point) { return Math.max(0, num(point.interval_sec)); }));
+        var yMax = Math.max(1, ...points.map(function(point) { return Math.abs(num(point.estimated_signed_nm)); }));
+        function x(value) { return left + plotW * Math.max(0, num(value)) / xMax; }
+        function y(value, facetTop) { return facetTop + plotH / 2 - plotH * num(value) / (2 * yMax); }
+        var facets = thicknesses.map(function(thickness, facetIndex) {
+          var facetTop = top + facetIndex * facetH;
+          var facetPoints = points.filter(function(point) { return point.nominal_thickness_nm === thickness; });
+          var zeroY = y(0, facetTop);
+          var guides = '<line class="chart-grid-line" x1="' + left + '" y1="' + facetTop + '" x2="' + (width - right) + '" y2="' + facetTop + '"></line>' +
+            '<line x1="' + left + '" y1="' + zeroY + '" x2="' + (width - right) + '" y2="' + zeroY + '" stroke="var(--muted)" stroke-width="1.2"></line>' +
+            '<line class="chart-grid-line" x1="' + left + '" y1="' + (facetTop + plotH) + '" x2="' + (width - right) + '" y2="' + (facetTop + plotH) + '"></line>';
+          function pointTitle(point) {
+            var rawCommand = isNumber(point.raw_signed_nm) ? Math.round(point.raw_signed_nm) + ' raw' : 'unavailable';
+            var observedDelta = isNumber(point.observed_delta_raw_nm) ? Math.round(point.observed_delta_raw_nm) + ' raw' : 'unavailable';
+            return 'run ' + (point.run_id || '?') + ' / cut ' + (point.cut_id == null ? '?' : point.cut_id) + ': ' + secondsText(point.interval_sec) +
+              ' since confirmed attachment; estimated ' + nmText(point.estimated_signed_nm) + '; requested ' + nmText(point.requested_signed_nm) +
+              '; raw ' + rawCommand + '; scale ' + (point.scale_divisor == null ? 'unknown' : point.scale_divisor) +
+              '; ' + num(point.relative_step_command_count) + ' relative step command(s); ' + titleize(point.outcome) +
+              '; source ' + (point.source_summary || 'unknown') + '; observed coordinate delta ' + observedDelta + ' (diagnostic only)';
+          }
+          var markerPadding = 7;
+          var innerWidth = Math.max(1, plotW - 2 * markerPadding);
+          var innerHeight = Math.max(1, plotH - 2 * markerPadding);
+          var xCellCount = Math.max(1, Math.floor(innerWidth / 16));
+          var yCellCount = Math.max(1, Math.floor(innerHeight / 16));
+          var markGroups = new Map();
+          facetPoints.forEach(function(point) {
+            var baseX = x(point.interval_sec);
+            var baseY = y(point.estimated_signed_nm, facetTop);
+            var xCell = Math.max(0, Math.min(xCellCount, Math.round((baseX - left) * xCellCount / plotW)));
+            var yCell = Math.max(0, Math.min(yCellCount, Math.round((baseY - facetTop) * yCellCount / plotH)));
+            var key = xCell + ':' + yCell;
+            if (!markGroups.has(key)) markGroups.set(key, {xCell: xCell, yCell: yCell, points: []});
+            markGroups.get(key).points.push(point);
+          });
+          var marks = Array.from(markGroups.values()).map(function(group) {
+            var xx = left + markerPadding + innerWidth * group.xCell / xCellCount;
+            var yy = facetTop + markerPadding + innerHeight * group.yCell / yCellCount;
+            if (group.points.length > 1) {
+              var outcomeCounts = {complete_section: 0, partial_section: 0, missed_section: 0};
+              group.points.forEach(function(point) { outcomeCounts[point.outcome] += 1; });
+              var populatedOutcomes = Object.entries(outcomeCounts).filter(function(entry) { return entry[1] > 0; });
+              var outcomes = populatedOutcomes.map(function(entry) { return titleize(entry[0]) + ' ' + entry[1]; }).join(', ');
+              var onlyOutcome = populatedOutcomes.length === 1 ? populatedOutcomes[0][0] : null;
+              var fill = onlyOutcome === 'complete_section' ? 'var(--green)' :
+                onlyOutcome === 'partial_section' ? 'var(--gold)' :
+                onlyOutcome === 'missed_section' ? 'var(--coral)' : 'var(--panel)';
+              var textFill = onlyOutcome ? '#ffffff' : 'var(--ink)';
+              var details = group.points.slice(0, 20).map(pointTitle).join('\n');
+              var omitted = group.points.length > 20 ? '\n' + (group.points.length - 20) + ' additional observation(s) omitted from tooltip' : '';
+              var groupedTitle = group.points.length + ' observations: ' + outcomes + '\n' + details + omitted;
+              return '<g><circle cx="' + xx + '" cy="' + yy + '" r="7" fill="' + fill + '" stroke="var(--muted)" stroke-width="1.2"></circle>' +
+                '<text x="' + xx + '" y="' + (yy + 3) + '" text-anchor="middle" font-size="8" font-weight="800" fill="' + textFill + '">' + esc(group.points.length) + '</text>' +
+                '<title>' + esc(groupedTitle) + '</title></g>';
+            }
+            var point = group.points[0];
+            var title = pointTitle(point);
+            if (point.outcome === 'partial_section') return '<polygon points="' + xx + ',' + (yy - 6) + ' ' + (xx - 6) + ',' + (yy + 5) + ' ' + (xx + 6) + ',' + (yy + 5) + '" fill="var(--gold)"><title>' + esc(title) + '</title></polygon>';
+            if (point.outcome === 'missed_section') return '<g stroke="var(--coral)" stroke-width="2.5"><line x1="' + (xx - 5) + '" y1="' + (yy - 5) + '" x2="' + (xx + 5) + '" y2="' + (yy + 5) + '"></line><line x1="' + (xx - 5) + '" y1="' + (yy + 5) + '" x2="' + (xx + 5) + '" y2="' + (yy - 5) + '"></line><title>' + esc(title) + '</title></g>';
+            return '<circle cx="' + xx + '" cy="' + yy + '" r="5" fill="var(--green)"><title>' + esc(title) + '</title></circle>';
+          }).join("");
+          return guides + '<text class="chart-legend" x="' + left + '" y="' + (facetTop - 9) + '">' + esc(nmText(thickness)) + ' | n=' + esc(facetPoints.length) + '</text>' +
+            '<text class="chart-axis" x="8" y="' + (facetTop + 4) + '">' + esc(nmText(yMax)) + '</text><text class="chart-axis" x="8" y="' + (zeroY + 4) + '">0</text>' +
+            '<text class="chart-axis" x="8" y="' + (facetTop + plotH + 4) + '">' + esc(nmText(-yMax)) + '</text>' + marks;
+        }).join("");
+        var plotBottom = top + thicknesses.length * facetH - (facetH - plotH);
+        return meta + '<svg viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Explicit N/S request estimate by pre-cut interval and nominal thickness">' +
+          '<rect width="' + width + '" height="' + height + '" fill="var(--panel)"></rect><text class="chart-legend" x="' + left + '" y="18" fill="var(--green)">● complete</text>' +
+          '<text class="chart-legend" x="' + (left + 104) + '" y="18" fill="var(--gold)">▲ partial</text><text class="chart-legend" x="' + (left + 190) + '" y="18" fill="var(--coral)">× missed</text>' + facets +
+          '<text class="chart-label" x="' + left + '" y="' + (plotBottom + 25) + '">0 s</text><text class="chart-label" text-anchor="end" x="' + (width - right) + '" y="' + (plotBottom + 25) + '">' + esc(secondsText(xMax)) + '</text>' +
+          '<text class="chart-label" text-anchor="middle" x="' + (left + plotW / 2) + '" y="' + (plotBottom + 25) + '">time since previous confirmed attachment</text></svg>';
+      }
+      function sectioningNsObservedDiagnosticText(diagnostic, counts) {
+        function raw(value) { return isNumber(value) ? Math.round(value) + ' raw' : 'unavailable'; }
+        var outliers = diagnostic.outlier_assessment_available ? num(diagnostic.outlier_count) + ' retained outlier(s)' : 'outlier assessment waiting for at least four nonzero observations';
+        return 'Observed UC7 N/S coordinate delta - diagnostic only, raw coordinate units, not a command: ' + num(diagnostic.available_cuts) + ' / ' + num(counts.all_cuts) +
+          ' available; ' + num(diagnostic.nonzero_cuts) + ' nonzero; ' + num(diagnostic.nonzero_without_explicit_command_cuts) +
+          ' nonzero without an explicit relative-step command; ' + outliers + '; min / median / max ' + raw(diagnostic.min_raw) + ' / ' + raw(diagnostic.median_raw) + ' / ' + raw(diagnostic.max_raw) + '; ' +
+          num(diagnostic.nonzero_unknown_attribution_cuts) + ' nonzero row(s) have legacy/incomplete command attribution.';
+      }
+      function sectioningNsCoverageRows(rows) {
+        if (!rows.length) return '<tr><td colspan="7" class="muted">No attributed thickness coverage available</td></tr>';
+        return rows.map(function(row) {
+          var levels = (row.estimated_command_levels_nm || []).map(nmText).join(', ') || 'none';
+          return '<tr><td>' + esc(nmText(row.thickness_nm)) + '</td><td>' + esc(num(row.eligible_cuts)) + ' / ' + esc(num(row.all_cuts)) + '</td><td>' + esc(num(row.no_command_cuts)) +
+            '</td><td>' + esc(num(row.explicit_command_cuts)) + '</td><td>' + esc(num(row.net_zero_command_cuts)) + '</td><td>' + esc(num(row.nonzero_command_cuts)) + '</td><td>' + esc(levels) + '</td></tr>';
+        }).join("");
       }
       function sectioningThicknessRows(rows) {
         if (!rows.length) return '<tr><td colspan="9" class="muted">No thickness groups available</td></tr>';
