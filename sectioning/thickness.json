@@ -1,25 +1,25 @@
 {
   "accepted_cut_gap_count": 6071,
-  "cut_count": 9374,
+  "cut_count": 9378,
   "ns_command_relationship": {
     "command_measurement": "request/enqueued estimate = signed raw UC7 step command x scale divisor; not hardware completion",
     "counts": {
-      "all_cuts": 9374,
+      "all_cuts": 9378,
       "displayed_point_cuts": 0,
-      "eligible_cuts": 8,
+      "eligible_cuts": 12,
       "excluded_cuts": 9366,
-      "explicit_command_cuts": 3,
+      "explicit_command_cuts": 6,
       "incomplete_attribution_cuts": 4,
       "legacy_attribution_cuts": 9362,
       "missing_interval_cuts": 0,
       "missing_thickness_cuts": 0,
       "net_zero_command_cuts": 0,
-      "no_command_cuts": 5,
-      "nonzero_command_cuts": 3,
+      "no_command_cuts": 6,
+      "nonzero_command_cuts": 6,
       "other_quantified_command_cuts": 0,
       "run_count": 306,
-      "unique_command_level_count": 2,
-      "unique_interval_level_count": 8,
+      "unique_command_level_count": 3,
+      "unique_interval_level_count": 12,
       "unique_thickness_level_count": 1,
       "unknown_outcome_cuts": 0,
       "unquantified_command_cuts": 0
@@ -86,16 +86,17 @@
         "thickness_nm": 80
       },
       {
-        "all_cuts": 1283,
-        "eligible_cuts": 8,
+        "all_cuts": 1287,
+        "eligible_cuts": 12,
         "estimated_command_levels_nm": [
+          -400,
           -300,
           0
         ],
-        "explicit_command_cuts": 3,
+        "explicit_command_cuts": 6,
         "net_zero_command_cuts": 0,
-        "no_command_cuts": 5,
-        "nonzero_command_cuts": 3,
+        "no_command_cuts": 6,
+        "nonzero_command_cuts": 6,
         "thickness_nm": 100
       },
       {
@@ -218,6 +219,7 @@
     },
     "levels": {
       "estimated_command_nm": [
+        -400,
         -300,
         0
       ],
@@ -226,12 +228,12 @@
       ]
     },
     "observed_delta_diagnostic": {
-      "available_cuts": 8900,
+      "available_cuts": 8904,
       "max_raw": 178890.0,
       "measurement": "observed UC7 coordinate delta; diagnostic only; not a command",
       "median_raw": 0.0,
       "min_raw": -2888.0,
-      "nonzero_cuts": 291,
+      "nonzero_cuts": 294,
       "nonzero_unknown_attribution_cuts": 288,
       "nonzero_without_explicit_command_cuts": 0,
       "outlier_assessment_available": true,
@@ -535,31 +537,31 @@
       "thickness_nm": 80
     },
     {
-      "accepted": 1146,
+      "accepted": 1148,
       "accepted_cut_gap_count": 1003,
-      "accepted_rate_pct": 89.32190179267342,
-      "complete": 1045,
-      "complete_rate_pct": 81.44972720187062,
-      "cuts": 1283,
+      "accepted_rate_pct": 89.1996891996892,
+      "complete": 1047,
+      "complete_rate_pct": 81.35198135198135,
+      "cuts": 1287,
       "median_accepted_cut_gap_sec": 28.118260528,
       "median_attach_time_sec": 0.0,
-      "median_cut_gap_sec": 48.013698606999995,
+      "median_cut_gap_sec": 48.000689337999994,
       "median_detector_confidence": 0.0,
       "median_ns_accepted_delta_nm": 0.0,
       "median_separation_time_sec": 2.3609400000000003,
-      "missed": 137,
-      "missed_no_section": 137,
-      "missed_rate_pct": 10.678098207326578,
+      "missed": 139,
+      "missed_no_section": 139,
+      "missed_rate_pct": 10.8003108003108,
       "outcome_counts": {
-        "missed_no_section": 137,
+        "missed_no_section": 139,
         "partial_section": 101,
-        "success": 1045
+        "success": 1047
       },
       "partial": 101,
-      "partial_rate_pct": 7.872174590802806,
+      "partial_rate_pct": 7.847707847707848,
       "partial_section": 101,
-      "separated": 1146,
-      "separated_rate_pct": 89.32190179267342,
+      "separated": 1148,
+      "separated_rate_pct": 89.1996891996892,
       "thickness_nm": 100
     },
     {
