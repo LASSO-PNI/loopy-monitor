@@ -652,22 +652,14 @@
         if (parts.length !== 3) return value || "";
         return Number(parts[1]) + "/" + Number(parts[2]);
       }
-      function isWeekend(day) {
-        var parts = String(day.date_eastern || "").split("-").map(Number);
-        if (parts.length !== 3 || parts.some(function(part) { return !Number.isFinite(part); })) return false;
-        var weekday = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2], 12)).getUTCDay();
-        return weekday === 0 || weekday === 6;
-      }
-      function dayHasRun(day) {
-        return num(day.daily_full_auto_cycles) > 0 ||
-          num(day.daily_section) > 0 ||
-          num(day.daily_pickup) > 0 ||
-          num(day.daily_dropoff) > 0;
+      // Same rule as the publisher: a day with no auto cycles, sections,
+      // pickups or dropoffs is not shown, whatever its times say.
+      function dayHasActivity(day) {
+        return ["daily_full_auto_cycles", "daily_section", "daily_pickup", "daily_dropoff"]
+          .some(function(field) { return num(day[field]) > 0; });
       }
       function displayDays(days) {
-        return days.filter(function(day) {
-          return dayHasRun(day) || !isWeekend(day);
-        });
+        return days.filter(dayHasActivity);
       }
       function card(label, value) {
         return '<article class="card"><span>' + esc(label) + '</span><strong>' + esc(value) + '</strong></article>';
