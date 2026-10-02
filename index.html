@@ -367,6 +367,101 @@
         padding: 18px 0;
       }
       a { color: var(--blue); }
+      .cb-intro { font-size: 15px; line-height: 1.5; max-width: 76ch; }
+      .cb-note {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+        margin: 0 0 12px;
+        max-width: 96ch;
+      }
+      #cb-generated { margin: 8px 0 0; }
+      .cb-note.cb-after { margin: 12px 0 0; }
+      .cb-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 18px;
+        color: var(--muted);
+        font-size: 13px;
+        margin-bottom: 8px;
+      }
+      .cb-key { display: inline-flex; align-items: center; gap: 7px; }
+      .cb-key i {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 3px;
+      }
+      .cb-key svg { display: block; }
+      .cb-chart svg { display: block; height: auto; max-width: none; }
+      .cb-scroll-x { overflow-x: auto; }
+      .cb-split { display: flex; align-items: flex-start; }
+      .cb-split > svg { flex: none; }
+      .cb-split > .cb-scroll-x { flex: 1 1 auto; min-width: 0; }
+      .cb-scroll-y { max-height: 640px; overflow-y: auto; }
+      .cb-svg text { fill: var(--muted); font-size: 12px; }
+      .cb-svg .cb-ink { fill: var(--ink); }
+      .cb-svg .cb-strong { fill: var(--ink); font-weight: 700; }
+      .cb-svg .cb-in { fill: var(--paper); font-weight: 700; pointer-events: none; }
+      .cb-svg .cb-halo {
+        paint-order: stroke;
+        stroke: var(--panel);
+        stroke-width: 4px;
+        stroke-linejoin: round;
+      }
+      .cb-grid { stroke: var(--line); stroke-width: 1; shape-rendering: crispEdges; }
+      .cb-day-controls { margin-bottom: 0; font-size: 14px; }
+      .cb-slack { font-size: 14px; line-height: 1.45; margin-top: 10px; }
+      .cb-slack:empty { display: none; }
+      .cb-table table { min-width: 560px; }
+      .cb-table th.num,
+      .cb-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+      .cb-table tr.cb-total td { font-weight: 800; }
+      .cb-table tr.cb-group td { font-weight: 700; }
+      .cb-table tr.cb-group td:first-child { padding-top: 14px; }
+      .cb-table td.cb-d1 { padding-left: 30px; }
+      .cb-table td.cb-d2 { padding-left: 50px; color: var(--muted); }
+      .cb-swatch {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 3px;
+        margin-right: 8px;
+      }
+      .cb-share { display: inline-flex; align-items: center; gap: 8px; }
+      .cb-share-track {
+        display: inline-block;
+        width: 120px;
+        height: 8px;
+        background: var(--bar-track);
+        border-radius: 2px;
+        position: relative;
+      }
+      .cb-share-fill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        border-radius: 0 2px 2px 0;
+      }
+      .cb-share-pct {
+        display: inline-block;
+        min-width: 3em;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+      @media (max-width: 600px) {
+        .cb-table table { min-width: 0; }
+        .cb-table th,
+        .cb-table td { padding: 8px 5px; white-space: normal; }
+        .cb-table td.cb-d1 { padding-left: 14px; }
+        .cb-table td.cb-d2 { padding-left: 26px; }
+        .cb-share-track { display: none; }
+        .cb-share-pct { min-width: 0; }
+        .cb-hide-narrow { display: none; }
+        .cb-table td.num,
+        .cb-table td.cb-nowrap { white-space: nowrap; }
+      }
       @media (max-width: 860px) {
         main { padding: 18px; }
         header { align-items: flex-start; flex-direction: column; }
@@ -388,6 +483,7 @@
       <nav class="tabs" aria-label="Dashboard views">
         <button type="button" class="tab-button active" data-tab="history">Counter History</button>
         <button type="button" class="tab-button" data-tab="sectioning">Sectioning Model</button>
+        <button type="button" class="tab-button" data-tab="cycle-breakdown">Cycle Breakdown</button>
       </nav>
 
       <section id="tab-history" class="tab-panel" data-tab-panel="history">
@@ -617,6 +713,85 @@
           </section>
         </section>
       </section>
+
+      <section id="tab-cycle-breakdown" class="tab-panel" data-tab-panel="cycle-breakdown" hidden>
+        <section class="panel">
+          <p class="cb-intro">Where each Full Auto cycle's time goes, per day. A cycle runs from one dropoff completion to the next; Sectioning counts only the time the cycle waits for the knife.</p>
+          <p class="cb-note" id="cb-generated">Loading cycle_breakdown.json</p>
+        </section>
+
+        <section id="cb-empty" class="panel notice" hidden>No cycle breakdown recorded yet.</section>
+
+        <section id="cb-content" hidden>
+          <section class="panel">
+            <h2>By day</h2>
+            <p class="cb-note">Mean seconds per completed cycle. Sectioning, Pickup and Dropoff add up to the mean cycle. n = completed cycles that day; faulted, stopped and abandoned cycles are left out.</p>
+            <div class="cb-legend" id="cb-bucket-legend"></div>
+            <div id="cb-by-day" class="cb-chart"></div>
+          </section>
+
+          <section class="panel">
+            <h2>Consistency over time</h2>
+            <p class="cb-note">Whole-cycle time per day: dot = median, box = p25&ndash;p75, line = p10&ndash;p90, in seconds. n = completed cycles that day.</p>
+            <div id="cb-consistency" class="cb-chart"></div>
+          </section>
+
+          <section class="panel">
+            <div class="controls cb-day-controls">
+              <label for="cb-day-select"><strong>Day</strong></label>
+              <select id="cb-day-select"></select>
+              <span class="muted" id="cb-day-meta"></span>
+            </div>
+            <p class="cb-slack" id="cb-slack"></p>
+          </section>
+
+          <section class="panel">
+            <h2>Breakdown</h2>
+            <p class="cb-note" id="cb-breakdown-note"></p>
+            <div class="table-wrap cb-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Group / Item</th>
+                    <th class="num">Mean (s)</th>
+                    <th class="num">Median (s)</th>
+                    <th class="num">p90 (s)</th>
+                    <th>Share<span class="cb-hide-narrow"> of the mean cycle</span></th>
+                  </tr>
+                </thead>
+                <tbody id="cb-breakdown-rows"></tbody>
+              </table>
+            </div>
+            <p class="cb-note cb-after">Groups split the critical path by kind of work. Waits sit under In-between times and moves under Transit, so the Sectioning group holds only foreground cutting and separation; the In-between times table shows which part each wait holds up.</p>
+          </section>
+
+          <section class="panel">
+            <h2>In-between times</h2>
+            <p class="cb-note" id="cb-waits-note"></p>
+            <div class="table-wrap cb-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Wait</th>
+                    <th>Holds up</th>
+                    <th class="num">In cycles</th>
+                    <th class="num">Mean (s)</th>
+                    <th class="num">p90 (s)</th>
+                  </tr>
+                </thead>
+                <tbody id="cb-waits-rows"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="panel">
+            <h2>Spread</h2>
+            <p class="cb-note" id="cb-spread-note"></p>
+            <div class="cb-legend" id="cb-spread-legend"></div>
+            <div id="cb-spread" class="cb-chart"></div>
+          </section>
+        </section>
+      </section>
       <footer class="site-footer">
         <p>* - consecutive counter was not working at this point</p>
         <p id="timing-method" class="method-note"></p>
@@ -767,15 +942,35 @@
           });
         });
       }
+      var TAB_HASHES = {
+        "history": "#history",
+        "sectioning": "#sectioning",
+        "cycle-breakdown": "#cycle-breakdown"
+      };
+      function tabFromHash(hash) {
+        for (var tab in TAB_HASHES) {
+          if (Object.prototype.hasOwnProperty.call(TAB_HASHES, tab) && TAB_HASHES[tab] === hash) return tab;
+        }
+        return "history";
+      }
       function switchTab(tab) {
+        if (!Object.prototype.hasOwnProperty.call(TAB_HASHES, tab)) tab = "history";
         Array.prototype.forEach.call(document.querySelectorAll("[data-tab]"), function(button) {
           button.classList.toggle("active", button.getAttribute("data-tab") === tab);
         });
         Array.prototype.forEach.call(document.querySelectorAll("[data-tab-panel]"), function(panel) {
           panel.hidden = panel.getAttribute("data-tab-panel") !== tab;
         });
+        // The footer explains the counter-based Cycle Timing panels, whose
+        // definitions differ from the Cycle Breakdown tab's.
+        var footer = document.querySelector(".site-footer");
+        if (footer) footer.hidden = tab === "cycle-breakdown";
         if (tab === "sectioning" && !window.__sectioningLoaded) loadSectioningIndex();
-        window.location.hash = tab === "sectioning" ? "#sectioning" : "#history";
+        if (tab === "cycle-breakdown") {
+          if (!window.__cycleBreakdownLoaded) loadCycleBreakdown();
+          else cbRender();
+        }
+        if (window.location.hash !== TAB_HASHES[tab]) window.location.hash = TAB_HASHES[tab];
       }
       function timingMetrics(timing) {
         return timing && Array.isArray(timing.metrics) ? timing.metrics : [];
@@ -1436,6 +1631,497 @@
         var last = rows[rows.length - 1] && rows[rows.length - 1].section_evidence_index || first;
         return '<text class="chart-label" x="' + left + '" y="' + (height - 12) + '">evidence ' + esc(first) + '</text><text class="chart-label" x="' + (width - right - 104) + '" y="' + (height - 12) + '">evidence ' + esc(last) + '</text>';
       }
+      // Cycle Breakdown tab. cycle_breakdown.json holds per-day numbers and
+      // fixed catalog labels only; this code reads nothing else.
+      var CB_COLORS = {
+        sectioning: "var(--green)",
+        pickup: "var(--blue)",
+        dropoff: "var(--gold)",
+        transit: "var(--violet)",
+        in_between: "var(--muted)"
+      };
+      var CB_BUCKETS = ["sectioning", "pickup", "dropoff"];
+      var CB_GROUPS = ["sectioning", "pickup", "dropoff", "transit", "in_between"];
+      var cbState = {payload: null, date: "", multiYear: false, resizeTimer: null, resizeBound: false};
+      var cbMeasure = null;
+      function cbList(value) { return Array.isArray(value) ? value : []; }
+      function cbStat(entry) { return entry && entry.stat ? entry.stat : {}; }
+      function cbTotal(day) { return day && day.total ? day.total : {}; }
+      function cbFind(list, key) {
+        var rows = cbList(list);
+        for (var i = 0; i < rows.length; i++) {
+          if (rows[i] && rows[i].key === key) return rows[i];
+        }
+        return null;
+      }
+      function cbByMean(a, b) { return num(cbStat(b).mean_ms) - num(cbStat(a).mean_ms); }
+      function cbSec(ms) { return isNumber(ms) ? (ms / 1000).toFixed(1) : "n/a"; }
+      function cbSecUnit(ms) { return isNumber(ms) ? (ms / 1000).toFixed(1) + " s" : "n/a"; }
+      function cbPercent(fraction) {
+        if (!isNumber(fraction) || fraction <= 0) return "0%";
+        return fraction * 100 < 1 ? "<1%" : Math.round(fraction * 100) + "%";
+      }
+      function cbDateLabel(date, withYear) {
+        var parts = String(date || "").split("-");
+        if (parts.length !== 3) return String(date || "");
+        var value = new Date(Date.UTC(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])));
+        if (!Number.isFinite(value.getTime())) return String(date);
+        var options = {timeZone: "UTC", weekday: "short", month: "short", day: "numeric"};
+        if (withYear || cbState.multiYear) options.year = "numeric";
+        return new Intl.DateTimeFormat("en-US", options).format(value);
+      }
+      function cbCatalogLabel(kind, key) {
+        var catalog = cbState.payload && cbState.payload.catalog ? cbState.payload.catalog : {};
+        var entry = cbFind(catalog[kind], key);
+        return entry ? entry.label : String(key || "");
+      }
+      function cbTextWidth(text, size, weight) {
+        var value = String(text == null ? "" : text);
+        try {
+          if (!cbMeasure) cbMeasure = document.createElement("canvas").getContext("2d");
+          if (cbMeasure) {
+            var family = window.getComputedStyle(document.body).fontFamily || "sans-serif";
+            cbMeasure.font = (weight || 400) + " " + size + "px " + family;
+            return Math.ceil(cbMeasure.measureText(value).width);
+          }
+        } catch (error) {}
+        return Math.ceil(value.length * size * 0.62);
+      }
+      function cbFitLabel(options, room, size, weight) {
+        for (var i = 0; i < options.length; i++) {
+          if (cbTextWidth(options[i], size, weight) <= room) return options[i];
+        }
+        return "";
+      }
+      function cbWidth(id) {
+        var node = document.getElementById(id);
+        var width = node ? node.clientWidth : 0;
+        return width > 0 ? Math.floor(width) : 960;
+      }
+      function cbScale(maxSec, targetTicks) {
+        var limit = Math.max(isNumber(maxSec) ? maxSec : 0, 0.5);
+        var raw = limit / Math.max(1, targetTicks);
+        var steps = [0.5, 1, 2, 5, 10, 15, 20, 30, 60, 120, 300, 600];
+        var step = steps[steps.length - 1];
+        for (var i = 0; i < steps.length; i++) {
+          if (steps[i] >= raw) { step = steps[i]; break; }
+        }
+        return {step: step, max: Math.ceil(limit / step - 1e-9) * step};
+      }
+      function cbTicks(scale) {
+        var ticks = [];
+        for (var i = 0; i * scale.step <= scale.max + 1e-9; i++) ticks.push(i * scale.step);
+        return ticks;
+      }
+      function cbTickText(seconds) {
+        return (seconds % 1 === 0 ? String(seconds) : seconds.toFixed(1)) + " s";
+      }
+      function cbAnchoredText(x, y, text, width, cls) {
+        var half = cbTextWidth(text, 12, 400) / 2;
+        var anchor = "middle";
+        if (x - half < 0) anchor = "start";
+        else if (x + half > width) anchor = "end";
+        if (anchor === "start") x = Math.max(0, x);
+        if (anchor === "end") x = Math.min(width, x);
+        return '<text' + (cls ? ' class="' + cls + '"' : '') + ' x="' + x.toFixed(1) + '" y="' + y +
+          '" text-anchor="' + anchor + '">' + esc(text) + '</text>';
+      }
+      function cbSvgOpen(width, height, label) {
+        return '<svg class="cb-svg" viewBox="0 0 ' + width + ' ' + height + '" width="' + width +
+          '" height="' + height + '" role="img" aria-label="' + esc(label) + '">';
+      }
+      function cbBarEnd(x, y, w, h, r) {
+        var radius = Math.max(0, Math.min(r, w / 2, h / 2));
+        function f(value) { return value.toFixed(1); }
+        return '<path d="M' + f(x) + ' ' + f(y) + 'H' + f(x + w - radius) +
+          'Q' + f(x + w) + ' ' + f(y) + ' ' + f(x + w) + ' ' + f(y + radius) +
+          'V' + f(y + h - radius) + 'Q' + f(x + w) + ' ' + f(y + h) + ' ' + f(x + w - radius) + ' ' + f(y + h) +
+          'H' + f(x) + 'Z"';
+      }
+      function cbKey(color, label) {
+        return '<span class="cb-key"><i style="background:' + color + '"></i>' + esc(label) + '</span>';
+      }
+      function cbBucketMeans(day) {
+        return CB_BUCKETS.map(function(key) {
+          var stat = cbStat(cbFind(day.buckets, key));
+          return {key: key, stat: stat, ms: Math.max(0, num(stat.mean_ms))};
+        });
+      }
+      function cbBarTotal(day) {
+        return cbBucketMeans(day).reduce(function(sum, part) { return sum + part.ms; }, 0);
+      }
+      function cbDayStatText(day, short) {
+        var total = cbTotal(day);
+        if (!num(day.completed)) return "no completed cycles";
+        if (short) return "mean " + cbSecUnit(total.mean_ms) + " · n=" + num(day.completed);
+        return "mean " + cbSecUnit(total.mean_ms) + " · median " + cbSecUnit(total.median_ms) +
+          " · n=" + num(day.completed);
+      }
+      function cbDaySegments(day, x, y, h) {
+        var parts = cbBucketMeans(day).filter(function(part) { return part.ms > 0; });
+        var cycleMean = num(cbTotal(day).mean_ms);
+        var cursor = 0;
+        return parts.map(function(part, index) {
+          var last = index === parts.length - 1;
+          var x0 = x(cursor);
+          cursor += part.ms;
+          var w = Math.max(1, x(cursor) - x0 - (last ? 0 : 2));
+          var label = cbCatalogLabel("buckets", part.key);
+          var title = cbDateLabel(day.date, true) + " · " + label + ": mean " + cbSecUnit(part.ms) +
+            " (" + cbPercent(cycleMean > 0 ? part.ms / cycleMean : 0) + " of the mean cycle) · median " +
+            cbSecUnit(part.stat.median_ms) + " · p90 " + cbSecUnit(part.stat.p90_ms) + " · in " +
+            num(part.stat.cycles_with) + " of " + num(day.completed) + " cycles";
+          var open = last ? cbBarEnd(x0, y, w, h, 4) :
+            '<rect x="' + x0.toFixed(1) + '" y="' + y + '" width="' + w.toFixed(1) + '" height="' + h + '"';
+          var shape = open + ' fill="' + CB_COLORS[part.key] + '"><title>' + esc(title) + '</title>' +
+            (last ? '</path>' : '</rect>');
+          var inside = cbFitLabel([label + " " + cbSecUnit(part.ms), cbSecUnit(part.ms)], w - 12, 12, 700);
+          return shape + (inside ? '<text class="cb-in" x="' + (x0 + 6).toFixed(1) +
+            '" y="' + (y + h / 2 + 4).toFixed(1) + '">' + esc(inside) + '</text>' : '');
+        }).join("");
+      }
+      function cbByDayChart(days, width) {
+        var rows = days.slice().reverse();
+        if (!rows.length) return '<p class="notice">No days recorded yet.</p>';
+        var scrolls = rows.length > 14;
+        if (scrolls) width = Math.max(200, width - 18);
+        var narrow = width < 640;
+        var dateW = 0, statW = 0;
+        rows.forEach(function(day) {
+          dateW = Math.max(dateW, cbTextWidth(cbDateLabel(day.date), 12, 700));
+          statW = Math.max(statW, cbTextWidth(cbDayStatText(day, false), 12, 400));
+        });
+        var shortStats = narrow && dateW + statW + 16 > width;
+        if (shortStats) {
+          statW = 0;
+          rows.forEach(function(day) { statW = Math.max(statW, cbTextWidth(cbDayStatText(day, true), 12, 400)); });
+        }
+        var barH = 20, rowH = narrow ? 48 : 32, axisH = 22;
+        var topAxis = scrolls;
+        var top = topAxis ? axisH : 2;
+        var left = narrow ? 0 : dateW + 16;
+        var right = narrow ? 1 : statW + 12;
+        var plotW = Math.max(80, width - left - right);
+        var maxMs = rows.reduce(function(most, day) { return Math.max(most, cbBarTotal(day)); }, 0);
+        var scale = cbScale(maxMs / 1000, plotW < 360 ? 4 : 8);
+        function x(ms) { return left + plotW * Math.max(0, Math.min(ms / 1000, scale.max)) / scale.max; }
+        var plotBottom = top + rows.length * rowH;
+        var height = plotBottom + axisH;
+        var axis = cbTicks(scale).map(function(tick) {
+          var gx = x(tick * 1000);
+          return '<line class="cb-grid" x1="' + gx.toFixed(1) + '" y1="' + top + '" x2="' + gx.toFixed(1) +
+            '" y2="' + plotBottom + '"></line>' +
+            cbAnchoredText(gx, plotBottom + 16, cbTickText(tick), width) +
+            (topAxis ? cbAnchoredText(gx, top - 8, cbTickText(tick), width) : '');
+        }).join("");
+        var body = rows.map(function(day, index) {
+          var y0 = top + index * rowH;
+          var barY = narrow ? y0 + 22 : y0 + (rowH - barH) / 2;
+          var textY = narrow ? y0 + 14 : barY + barH / 2 + 4;
+          var statText = cbDayStatText(day, shortStats);
+          var stat = narrow ?
+            '<text class="cb-halo" x="' + width + '" y="' + textY + '" text-anchor="end">' + esc(statText) + '</text>' :
+            '<text class="cb-halo" x="' + (x(cbBarTotal(day)) + 8).toFixed(1) + '" y="' + textY + '">' + esc(statText) + '</text>';
+          return '<g><text class="cb-strong cb-halo" x="0" y="' + textY + '">' + esc(cbDateLabel(day.date)) + '</text>' +
+            cbDaySegments(day, x, barY, barH) + stat + '</g>';
+        }).join("");
+        var svg = cbSvgOpen(width, height, "Mean seconds per completed cycle by day, split into Sectioning, Pickup and Dropoff") +
+          axis + body + '</svg>';
+        return scrolls ? '<div class="cb-scroll-y">' + svg + '</div>' : svg;
+      }
+      function cbConsistencyChart(days, width) {
+        var points = days.filter(function(day) { return num(day.completed) > 0; });
+        if (!points.length) return '<p class="notice">No completed cycles recorded yet.</p>';
+        var latest = points[points.length - 1];
+        var latestStat = cbTotal(latest);
+        var label1 = "median " + cbSecUnit(latestStat.median_ms);
+        var label2 = cbDateLabel(latest.date) + " · n=" + num(latest.completed);
+        var maxMs = points.reduce(function(most, day) { return Math.max(most, num(cbTotal(day).p90_ms)); }, 0);
+        var scale = cbScale(maxMs / 1000, 5);
+        var axisW = cbTextWidth(cbTickText(scale.max), 12, 400) + 10;
+        var labelW = Math.max(cbTextWidth(label1, 12, 700), cbTextWidth(label2, 12, 400));
+        var top = 10, plotH = 200, height = top + plotH + 26;
+        var colW = (width - axisW - labelW - 24) / points.length;
+        // Too many days to fit: the y axis stays put and the plot scrolls.
+        var split = colW < 18;
+        if (split) colW = 18;
+        var dotR = colW < 24 ? 3.5 : 4.5;
+        var left = split ? 4 : axisW;
+        var boxW = Math.max(6, Math.min(16, colW * 0.45));
+        function cx(index) { return left + colW * (index + 0.5); }
+        var lastX = cx(points.length - 1) + boxW / 2 + 10;
+        var plotRight = lastX - 6;
+        var svgWidth = split ? Math.ceil(lastX + labelW + 4) : Math.max(width, Math.ceil(lastX + labelW + 4));
+        function y(ms) { return top + plotH * (1 - Math.max(0, Math.min(num(ms) / 1000, scale.max)) / scale.max); }
+        function tickLabels(x) {
+          return cbTicks(scale).map(function(tick) {
+            return '<text x="' + x + '" y="' + (y(tick * 1000) + 4).toFixed(1) + '" text-anchor="end">' + esc(cbTickText(tick)) + '</text>';
+          }).join("");
+        }
+        var grid = cbTicks(scale).map(function(tick) {
+          var gy = y(tick * 1000).toFixed(1);
+          return '<line class="cb-grid" x1="' + left + '" y1="' + gy + '" x2="' + plotRight.toFixed(1) + '" y2="' + gy + '"></line>';
+        }).join("") + (split ? '' : tickLabels(left - 8));
+        var every = Math.max(1, Math.ceil(44 / colW));
+        var marks = points.map(function(day, index) {
+          var st = cbTotal(day);
+          var c = cx(index);
+          var y25 = y(st.p25_ms), y75 = y(st.p75_ms);
+          var title = cbDateLabel(day.date, true) + " · whole cycle: median " + cbSecUnit(st.median_ms) +
+            " · p25–p75 " + cbSec(st.p25_ms) + "–" + cbSecUnit(st.p75_ms) + " · p10–p90 " + cbSec(st.p10_ms) +
+            "–" + cbSecUnit(st.p90_ms) + " · mean " + cbSecUnit(st.mean_ms) + " · n=" + num(day.completed) + " completed cycles";
+          var dateLabel = (points.length - 1 - index) % every === 0 ?
+            '<text x="' + c.toFixed(1) + '" y="' + (top + plotH + 18) + '" text-anchor="middle">' + esc(formatShortDate(day.date)) + '</text>' : '';
+          return '<g><title>' + esc(title) + '</title>' +
+            '<rect x="' + (c - colW / 2).toFixed(1) + '" y="' + top + '" width="' + colW.toFixed(1) + '" height="' + plotH + '" fill="transparent"></rect>' +
+            '<line x1="' + c.toFixed(1) + '" y1="' + y(st.p90_ms).toFixed(1) + '" x2="' + c.toFixed(1) + '" y2="' + y(st.p10_ms).toFixed(1) +
+            '" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"></line>' +
+            '<rect x="' + (c - boxW / 2).toFixed(1) + '" y="' + y75.toFixed(1) + '" width="' + boxW.toFixed(1) + '" height="' +
+            Math.max(2, y25 - y75).toFixed(1) + '" rx="2" fill="var(--muted)" fill-opacity="0.4"></rect>' +
+            '<circle cx="' + c.toFixed(1) + '" cy="' + y(st.median_ms).toFixed(1) + '" r="' + dotR + '" fill="var(--ink)" stroke="var(--panel)" stroke-width="2"></circle>' +
+            dateLabel + '</g>';
+        }).join("");
+        var labelY = Math.min(y(latestStat.median_ms) + 4, top + plotH - 14);
+        var direct = '<text class="cb-strong" x="' + lastX.toFixed(1) + '" y="' + labelY.toFixed(1) + '">' + esc(label1) + '</text>' +
+          '<text x="' + lastX.toFixed(1) + '" y="' + (labelY + 15).toFixed(1) + '">' + esc(label2) + '</text>';
+        var svg = cbSvgOpen(svgWidth, height, "Whole-cycle seconds per day: median, p25 to p75 and p10 to p90") +
+          grid + marks + direct + '</svg>';
+        if (!split) return svg;
+        return '<div class="cb-split"><svg class="cb-svg" viewBox="0 0 ' + axisW + ' ' + height + '" width="' + axisW +
+          '" height="' + height + '" aria-hidden="true">' + tickLabels(axisW - 8) + '</svg>' +
+          '<div class="cb-scroll-x">' + svg + '</div></div>';
+      }
+      function cbSpreadRows(day) {
+        return cbList(day.items).concat(cbList(day.waits)).filter(function(row) {
+          return num(cbStat(row).cycles_with) > 0;
+        }).sort(cbByMean);
+      }
+      // The axis ends near the largest box or the second-largest p90, so one
+      // long tail does not squash every other row; clipped tails are labelled.
+      function cbSpreadCapMs(rows) {
+        var p90s = rows.map(function(row) { return num(cbStat(row).p90_ms); }).sort(function(a, b) { return b - a; });
+        var maxP75 = rows.reduce(function(most, row) { return Math.max(most, num(cbStat(row).p75_ms)); }, 0);
+        if (p90s.length < 2) return p90s[0] || 0;
+        var robust = Math.max(maxP75, p90s[1]) * 1.15;
+        return p90s[0] > robust ? robust : p90s[0];
+      }
+      function cbSpreadChart(day, width) {
+        var rows = cbSpreadRows(day);
+        if (!rows.length) return {html: '<p class="notice">No item times recorded on this day.</p>', clipped: false, rows: rows};
+        var narrow = width < 640;
+        var labelW = rows.reduce(function(most, row) { return Math.max(most, cbTextWidth(row.label, 12, 400)); }, 0);
+        var left = narrow ? 6 : labelW + 16;
+        var right = 12, top = 4, rowH = narrow ? 40 : 28;
+        var plotW = Math.max(80, width - left - right);
+        var scale = cbScale(cbSpreadCapMs(rows) / 1000, plotW < 360 ? 4 : 8);
+        var capMs = scale.max * 1000;
+        var anyClipped = false;
+        function x(ms) { return left + plotW * Math.max(0, Math.min(num(ms), capMs)) / capMs; }
+        var plotBottom = top + rows.length * rowH;
+        var height = plotBottom + 22;
+        var axis = cbTicks(scale).map(function(tick) {
+          var gx = x(tick * 1000);
+          return '<line class="cb-grid" x1="' + gx.toFixed(1) + '" y1="' + top + '" x2="' + gx.toFixed(1) + '" y2="' + plotBottom + '"></line>' +
+            cbAnchoredText(gx, plotBottom + 16, cbTickText(tick), width);
+        }).join("");
+        var n = num(day.completed);
+        var body = rows.map(function(row, index) {
+          var st = cbStat(row);
+          var color = CB_COLORS[row.group] || "var(--muted)";
+          var y0 = top + index * rowH;
+          var cy = narrow ? y0 + 28 : y0 + rowH / 2;
+          var labelY = narrow ? y0 + 13 : cy + 4;
+          var x25 = x(st.p25_ms), x75 = x(st.p75_ms), x90 = x(st.p90_ms);
+          var clipped = num(st.p90_ms) > capMs + 0.5;
+          var clip = "";
+          if (clipped) {
+            anyClipped = true;
+            var edge = left + plotW;
+            var clipText = cbFitLabel(["p90 " + cbSecUnit(st.p90_ms), cbSecUnit(st.p90_ms)],
+              narrow ? plotW - cbTextWidth(row.label, 12, 400) - 12 : plotW * 0.3, 12, 400);
+            clip = '<path d="M' + (edge - 6).toFixed(1) + ' ' + (cy - 4) + 'L' + edge.toFixed(1) + ' ' + cy + 'L' + (edge - 6).toFixed(1) + ' ' + (cy + 4) +
+              '" fill="none" stroke="' + color + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>' +
+              (clipText ? '<text class="cb-ink cb-halo" x="' + (edge - 2).toFixed(1) + '" y="' + (narrow ? labelY : cy - 8) + '" text-anchor="end">' + esc(clipText) + '</text>' : '');
+          }
+          var title = row.label + " · median " + cbSecUnit(st.median_ms) + " · p25–p75 " + cbSec(st.p25_ms) + "–" + cbSecUnit(st.p75_ms) +
+            " · p10–p90 " + cbSec(st.p10_ms) + "–" + cbSecUnit(st.p90_ms) + " · mean " + cbSecUnit(st.mean_ms) +
+            " · in " + num(st.cycles_with) + " of " + n + " cycles";
+          return '<g><title>' + esc(title) + '</title>' +
+            '<rect x="0" y="' + y0 + '" width="' + width + '" height="' + rowH + '" fill="transparent"></rect>' +
+            '<text class="cb-ink cb-halo" x="' + (narrow ? left : 0) + '" y="' + labelY + '">' + esc(row.label) + '</text>' +
+            '<line x1="' + x(st.p10_ms).toFixed(1) + '" y1="' + cy + '" x2="' + x90.toFixed(1) + '" y2="' + cy +
+            '" stroke="' + color + '" stroke-width="2" stroke-linecap="round"></line>' +
+            '<rect x="' + x25.toFixed(1) + '" y="' + (cy - 5) + '" width="' + Math.max(2, x75 - x25).toFixed(1) +
+            '" height="10" rx="2" fill="' + color + '"></rect>' +
+            '<circle cx="' + x(st.median_ms).toFixed(1) + '" cy="' + cy + '" r="4.5" fill="var(--ink)" stroke="var(--panel)" stroke-width="2"></circle>' +
+            clip + '</g>';
+        }).join("");
+        return {
+          html: cbSvgOpen(width, height, "Spread of each item's seconds per cycle on the selected day") + axis + body + '</svg>',
+          clipped: anyClipped,
+          capSec: scale.max,
+          rows: rows
+        };
+      }
+      function cbSpreadLegend(rows) {
+        var present = {};
+        rows.forEach(function(row) { present[row.group] = true; });
+        var keys = CB_GROUPS.filter(function(key) { return present[key]; }).map(function(key) {
+          return cbKey(CB_COLORS[key], cbCatalogLabel("groups", key));
+        }).join("");
+        return keys + '<span class="cb-key"><svg width="54" height="12" viewBox="0 0 54 12" aria-hidden="true">' +
+          '<line x1="2" y1="6" x2="52" y2="6" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"></line>' +
+          '<rect x="15" y="1" width="24" height="10" rx="2" fill="var(--muted)"></rect>' +
+          '<circle cx="25" cy="6" r="4" fill="var(--ink)" stroke="var(--panel)" stroke-width="2"></circle></svg>' +
+          'line p10–p90, box p25–p75, dot median</span>';
+      }
+      function cbShareCell(fraction, color) {
+        var width = isNumber(fraction) ? Math.max(0, Math.min(1, fraction)) * 100 : 0;
+        return '<span class="cb-share"><span class="cb-share-track"><span class="cb-share-fill" style="width:' +
+          width.toFixed(1) + '%;background:' + color + '"></span></span><span class="cb-share-pct">' +
+          esc(cbPercent(fraction)) + '</span></span>';
+      }
+      function cbTableRow(label, stat, rowClass, cellClass, share, color, swatch) {
+        return '<tr' + (rowClass ? ' class="' + rowClass + '"' : '') + '><td' + (cellClass ? ' class="' + cellClass + '"' : '') + '>' +
+          (swatch ? '<i class="cb-swatch" style="background:' + color + '"></i>' : '') + esc(label) +
+          '</td><td class="num">' + esc(cbSec(stat.mean_ms)) + '</td><td class="num">' + esc(cbSec(stat.median_ms)) +
+          '</td><td class="num">' + esc(cbSec(stat.p90_ms)) + '</td><td>' + cbShareCell(share, color) + '</td></tr>';
+      }
+      function cbBreakdownRows(day) {
+        if (!num(day.completed)) return '<tr><td colspan="5" class="muted">No completed cycles on this day.</td></tr>';
+        var total = cbTotal(day);
+        var meanTotal = num(total.mean_ms);
+        function share(stat) { return meanTotal > 0 ? num(stat.mean_ms) / meanTotal : 0; }
+        var members = cbList(day.items).concat(cbList(day.waits));
+        var html = '<tr class="cb-total"><td>Whole cycle</td><td class="num">' + esc(cbSec(total.mean_ms)) +
+          '</td><td class="num">' + esc(cbSec(total.median_ms)) + '</td><td class="num">' + esc(cbSec(total.p90_ms)) +
+          '</td><td><span class="cb-share"><span class="cb-share-track" style="visibility:hidden"></span>' +
+          '<span class="cb-share-pct">100%</span></span></td></tr>';
+        CB_GROUPS.forEach(function(groupKey) {
+          var color = CB_COLORS[groupKey];
+          var groupStat = cbStat(cbFind(day.groups, groupKey));
+          html += cbTableRow(cbCatalogLabel("groups", groupKey), groupStat, "cb-group", "", share(groupStat), color, true);
+          members.filter(function(row) { return row.group === groupKey; }).sort(cbByMean).forEach(function(row) {
+            var stat = cbStat(row);
+            html += cbTableRow(row.label, stat, "", "cb-d1", share(stat), color, false);
+            if (row.key !== "dropoff_steps") return;
+            cbList(day.dropoff_steps).forEach(function(step) {
+              var stepStat = cbStat(step);
+              html += cbTableRow(step.label, stepStat, "", "cb-d2", share(stepStat), color, false);
+            });
+          });
+        });
+        return html;
+      }
+      function cbWaitRows(day) {
+        var waits = cbList(day.waits).slice().sort(cbByMean);
+        if (!waits.length) return '<tr><td colspan="5" class="muted">No in-between times recorded on this day.</td></tr>';
+        var n = num(day.completed);
+        return waits.map(function(row) {
+          var stat = cbStat(row);
+          return '<tr><td>' + esc(row.label) + '</td><td class="cb-nowrap"><i class="cb-swatch" style="background:' +
+            (CB_COLORS[row.bucket] || "var(--muted)") + '"></i>' + esc(cbCatalogLabel("buckets", row.bucket)) +
+            '</td><td class="num">' + esc(num(stat.cycles_with) + " of " + n) + '</td><td class="num">' +
+            esc(cbSec(stat.mean_ms)) + '</td><td class="num">' + esc(cbSec(stat.p90_ms)) + '</td></tr>';
+        }).join("");
+      }
+      function cbSlackText(day) {
+        var slack = day.sectioning_slack;
+        if (!slack || !isNumber(slack.median_ms)) return "";
+        if (slack.median_ms > 0) {
+          return "Sectioning finished " + cbSecUnit(slack.median_ms) + " before the cycle needed it (median; p10–p90 " +
+            cbSec(slack.p10_ms) + "–" + cbSecUnit(slack.p90_ms) + ").";
+        }
+        return "Sectioning did not finish before the cycle needed it on a typical cycle (median slack " +
+          cbSecUnit(slack.median_ms) + "); the wait shows under In-between times.";
+      }
+      function cbDays() { return cbList(cbState.payload && cbState.payload.days); }
+      function cbSelectedDay() {
+        var days = cbDays();
+        for (var i = 0; i < days.length; i++) {
+          if (days[i].date === cbState.date) return days[i];
+        }
+        return days.length ? days[days.length - 1] : null;
+      }
+      function cbRenderDay() {
+        var day = cbSelectedDay();
+        if (!day) return;
+        var n = num(day.completed);
+        var name = cbDateLabel(day.date, true);
+        var others = num(day.other_outcomes);
+        document.getElementById("cb-day-meta").textContent = n + (n === 1 ? " completed cycle" : " completed cycles") +
+          (others ? " · " + others + " left out (faulted, stopped or abandoned)" : "") +
+          " · Breakdown, In-between times and Spread below are for this day";
+        document.getElementById("cb-slack").textContent = cbSlackText(day);
+        document.getElementById("cb-breakdown-note").textContent = "Seconds per completed cycle on " + name + ", n=" + n +
+          ". A cycle where an item did not happen counts as 0 s, so the means add up to the mean cycle (" +
+          cbSecUnit(cbTotal(day).mean_ms) + "); medians and p90s do not add up.";
+        document.getElementById("cb-breakdown-rows").innerHTML = cbBreakdownRows(day);
+        document.getElementById("cb-waits-note").textContent = "Waits with a named cause on " + name + ", n=" + n +
+          " completed cycles. In cycles counts the cycles that had the wait; Mean and p90 count 0 s where it did not happen.";
+        document.getElementById("cb-waits-rows").innerHTML = cbWaitRows(day);
+        var spread = cbSpreadChart(day, cbWidth("cb-spread"));
+        document.getElementById("cb-spread").innerHTML = spread.html;
+        document.getElementById("cb-spread-legend").innerHTML = spread.rows.length ? cbSpreadLegend(spread.rows) : "";
+        document.getElementById("cb-spread-note").textContent = "Seconds per cycle for each item with time on " + name +
+          ", n=" + n + " completed cycles (0 s where it did not happen), largest mean first." +
+          (spread.clipped ? " The axis stops at " + cbTickText(spread.capSec) +
+            " so one long tail does not squash the rest; an arrow marks a clipped p90 and gives its value." : "");
+      }
+      function cbRender() {
+        var panel = document.getElementById("tab-cycle-breakdown");
+        if (!cbState.payload || (panel && panel.hidden) || !cbDays().length) return;
+        var days = cbDays();
+        document.getElementById("cb-by-day").innerHTML = cbByDayChart(days, cbWidth("cb-by-day"));
+        var consistency = document.getElementById("cb-consistency");
+        consistency.innerHTML = cbConsistencyChart(days, cbWidth("cb-consistency"));
+        var scroller = consistency.querySelector(".cb-scroll-x");
+        if (scroller) scroller.scrollLeft = scroller.scrollWidth;
+        cbRenderDay();
+      }
+      function cbSetup(payload) {
+        cbState.payload = payload && typeof payload === "object" ? payload : {};
+        var days = cbDays();
+        var completed = days.reduce(function(sum, day) { return sum + num(day.completed); }, 0);
+        cbState.multiYear = days.length > 1 && String(days[0].date).slice(0, 4) !== String(days[days.length - 1].date).slice(0, 4);
+        document.getElementById("cb-generated").textContent =
+          (cbState.payload.generated_at ? "Generated " + formatEasternTimestamp(cbState.payload.generated_at) + " · " : "") +
+          days.length + (days.length === 1 ? " day · " : " days · ") + completed + " completed cycles";
+        document.getElementById("cb-empty").hidden = days.length > 0;
+        document.getElementById("cb-content").hidden = days.length === 0;
+        if (!days.length) return;
+        var select = document.getElementById("cb-day-select");
+        select.innerHTML = days.slice().reverse().map(function(day) {
+          return '<option value="' + esc(day.date) + '">' + esc(cbDateLabel(day.date, true) + " · n=" + num(day.completed)) + '</option>';
+        }).join("");
+        cbState.date = days[days.length - 1].date;
+        select.value = cbState.date;
+        select.onchange = function() {
+          cbState.date = select.value;
+          cbRenderDay();
+        };
+        document.getElementById("cb-bucket-legend").innerHTML = CB_BUCKETS.map(function(key) {
+          return cbKey(CB_COLORS[key], cbCatalogLabel("buckets", key));
+        }).join("");
+        if (!cbState.resizeBound) {
+          cbState.resizeBound = true;
+          window.addEventListener("resize", function() {
+            if (cbState.resizeTimer) window.clearTimeout(cbState.resizeTimer);
+            cbState.resizeTimer = window.setTimeout(cbRender, 150);
+          });
+        }
+        cbRender();
+      }
+      function loadCycleBreakdown() {
+        window.__cycleBreakdownLoaded = true;
+        return fetch("cycle_breakdown.json", {cache: "no-store"})
+          .then(function(response) { return response.json(); })
+          .then(cbSetup)
+          .catch(function() {
+            document.getElementById("cb-generated").textContent = "Unable to load cycle_breakdown.json";
+          });
+      }
+      // End of the Cycle Breakdown tab.
       function draw(payload) {
         var sourceDays = Array.isArray(payload.days) ? payload.days : [];
         var days = displayDays(sourceDays);
@@ -1465,14 +2151,17 @@
       }
       window.onload = function() {
         setupTabs();
-        if (window.location.hash === "#sectioning") switchTab("sectioning");
+        var initialTab = tabFromHash(window.location.hash);
+        if (initialTab !== "history") switchTab(initialTab);
+        window.addEventListener("hashchange", function() {
+          switchTab(tabFromHash(window.location.hash));
+        });
         fetch("history.json", {cache: "no-store"})
           .then(function(response) { return response.json(); })
           .then(draw)
           .catch(function() {
             document.getElementById("generated").textContent = "Unable to load history.json";
           });
-        if (window.location.hash === "#sectioning" && !window.__sectioningLoaded) loadSectioningIndex();
       };
     </script>
   </body>
