@@ -1,25 +1,25 @@
 {
-  "accepted_cut_gap_count": 7181,
-  "cut_count": 11425,
+  "accepted_cut_gap_count": 7184,
+  "cut_count": 11438,
   "ns_command_relationship": {
     "command_measurement": "request/enqueued estimate = signed raw UC7 step command x scale divisor; not hardware completion",
     "counts": {
-      "all_cuts": 11425,
+      "all_cuts": 11438,
       "displayed_point_cuts": 0,
-      "eligible_cuts": 1827,
+      "eligible_cuts": 1840,
       "excluded_cuts": 9598,
-      "explicit_command_cuts": 314,
+      "explicit_command_cuts": 324,
       "incomplete_attribution_cuts": 234,
       "legacy_attribution_cuts": 9362,
       "missing_interval_cuts": 0,
       "missing_thickness_cuts": 0,
       "net_zero_command_cuts": 3,
-      "no_command_cuts": 1513,
-      "nonzero_command_cuts": 311,
+      "no_command_cuts": 1516,
+      "nonzero_command_cuts": 321,
       "other_quantified_command_cuts": 0,
       "run_count": 396,
-      "unique_command_level_count": 38,
-      "unique_interval_level_count": 1827,
+      "unique_command_level_count": 39,
+      "unique_interval_level_count": 1840,
       "unique_thickness_level_count": 6,
       "unknown_outcome_cuts": 0,
       "unquantified_command_cuts": 2
@@ -144,8 +144,8 @@
         "thickness_nm": 110
       },
       {
-        "all_cuts": 644,
-        "eligible_cuts": 540,
+        "all_cuts": 657,
+        "eligible_cuts": 553,
         "estimated_command_levels_nm": [
           -55800,
           -44600,
@@ -165,13 +165,14 @@
           -200,
           0,
           16400,
+          137400,
           216200,
           218400
         ],
-        "explicit_command_cuts": 82,
+        "explicit_command_cuts": 92,
         "net_zero_command_cuts": 1,
-        "no_command_cuts": 458,
-        "nonzero_command_cuts": 81,
+        "no_command_cuts": 461,
+        "nonzero_command_cuts": 91,
         "thickness_nm": 120
       },
       {
@@ -339,6 +340,7 @@
         1500,
         1700,
         16400,
+        137400,
         216200,
         218400,
         497000
@@ -353,18 +355,18 @@
       ]
     },
     "observed_delta_diagnostic": {
-      "available_cuts": 10722,
+      "available_cuts": 10735,
       "max_raw": 178890.0,
       "measurement": "observed UC7 coordinate delta; diagnostic only; not a command",
       "median_raw": 0.0,
       "min_raw": -2888.0,
-      "nonzero_cuts": 609,
+      "nonzero_cuts": 619,
       "nonzero_unknown_attribution_cuts": 296,
       "nonzero_without_explicit_command_cuts": 1,
       "outlier_assessment_available": true,
-      "outlier_count": 28,
+      "outlier_count": 38,
       "outlier_rule": "absolute nonzero delta above Q3 + 1.5 IQR; never excluded",
-      "outlier_threshold_abs_raw": 269.0,
+      "outlier_threshold_abs_raw": 267.5,
       "outliers": [
         {
           "cut_id": 57,
@@ -505,6 +507,56 @@
           "cut_id": 78,
           "observed_delta_raw_nm": 1497.0,
           "run_id": "run_20261005_132530_4b37131b"
+        },
+        {
+          "cut_id": 49,
+          "observed_delta_raw_nm": -494.0,
+          "run_id": "run_20261006_123509_6e522c4a"
+        },
+        {
+          "cut_id": 50,
+          "observed_delta_raw_nm": -494.0,
+          "run_id": "run_20261006_123509_6e522c4a"
+        },
+        {
+          "cut_id": 51,
+          "observed_delta_raw_nm": -494.0,
+          "run_id": "run_20261006_123509_6e522c4a"
+        },
+        {
+          "cut_id": 52,
+          "observed_delta_raw_nm": -494.0,
+          "run_id": "run_20261006_123509_6e522c4a"
+        },
+        {
+          "cut_id": 53,
+          "observed_delta_raw_nm": -494.0,
+          "run_id": "run_20261006_123509_6e522c4a"
+        },
+        {
+          "cut_id": 54,
+          "observed_delta_raw_nm": -494.0,
+          "run_id": "run_20261006_123509_6e522c4a"
+        },
+        {
+          "cut_id": 55,
+          "observed_delta_raw_nm": -494.0,
+          "run_id": "run_20261006_123509_6e522c4a"
+        },
+        {
+          "cut_id": 56,
+          "observed_delta_raw_nm": -494.0,
+          "run_id": "run_20261006_123509_6e522c4a"
+        },
+        {
+          "cut_id": 57,
+          "observed_delta_raw_nm": -494.0,
+          "run_id": "run_20261006_123509_6e522c4a"
+        },
+        {
+          "cut_id": 58,
+          "observed_delta_raw_nm": -494.0,
+          "run_id": "run_20261006_123509_6e522c4a"
         }
       ],
       "units": "raw UC7 coordinate units"
@@ -759,32 +811,32 @@
       "thickness_nm": 110
     },
     {
-      "accepted": 506,
-      "accepted_cut_gap_count": 344,
-      "accepted_rate_pct": 78.57142857142857,
-      "complete": 456,
-      "complete_rate_pct": 70.80745341614907,
-      "cuts": 644,
-      "median_accepted_cut_gap_sec": 19.334107420499997,
-      "median_attach_time_sec": 1.0565729999999998,
-      "median_cut_gap_sec": 39.607622551,
+      "accepted": 510,
+      "accepted_cut_gap_count": 347,
+      "accepted_rate_pct": 77.62557077625571,
+      "complete": 460,
+      "complete_rate_pct": 70.01522070015221,
+      "cuts": 657,
+      "median_accepted_cut_gap_sec": 19.350286623,
+      "median_attach_time_sec": 1.057395,
+      "median_cut_gap_sec": 39.569688257,
       "median_detector_confidence": 0.0,
       "median_ns_accepted_delta_nm": 0.0,
-      "median_separation_time_sec": 3.402408,
-      "missed": 138,
-      "missed_no_section": 138,
-      "missed_rate_pct": 21.428571428571427,
+      "median_separation_time_sec": 3.4022609999999998,
+      "missed": 147,
+      "missed_no_section": 147,
+      "missed_rate_pct": 22.374429223744293,
       "outcome_counts": {
-        "missed_no_section": 136,
+        "missed_no_section": 145,
         "partial_section": 50,
-        "success": 456,
+        "success": 460,
         "timeout": 2
       },
       "partial": 50,
-      "partial_rate_pct": 7.763975155279503,
+      "partial_rate_pct": 7.610350076103501,
       "partial_section": 50,
-      "separated": 506,
-      "separated_rate_pct": 78.57142857142857,
+      "separated": 510,
+      "separated_rate_pct": 77.62557077625571,
       "thickness_nm": 120
     },
     {
