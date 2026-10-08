@@ -3817,13 +3817,13 @@
           "key": "sectioning",
           "label": "Sectioning",
           "stat": {
-            "cycles_with": 0,
-            "mean_ms": 0.0,
-            "median_ms": 0.0,
-            "p10_ms": 0.0,
-            "p25_ms": 0.0,
-            "p75_ms": 0.0,
-            "p90_ms": 0.0
+            "cycles_with": 1,
+            "mean_ms": 99345.0,
+            "median_ms": 99345.0,
+            "p10_ms": 99345.0,
+            "p25_ms": 99345.0,
+            "p75_ms": 99345.0,
+            "p90_ms": 99345.0
           }
         },
         {
@@ -3853,7 +3853,7 @@
           }
         }
       ],
-      "completed": 0,
+      "completed": 1,
       "date": "2026-10-08",
       "dropoff_steps": [],
       "groups": [
@@ -3861,13 +3861,13 @@
           "key": "sectioning",
           "label": "Sectioning",
           "stat": {
-            "cycles_with": 0,
-            "mean_ms": 0.0,
-            "median_ms": 0.0,
-            "p10_ms": 0.0,
-            "p25_ms": 0.0,
-            "p75_ms": 0.0,
-            "p90_ms": 0.0
+            "cycles_with": 1,
+            "mean_ms": 98659.0,
+            "median_ms": 98659.0,
+            "p10_ms": 98659.0,
+            "p25_ms": 98659.0,
+            "p75_ms": 98659.0,
+            "p90_ms": 98659.0
           }
         },
         {
@@ -3913,32 +3913,82 @@
           "key": "in_between",
           "label": "In-between times",
           "stat": {
-            "cycles_with": 0,
-            "mean_ms": 0.0,
-            "median_ms": 0.0,
-            "p10_ms": 0.0,
-            "p25_ms": 0.0,
-            "p75_ms": 0.0,
-            "p90_ms": 0.0
+            "cycles_with": 1,
+            "mean_ms": 686.0,
+            "median_ms": 686.0,
+            "p10_ms": 686.0,
+            "p25_ms": 686.0,
+            "p75_ms": 686.0,
+            "p90_ms": 686.0
           }
         }
       ],
-      "items": [],
-      "other_outcomes": 6,
+      "items": [
+        {
+          "bucket": "sectioning",
+          "group": "sectioning",
+          "key": "sectioning_cut",
+          "label": "Sectioning (UC7 cut)",
+          "share": 0.99309,
+          "stat": {
+            "cycles_with": 1,
+            "mean_ms": 98659.0,
+            "median_ms": 98659.0,
+            "p10_ms": 98659.0,
+            "p25_ms": 98659.0,
+            "p75_ms": 98659.0,
+            "p90_ms": 98659.0
+          }
+        }
+      ],
+      "other_outcomes": 15,
       "sectioning_slack": null,
       "total": {
-        "cycles_with": 0,
-        "mean_ms": 0.0,
-        "median_ms": 0.0,
-        "p10_ms": 0.0,
-        "p25_ms": 0.0,
-        "p75_ms": 0.0,
-        "p90_ms": 0.0
+        "cycles_with": 1,
+        "mean_ms": 99345.0,
+        "median_ms": 99345.0,
+        "p10_ms": 99345.0,
+        "p25_ms": 99345.0,
+        "p75_ms": 99345.0,
+        "p90_ms": 99345.0
       },
-      "waits": [],
+      "waits": [
+        {
+          "bucket": "sectioning",
+          "group": "in_between",
+          "key": "water_level_before_cutting",
+          "label": "Water level before cutting",
+          "share": 0.00465,
+          "stat": {
+            "cycles_with": 1,
+            "mean_ms": 462.0,
+            "median_ms": 462.0,
+            "p10_ms": 462.0,
+            "p25_ms": 462.0,
+            "p75_ms": 462.0,
+            "p90_ms": 462.0
+          }
+        },
+        {
+          "bucket": "sectioning",
+          "group": "in_between",
+          "key": "phase_start_queued",
+          "label": "Phase start (queued)",
+          "share": 0.00225,
+          "stat": {
+            "cycles_with": 1,
+            "mean_ms": 224.0,
+            "median_ms": 224.0,
+            "p10_ms": 224.0,
+            "p25_ms": 224.0,
+            "p75_ms": 224.0,
+            "p90_ms": 224.0
+          }
+        }
+      ],
       "web_slack": null
     }
   ],
-  "generated_at": "2026-10-08T20:22:41Z",
+  "generated_at": "2026-10-08T20:37:40Z",
   "schema_version": 1
 }
