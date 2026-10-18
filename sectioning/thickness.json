@@ -1,28 +1,28 @@
 {
-  "accepted_cut_gap_count": 7861,
-  "cut_count": 12839,
+  "accepted_cut_gap_count": 7863,
+  "cut_count": 12846,
   "ns_command_relationship": {
     "command_measurement": "request/enqueued estimate = signed raw UC7 step command x scale divisor; not hardware completion",
     "counts": {
-      "all_cuts": 12839,
+      "all_cuts": 12846,
       "displayed_point_cuts": 0,
-      "eligible_cuts": 3069,
-      "excluded_cuts": 9770,
-      "explicit_command_cuts": 511,
+      "eligible_cuts": 3074,
+      "excluded_cuts": 9772,
+      "explicit_command_cuts": 515,
       "incomplete_attribution_cuts": 406,
       "legacy_attribution_cuts": 9362,
       "missing_interval_cuts": 0,
       "missing_thickness_cuts": 0,
       "net_zero_command_cuts": 3,
-      "no_command_cuts": 2558,
-      "nonzero_command_cuts": 508,
+      "no_command_cuts": 2559,
+      "nonzero_command_cuts": 512,
       "other_quantified_command_cuts": 0,
       "run_count": 451,
       "unique_command_level_count": 45,
-      "unique_interval_level_count": 3069,
+      "unique_interval_level_count": 3074,
       "unique_thickness_level_count": 12,
       "unknown_outcome_cuts": 0,
-      "unquantified_command_cuts": 2
+      "unquantified_command_cuts": 4
     },
     "coverage_by_thickness": [
       {
@@ -124,17 +124,18 @@
         "thickness_nm": 65
       },
       {
-        "all_cuts": 16,
-        "eligible_cuts": 16,
+        "all_cuts": 23,
+        "eligible_cuts": 21,
         "estimated_command_levels_nm": [
+          -800,
           -400,
           -200,
           0
         ],
-        "explicit_command_cuts": 3,
+        "explicit_command_cuts": 7,
         "net_zero_command_cuts": 0,
-        "no_command_cuts": 13,
-        "nonzero_command_cuts": 3,
+        "no_command_cuts": 14,
+        "nonzero_command_cuts": 7,
         "thickness_nm": 70
       },
       {
@@ -367,7 +368,7 @@
       "missing_interval": 0,
       "missing_thickness": 0,
       "unknown_outcome": 0,
-      "unquantified_command": 2
+      "unquantified_command": 4
     },
     "levels": {
       "estimated_command_nm": [
@@ -433,12 +434,12 @@
       ]
     },
     "observed_delta_diagnostic": {
-      "available_cuts": 11963,
+      "available_cuts": 11970,
       "max_raw": 178890.0,
       "measurement": "observed UC7 coordinate delta; diagnostic only; not a command",
       "median_raw": 0.0,
       "min_raw": -18924.0,
-      "nonzero_cuts": 807,
+      "nonzero_cuts": 811,
       "nonzero_unknown_attribution_cuts": 296,
       "nonzero_without_explicit_command_cuts": 2,
       "outlier_assessment_available": true,
@@ -1298,31 +1299,31 @@
       "thickness_nm": 65
     },
     {
-      "accepted": 14,
-      "accepted_cut_gap_count": 12,
-      "accepted_rate_pct": 87.5,
-      "complete": 14,
-      "complete_rate_pct": 87.5,
-      "cuts": 16,
-      "median_accepted_cut_gap_sec": 23.124481913,
+      "accepted": 17,
+      "accepted_cut_gap_count": 14,
+      "accepted_rate_pct": 73.91304347826087,
+      "complete": 17,
+      "complete_rate_pct": 73.91304347826087,
+      "cuts": 23,
+      "median_accepted_cut_gap_sec": 23.384719341500002,
       "median_attach_time_sec": 0.0,
-      "median_cut_gap_sec": 52.2020037435,
+      "median_cut_gap_sec": 48.823777189,
       "median_detector_confidence": 0.0,
       "median_ns_accepted_delta_nm": 0.0,
-      "median_separation_time_sec": 11.2501735,
-      "missed": 2,
-      "missed_no_section": 2,
-      "missed_rate_pct": 12.5,
+      "median_separation_time_sec": 11.216628,
+      "missed": 6,
+      "missed_no_section": 6,
+      "missed_rate_pct": 26.08695652173913,
       "outcome_counts": {
-        "missed_no_section": 1,
-        "success": 14,
+        "missed_no_section": 5,
+        "success": 17,
         "timeout": 1
       },
       "partial": 0,
       "partial_rate_pct": 0.0,
       "partial_section": 0,
-      "separated": 14,
-      "separated_rate_pct": 87.5,
+      "separated": 17,
+      "separated_rate_pct": 73.91304347826087,
       "thickness_nm": 70
     },
     {
