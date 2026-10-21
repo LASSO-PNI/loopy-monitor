@@ -5995,21 +5995,21 @@
           "key": "sectioning",
           "label": "Sectioning",
           "stat": {
-            "cycles_with": 65,
-            "mean_ms": 3290.2,
+            "cycles_with": 66,
+            "mean_ms": 3409.5,
             "median_ms": 0.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
-            "p75_ms": 0.0,
-            "p90_ms": 4762.0
+            "p75_ms": 41.0,
+            "p90_ms": 5359.0
           }
         },
         {
           "key": "pickup",
           "label": "Pickup",
           "stat": {
-            "cycles_with": 260,
-            "mean_ms": 20634.2,
+            "cycles_with": 261,
+            "mean_ms": 20615.9,
             "median_ms": 14743.0,
             "p10_ms": 8068.0,
             "p25_ms": 10129.0,
@@ -6021,24 +6021,24 @@
           "key": "dropoff",
           "label": "Dropoff",
           "stat": {
-            "cycles_with": 260,
-            "mean_ms": 23818.8,
+            "cycles_with": 261,
+            "mean_ms": 23814.9,
             "median_ms": 23736.0,
-            "p10_ms": 23000.0,
-            "p25_ms": 23449.0,
+            "p10_ms": 22992.0,
+            "p25_ms": 23446.0,
             "p75_ms": 24266.0,
             "p90_ms": 24782.0
           }
         }
       ],
-      "completed": 260,
+      "completed": 261,
       "date": "2026-10-21",
       "dropoff_steps": [
         {
           "key": "pre_drop_z",
           "label": "Move To Pre-drop Z",
           "stat": {
-            "cycles_with": 259,
+            "cycles_with": 260,
             "mean_ms": 1288.6,
             "median_ms": 1294.0,
             "p10_ms": 1283.0,
@@ -6051,8 +6051,8 @@
           "key": "drop_z",
           "label": "Move To Drop Z",
           "stat": {
-            "cycles_with": 259,
-            "mean_ms": 832.5,
+            "cycles_with": 260,
+            "mean_ms": 832.7,
             "median_ms": 879.0,
             "p10_ms": 664.0,
             "p25_ms": 765.0,
@@ -6064,8 +6064,8 @@
           "key": "fine_z_adjust",
           "label": "Fine Z Adjust",
           "stat": {
-            "cycles_with": 259,
-            "mean_ms": 319.6,
+            "cycles_with": 260,
+            "mean_ms": 319.7,
             "median_ms": 353.0,
             "p10_ms": 205.0,
             "p25_ms": 287.0,
@@ -6077,7 +6077,7 @@
           "key": "hold_on_substrate_contact",
           "label": "Hold on Substrate Contact",
           "stat": {
-            "cycles_with": 259,
+            "cycles_with": 260,
             "mean_ms": 12.3,
             "median_ms": 12.0,
             "p10_ms": 11.0,
@@ -6090,8 +6090,8 @@
           "key": "fine_lift",
           "label": "Fine Lift",
           "stat": {
-            "cycles_with": 259,
-            "mean_ms": 6405.0,
+            "cycles_with": 260,
+            "mean_ms": 6404.9,
             "median_ms": 6361.0,
             "p10_ms": 6346.0,
             "p25_ms": 6351.0,
@@ -6103,7 +6103,7 @@
           "key": "hold",
           "label": "Hold",
           "stat": {
-            "cycles_with": 259,
+            "cycles_with": 260,
             "mean_ms": 500.6,
             "median_ms": 502.0,
             "p10_ms": 502.0,
@@ -6116,7 +6116,7 @@
           "key": "blower_on",
           "label": "Dropoff Blower ON",
           "stat": {
-            "cycles_with": 259,
+            "cycles_with": 260,
             "mean_ms": 2.6,
             "median_ms": 2.0,
             "p10_ms": 2.0,
@@ -6130,7 +6130,7 @@
           "label": "Dropoff Blower Dwell",
           "stat": {
             "cycles_with": 245,
-            "mean_ms": 1133.4,
+            "mean_ms": 1129.1,
             "median_ms": 1202.0,
             "p10_ms": 1201.0,
             "p25_ms": 1202.0,
@@ -6142,7 +6142,7 @@
           "key": "coarse_lift",
           "label": "Coarse Lift",
           "stat": {
-            "cycles_with": 259,
+            "cycles_with": 260,
             "mean_ms": 2454.8,
             "median_ms": 2463.0,
             "p10_ms": 2454.0,
@@ -6156,7 +6156,7 @@
           "label": "Dropoff Blower OFF",
           "stat": {
             "cycles_with": 245,
-            "mean_ms": 3.5,
+            "mean_ms": 3.4,
             "median_ms": 3.0,
             "p10_ms": 2.0,
             "p25_ms": 2.0,
@@ -6168,7 +6168,7 @@
           "key": "retract_to_safety_plane",
           "label": "Retract To Safety Plane",
           "stat": {
-            "cycles_with": 259,
+            "cycles_with": 260,
             "mean_ms": 1147.3,
             "median_ms": 1152.0,
             "p10_ms": 1141.0,
@@ -6181,9 +6181,9 @@
           "key": "between_steps",
           "label": "Between steps",
           "stat": {
-            "cycles_with": 245,
-            "mean_ms": 20.3,
-            "median_ms": 20.0,
+            "cycles_with": 246,
+            "mean_ms": 20.2,
+            "median_ms": 19.0,
             "p10_ms": 5.0,
             "p25_ms": 12.0,
             "p75_ms": 28.0,
@@ -6196,8 +6196,8 @@
           "key": "sectioning",
           "label": "Sectioning",
           "stat": {
-            "cycles_with": 12,
-            "mean_ms": 1262.9,
+            "cycles_with": 13,
+            "mean_ms": 1342.6,
             "median_ms": 0.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
@@ -6209,8 +6209,8 @@
           "key": "pickup",
           "label": "Pickup",
           "stat": {
-            "cycles_with": 260,
-            "mean_ms": 15679.3,
+            "cycles_with": 261,
+            "mean_ms": 15673.4,
             "median_ms": 13414.0,
             "p10_ms": 6363.0,
             "p25_ms": 8232.0,
@@ -6222,8 +6222,8 @@
           "key": "dropoff",
           "label": "Dropoff",
           "stat": {
-            "cycles_with": 259,
-            "mean_ms": 19512.1,
+            "cycles_with": 260,
+            "mean_ms": 19511.3,
             "median_ms": 20171.0,
             "p10_ms": 17054.0,
             "p25_ms": 18132.0,
@@ -6235,26 +6235,26 @@
           "key": "transit",
           "label": "Transit",
           "stat": {
-            "cycles_with": 260,
-            "mean_ms": 5502.3,
+            "cycles_with": 261,
+            "mean_ms": 5514.4,
             "median_ms": 4963.0,
             "p10_ms": 3152.0,
             "p25_ms": 4905.0,
-            "p75_ms": 5699.0,
-            "p90_ms": 8537.0
+            "p75_ms": 5714.0,
+            "p90_ms": 8587.0
           }
         },
         {
           "key": "in_between",
           "label": "In-between times",
           "stat": {
-            "cycles_with": 260,
-            "mean_ms": 5786.6,
+            "cycles_with": 261,
+            "mean_ms": 5798.6,
             "median_ms": 415.0,
             "p10_ms": 299.0,
             "p25_ms": 334.0,
-            "p75_ms": 2267.0,
-            "p90_ms": 8178.0
+            "p75_ms": 2438.0,
+            "p90_ms": 8287.0
           }
         }
       ],
@@ -6264,13 +6264,13 @@
           "group": "dropoff",
           "key": "dropoff_steps",
           "label": "Dropoff steps",
-          "share": 0.29575,
+          "share": 0.29506,
           "stat": {
-            "cycles_with": 259,
-            "mean_ms": 14119.9,
+            "cycles_with": 260,
+            "mean_ms": 14115.6,
             "median_ms": 14245.0,
-            "p10_ms": 13993.0,
-            "p25_ms": 14205.0,
+            "p10_ms": 13992.0,
+            "p25_ms": 14200.0,
             "p75_ms": 14273.0,
             "p90_ms": 14329.0
           }
@@ -6280,10 +6280,10 @@
           "group": "pickup",
           "key": "section_search",
           "label": "Section Search",
-          "share": 0.19308,
+          "share": 0.19255,
           "stat": {
-            "cycles_with": 260,
-            "mean_ms": 9218.2,
+            "cycles_with": 261,
+            "mean_ms": 9211.8,
             "median_ms": 6898.0,
             "p10_ms": 1705.0,
             "p25_ms": 1912.0,
@@ -6296,10 +6296,10 @@
           "group": "dropoff",
           "key": "post_dropoff",
           "label": "Post-dropoff moves and tap",
-          "share": 0.11127,
+          "share": 0.11112,
           "stat": {
-            "cycles_with": 259,
-            "mean_ms": 5312.4,
+            "cycles_with": 260,
+            "mean_ms": 5316.0,
             "median_ms": 5915.0,
             "p10_ms": 3219.0,
             "p25_ms": 3894.0,
@@ -6312,15 +6312,15 @@
           "group": "transit",
           "key": "to_dropoff_window",
           "label": "To the dropoff window",
-          "share": 0.06378,
+          "share": 0.06366,
           "stat": {
-            "cycles_with": 259,
-            "mean_ms": 3045.2,
+            "cycles_with": 260,
+            "mean_ms": 3045.7,
             "median_ms": 3040.0,
             "p10_ms": 3004.0,
             "p25_ms": 3019.0,
             "p75_ms": 3081.0,
-            "p90_ms": 3135.0
+            "p90_ms": 3138.0
           }
         },
         {
@@ -6328,11 +6328,11 @@
           "group": "pickup",
           "key": "pickup_drag_lift",
           "label": "Pickup: boat drag and lift",
-          "share": 0.06258,
+          "share": 0.06245,
           "stat": {
-            "cycles_with": 260,
-            "mean_ms": 2988.0,
-            "median_ms": 3014.0,
+            "cycles_with": 261,
+            "mean_ms": 2987.8,
+            "median_ms": 3013.0,
             "p10_ms": 2745.0,
             "p25_ms": 2882.0,
             "p75_ms": 3072.0,
@@ -6344,9 +6344,9 @@
           "group": "pickup",
           "key": "section_tracking",
           "label": "Section Tracking",
-          "share": 0.04585,
+          "share": 0.04576,
           "stat": {
-            "cycles_with": 260,
+            "cycles_with": 261,
             "mean_ms": 2189.3,
             "median_ms": 2112.0,
             "p10_ms": 129.0,
@@ -6360,13 +6360,13 @@
           "group": "transit",
           "key": "back_to_boat",
           "label": "Back to the boat",
-          "share": 0.03168,
+          "share": 0.03163,
           "stat": {
-            "cycles_with": 205,
-            "mean_ms": 1512.6,
+            "cycles_with": 206,
+            "mean_ms": 1513.4,
             "median_ms": 1889.0,
             "p10_ms": 0.0,
-            "p25_ms": 1735.0,
+            "p25_ms": 1730.0,
             "p75_ms": 1923.0,
             "p90_ms": 1978.0
           }
@@ -6376,15 +6376,15 @@
           "group": "pickup",
           "key": "pickup_descent",
           "label": "Pickup: live descent",
-          "share": 0.02601,
+          "share": 0.02597,
           "stat": {
-            "cycles_with": 259,
-            "mean_ms": 1241.7,
+            "cycles_with": 260,
+            "mean_ms": 1242.4,
             "median_ms": 1157.0,
             "p10_ms": 1125.0,
             "p25_ms": 1136.0,
             "p75_ms": 1365.0,
-            "p90_ms": 1403.0
+            "p90_ms": 1404.0
           }
         },
         {
@@ -6392,10 +6392,10 @@
           "group": "sectioning",
           "key": "sectioning_cut",
           "label": "Sectioning (UC7 cut)",
-          "share": 0.02362,
+          "share": 0.02421,
           "stat": {
-            "cycles_with": 11,
-            "mean_ms": 1127.7,
+            "cycles_with": 12,
+            "mean_ms": 1158.4,
             "median_ms": 0.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
@@ -6408,10 +6408,10 @@
           "group": "transit",
           "key": "back_from_window",
           "label": "Back from the window",
-          "share": 0.01772,
+          "share": 0.01762,
           "stat": {
             "cycles_with": 58,
-            "mean_ms": 846.1,
+            "mean_ms": 842.9,
             "median_ms": 0.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
@@ -6424,10 +6424,10 @@
           "group": "sectioning",
           "key": "section_separation",
           "label": "Section-Knife Separation",
-          "share": 0.00283,
+          "share": 0.00385,
           "stat": {
-            "cycles_with": 12,
-            "mean_ms": 135.2,
+            "cycles_with": 13,
+            "mean_ms": 184.2,
             "median_ms": 0.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
@@ -6440,10 +6440,10 @@
           "group": "transit",
           "key": "to_staging_sectioning",
           "label": "To staging (sectioning)",
-          "share": 0.00206,
+          "share": 0.00235,
           "stat": {
-            "cycles_with": 8,
-            "mean_ms": 98.4,
+            "cycles_with": 9,
+            "mean_ms": 112.5,
             "median_ms": 0.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
@@ -6458,8 +6458,8 @@
           "label": "Dropoff (between stages)",
           "share": 0.00131,
           "stat": {
-            "cycles_with": 255,
-            "mean_ms": 62.7,
+            "cycles_with": 256,
+            "mean_ms": 62.6,
             "median_ms": 30.0,
             "p10_ms": 23.0,
             "p25_ms": 26.0,
@@ -6475,7 +6475,7 @@
           "share": 0.00088,
           "stat": {
             "cycles_with": 9,
-            "mean_ms": 42.1,
+            "mean_ms": 42.0,
             "median_ms": 0.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
@@ -6491,7 +6491,7 @@
           "share": 0.00036,
           "stat": {
             "cycles_with": 1,
-            "mean_ms": 17.1,
+            "mean_ms": 17.0,
             "median_ms": 0.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
@@ -6507,13 +6507,13 @@
         "p90_ms": 4842.0
       },
       "total": {
-        "cycles_with": 260,
-        "mean_ms": 47743.2,
+        "cycles_with": 261,
+        "mean_ms": 47840.3,
         "median_ms": 39664.0,
         "p10_ms": 32093.0,
         "p25_ms": 34576.0,
-        "p75_ms": 47951.0,
-        "p90_ms": 59744.0
+        "p75_ms": 48384.0,
+        "p90_ms": 59937.0
       },
       "waits": [
         {
@@ -6521,10 +6521,10 @@
           "group": "in_between",
           "key": "recovery",
           "label": "Recovery",
-          "share": 0.06327,
+          "share": 0.0629,
           "stat": {
             "cycles_with": 29,
-            "mean_ms": 3020.6,
+            "mean_ms": 3009.0,
             "median_ms": 0.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
@@ -6537,10 +6537,10 @@
           "group": "in_between",
           "key": "parked_for_sectioning",
           "label": "Parked: waiting for sectioning",
-          "share": 0.03232,
+          "share": 0.03213,
           "stat": {
             "cycles_with": 54,
-            "mean_ms": 1543.2,
+            "mean_ms": 1537.3,
             "median_ms": 0.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
@@ -6553,10 +6553,10 @@
           "group": "in_between",
           "key": "paused",
           "label": "Paused",
-          "share": 0.00732,
+          "share": 0.00727,
           "stat": {
             "cycles_with": 1,
-            "mean_ms": 349.4,
+            "mean_ms": 348.0,
             "median_ms": 0.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
@@ -6569,14 +6569,14 @@
           "group": "in_between",
           "key": "stage_stop_handoff",
           "label": "Stage-stop handoff",
-          "share": 0.00623,
+          "share": 0.00622,
           "stat": {
-            "cycles_with": 260,
-            "mean_ms": 297.2,
+            "cycles_with": 261,
+            "mean_ms": 297.3,
             "median_ms": 290.0,
             "p10_ms": 228.0,
             "p25_ms": 252.0,
-            "p75_ms": 327.0,
+            "p75_ms": 329.0,
             "p90_ms": 370.0
           }
         },
@@ -6585,10 +6585,10 @@
           "group": "in_between",
           "key": "wiper_sweep",
           "label": "Wiper sweep",
-          "share": 0.00437,
+          "share": 0.00471,
           "stat": {
-            "cycles_with": 11,
-            "mean_ms": 208.5,
+            "cycles_with": 12,
+            "mean_ms": 225.1,
             "median_ms": 0.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
@@ -6601,10 +6601,10 @@
           "group": "in_between",
           "key": "water_level_before_cutting",
           "label": "Water level before cutting",
-          "share": 0.00281,
+          "share": 0.00312,
           "stat": {
-            "cycles_with": 12,
-            "mean_ms": 134.3,
+            "cycles_with": 13,
+            "mean_ms": 149.0,
             "median_ms": 0.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
@@ -6617,10 +6617,10 @@
           "group": "in_between",
           "key": "paused",
           "label": "Paused",
-          "share": 0.00176,
+          "share": 0.00175,
           "stat": {
             "cycles_with": 2,
-            "mean_ms": 83.8,
+            "mean_ms": 83.5,
             "median_ms": 0.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
@@ -6633,10 +6633,10 @@
           "group": "in_between",
           "key": "phase_start_queued",
           "label": "Phase start (queued)",
-          "share": 0.00123,
+          "share": 0.00122,
           "stat": {
-            "cycles_with": 205,
-            "mean_ms": 58.6,
+            "cycles_with": 206,
+            "mean_ms": 58.5,
             "median_ms": 53.0,
             "p10_ms": 0.0,
             "p25_ms": 23.0,
@@ -6652,7 +6652,7 @@
           "share": 0.00083,
           "stat": {
             "cycles_with": 1,
-            "mean_ms": 39.7,
+            "mean_ms": 39.5,
             "median_ms": 0.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
@@ -6665,10 +6665,10 @@
           "group": "in_between",
           "key": "startup_web_preflight",
           "label": "Startup web preflight",
-          "share": 0.00072,
+          "share": 0.00071,
           "stat": {
             "cycles_with": 2,
-            "mean_ms": 34.3,
+            "mean_ms": 34.2,
             "median_ms": 0.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
@@ -6684,7 +6684,7 @@
           "share": 0.00029,
           "stat": {
             "cycles_with": 92,
-            "mean_ms": 13.7,
+            "mean_ms": 13.6,
             "median_ms": 0.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
@@ -6699,8 +6699,8 @@
           "label": "Phase start (queued)",
           "share": 7e-05,
           "stat": {
-            "cycles_with": 12,
-            "mean_ms": 3.3,
+            "cycles_with": 13,
+            "mean_ms": 3.4,
             "median_ms": 0.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
@@ -6716,6 +6716,6 @@
       }
     }
   ],
-  "generated_at": "2026-10-21T14:36:30Z",
+  "generated_at": "2026-10-21T14:36:53Z",
   "schema_version": 1
 }
