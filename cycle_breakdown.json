@@ -7479,13 +7479,13 @@
           "key": "sectioning",
           "label": "Sectioning",
           "stat": {
-            "cycles_with": 3,
-            "mean_ms": 9998.0,
-            "median_ms": 10528.0,
+            "cycles_with": 4,
+            "mean_ms": 11124.5,
+            "median_ms": 13053.0,
             "p10_ms": 6413.0,
-            "p25_ms": 6413.0,
+            "p25_ms": 10528.0,
             "p75_ms": 13053.0,
-            "p90_ms": 13053.0
+            "p90_ms": 14504.0
           }
         },
         {
@@ -7515,7 +7515,7 @@
           }
         }
       ],
-      "completed": 3,
+      "completed": 4,
       "date": "2026-10-23",
       "dropoff_steps": [],
       "groups": [
@@ -7523,12 +7523,12 @@
           "key": "sectioning",
           "label": "Sectioning",
           "stat": {
-            "cycles_with": 3,
-            "mean_ms": 6119.0,
-            "median_ms": 5729.0,
+            "cycles_with": 4,
+            "mean_ms": 6937.0,
+            "median_ms": 9391.0,
             "p10_ms": 314.0,
-            "p25_ms": 314.0,
-            "p75_ms": 12314.0,
+            "p25_ms": 5729.0,
+            "p75_ms": 9391.0,
             "p90_ms": 12314.0
           }
         },
@@ -7563,11 +7563,11 @@
           "label": "Transit",
           "stat": {
             "cycles_with": 1,
-            "mean_ms": 1756.3,
+            "mean_ms": 1317.2,
             "median_ms": 0.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
-            "p75_ms": 5269.0,
+            "p75_ms": 0.0,
             "p90_ms": 5269.0
           }
         },
@@ -7575,13 +7575,13 @@
           "key": "in_between",
           "label": "In-between times",
           "stat": {
-            "cycles_with": 3,
-            "mean_ms": 2122.7,
-            "median_ms": 830.0,
+            "cycles_with": 4,
+            "mean_ms": 2870.2,
+            "median_ms": 4799.0,
             "p10_ms": 739.0,
-            "p25_ms": 739.0,
+            "p25_ms": 830.0,
             "p75_ms": 4799.0,
-            "p90_ms": 4799.0
+            "p90_ms": 5113.0
           }
         }
       ],
@@ -7591,14 +7591,14 @@
           "group": "sectioning",
           "key": "sectioning_cut",
           "label": "Sectioning (UC7 cut)",
-          "share": 0.61202,
+          "share": 0.55726,
           "stat": {
-            "cycles_with": 3,
-            "mean_ms": 6119.0,
-            "median_ms": 5729.0,
+            "cycles_with": 4,
+            "mean_ms": 6199.2,
+            "median_ms": 6440.0,
             "p10_ms": 314.0,
-            "p25_ms": 314.0,
-            "p75_ms": 12314.0,
+            "p25_ms": 5729.0,
+            "p75_ms": 6440.0,
             "p90_ms": 12314.0
           }
         },
@@ -7607,28 +7607,44 @@
           "group": "transit",
           "key": "to_staging_sectioning",
           "label": "To staging (sectioning)",
-          "share": 0.17567,
+          "share": 0.11841,
           "stat": {
             "cycles_with": 1,
-            "mean_ms": 1756.3,
+            "mean_ms": 1317.2,
             "median_ms": 0.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
-            "p75_ms": 5269.0,
+            "p75_ms": 0.0,
             "p90_ms": 5269.0
+          }
+        },
+        {
+          "bucket": "sectioning",
+          "group": "sectioning",
+          "key": "section_separation",
+          "label": "Section-Knife Separation",
+          "share": 0.06632,
+          "stat": {
+            "cycles_with": 1,
+            "mean_ms": 737.8,
+            "median_ms": 0.0,
+            "p10_ms": 0.0,
+            "p25_ms": 0.0,
+            "p75_ms": 0.0,
+            "p90_ms": 2951.0
           }
         }
       ],
       "other_outcomes": 4,
       "sectioning_slack": null,
       "total": {
-        "cycles_with": 3,
-        "mean_ms": 9998.0,
-        "median_ms": 10528.0,
+        "cycles_with": 4,
+        "mean_ms": 11124.5,
+        "median_ms": 13053.0,
         "p10_ms": 6413.0,
-        "p25_ms": 6413.0,
+        "p25_ms": 10528.0,
         "p75_ms": 13053.0,
-        "p90_ms": 13053.0
+        "p90_ms": 14504.0
       },
       "waits": [
         {
@@ -7636,15 +7652,15 @@
           "group": "in_between",
           "key": "wiper_sweep",
           "label": "Wiper sweep",
-          "share": 0.13879,
+          "share": 0.19439,
           "stat": {
-            "cycles_with": 1,
-            "mean_ms": 1387.7,
-            "median_ms": 0.0,
+            "cycles_with": 2,
+            "mean_ms": 2162.5,
+            "median_ms": 4163.0,
             "p10_ms": 0.0,
             "p25_ms": 0.0,
             "p75_ms": 4163.0,
-            "p90_ms": 4163.0
+            "p90_ms": 4487.0
           }
         },
         {
@@ -7652,14 +7668,14 @@
           "group": "in_between",
           "key": "water_level_before_cutting",
           "label": "Water level before cutting",
-          "share": 0.04981,
+          "share": 0.0445,
           "stat": {
-            "cycles_with": 3,
-            "mean_ms": 498.0,
+            "cycles_with": 4,
+            "mean_ms": 495.0,
             "median_ms": 507.0,
             "p10_ms": 456.0,
-            "p25_ms": 456.0,
-            "p75_ms": 531.0,
+            "p25_ms": 486.0,
+            "p75_ms": 507.0,
             "p90_ms": 531.0
           }
         },
@@ -7668,14 +7684,14 @@
           "group": "in_between",
           "key": "phase_start_queued",
           "label": "Phase start (queued)",
-          "share": 0.0237,
+          "share": 0.01912,
           "stat": {
-            "cycles_with": 3,
-            "mean_ms": 237.0,
+            "cycles_with": 4,
+            "mean_ms": 212.8,
             "median_ms": 232.0,
             "p10_ms": 105.0,
-            "p25_ms": 105.0,
-            "p75_ms": 374.0,
+            "p25_ms": 140.0,
+            "p75_ms": 232.0,
             "p90_ms": 374.0
           }
         }
@@ -7683,6 +7699,6 @@
       "web_slack": null
     }
   ],
-  "generated_at": "2026-10-23T11:37:08Z",
+  "generated_at": "2026-10-23T11:37:32Z",
   "schema_version": 1
 }
