@@ -1,25 +1,25 @@
 {
   "accepted_cut_gap_count": 8499,
-  "cut_count": 14940,
+  "cut_count": 15016,
   "ns_command_relationship": {
     "command_measurement": "request/enqueued estimate = signed raw UC7 step command x scale divisor; not hardware completion",
     "counts": {
-      "all_cuts": 14940,
+      "all_cuts": 15016,
       "displayed_point_cuts": 0,
-      "eligible_cuts": 4853,
+      "eligible_cuts": 4929,
       "excluded_cuts": 10087,
-      "explicit_command_cuts": 1201,
+      "explicit_command_cuts": 1277,
       "incomplete_attribution_cuts": 721,
       "legacy_attribution_cuts": 9362,
       "missing_interval_cuts": 0,
       "missing_thickness_cuts": 0,
       "net_zero_command_cuts": 3,
       "no_command_cuts": 3652,
-      "nonzero_command_cuts": 1198,
+      "nonzero_command_cuts": 1274,
       "other_quantified_command_cuts": 0,
       "run_count": 507,
-      "unique_command_level_count": 90,
-      "unique_interval_level_count": 4853,
+      "unique_command_level_count": 102,
+      "unique_interval_level_count": 4929,
       "unique_thickness_level_count": 14,
       "unknown_outcome_cuts": 0,
       "unquantified_command_cuts": 4
@@ -141,8 +141,8 @@
         "thickness_nm": 50
       },
       {
-        "all_cuts": 1987,
-        "eligible_cuts": 552,
+        "all_cuts": 2063,
+        "eligible_cuts": 628,
         "estimated_command_levels_nm": [
           -36600,
           -5000,
@@ -168,12 +168,24 @@
           1400,
           12700,
           53100,
+          53700,
+          53900,
+          54100,
+          54500,
+          54900,
+          55500,
+          55900,
+          56300,
+          56900,
+          57300,
+          57700,
+          58300,
           61000
         ],
-        "explicit_command_cuts": 296,
+        "explicit_command_cuts": 372,
         "net_zero_command_cuts": 0,
         "no_command_cuts": 256,
-        "nonzero_command_cuts": 296,
+        "nonzero_command_cuts": 372,
         "thickness_nm": 60
       },
       {
@@ -548,8 +560,20 @@
         45500,
         51500,
         53100,
+        53700,
+        53900,
+        54100,
+        54500,
+        54900,
         55000,
+        55500,
+        55900,
+        56300,
+        56900,
+        57300,
+        57700,
         58000,
+        58300,
         60500,
         61000,
         137400,
@@ -575,28 +599,23 @@
       ]
     },
     "observed_delta_diagnostic": {
-      "available_cuts": 13746,
+      "available_cuts": 13822,
       "max_raw": 178890.0,
       "measurement": "observed UC7 coordinate delta; diagnostic only; not a command",
       "median_raw": 0.0,
       "min_raw": -18924.0,
-      "nonzero_cuts": 1506,
+      "nonzero_cuts": 1582,
       "nonzero_unknown_attribution_cuts": 299,
       "nonzero_without_explicit_command_cuts": 19,
       "outlier_assessment_available": true,
-      "outlier_count": 274,
+      "outlier_count": 212,
       "outlier_rule": "absolute nonzero delta above Q3 + 1.5 IQR; never excluded",
-      "outlier_threshold_abs_raw": 90.0,
+      "outlier_threshold_abs_raw": 187.5,
       "outliers": [
         {
           "cut_id": 57,
           "observed_delta_raw_nm": 178890.0,
           "run_id": "run_20260515_045828_3b58e8d3"
-        },
-        {
-          "cut_id": 32,
-          "observed_delta_raw_nm": -123.0,
-          "run_id": "run_20260519_142639_d29ddd06"
         },
         {
           "cut_id": 34,
@@ -999,251 +1018,6 @@
           "run_id": "run_20260714_184500_33a7fece"
         },
         {
-          "cut_id": 21,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 22,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 23,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 24,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 25,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 26,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 27,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 28,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 29,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 30,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 31,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 32,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 33,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 34,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 35,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 36,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 37,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 38,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 39,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 40,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 41,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 42,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 43,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 44,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 45,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 46,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 47,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 48,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 49,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 50,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 51,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 52,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 53,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 54,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 55,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 56,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 57,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 58,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 59,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 60,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 61,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 62,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 63,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 64,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 65,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 66,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 67,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 68,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
-          "cut_id": 69,
-          "observed_delta_raw_nm": 110.0,
-          "run_id": "run_20260803_211442_33d3994f"
-        },
-        {
           "cut_id": 54,
           "observed_delta_raw_nm": -1809.0,
           "run_id": "run_20260804_174535_9420d83a"
@@ -1274,51 +1048,6 @@
           "run_id": "run_20260927_014218_199a96b7"
         },
         {
-          "cut_id": 14,
-          "observed_delta_raw_nm": 112.0,
-          "run_id": "run_20261003_223013_f88e3f7c"
-        },
-        {
-          "cut_id": 15,
-          "observed_delta_raw_nm": 112.0,
-          "run_id": "run_20261003_223013_f88e3f7c"
-        },
-        {
-          "cut_id": 16,
-          "observed_delta_raw_nm": 112.0,
-          "run_id": "run_20261003_223013_f88e3f7c"
-        },
-        {
-          "cut_id": 17,
-          "observed_delta_raw_nm": 112.0,
-          "run_id": "run_20261003_223013_f88e3f7c"
-        },
-        {
-          "cut_id": 18,
-          "observed_delta_raw_nm": 112.0,
-          "run_id": "run_20261003_223013_f88e3f7c"
-        },
-        {
-          "cut_id": 19,
-          "observed_delta_raw_nm": 112.0,
-          "run_id": "run_20261003_223013_f88e3f7c"
-        },
-        {
-          "cut_id": 20,
-          "observed_delta_raw_nm": 112.0,
-          "run_id": "run_20261003_223013_f88e3f7c"
-        },
-        {
-          "cut_id": 37,
-          "observed_delta_raw_nm": 162.0,
-          "run_id": "run_20261004_030632_62a2620f"
-        },
-        {
-          "cut_id": 38,
-          "observed_delta_raw_nm": 162.0,
-          "run_id": "run_20261004_030632_62a2620f"
-        },
-        {
           "cut_id": 76,
           "observed_delta_raw_nm": 1474.0,
           "run_id": "run_20261005_132530_4b37131b"
@@ -1332,51 +1061,6 @@
           "cut_id": 78,
           "observed_delta_raw_nm": 1497.0,
           "run_id": "run_20261005_132530_4b37131b"
-        },
-        {
-          "cut_id": 9,
-          "observed_delta_raw_nm": 132.0,
-          "run_id": "run_20261006_094331_d9a96b8d"
-        },
-        {
-          "cut_id": 10,
-          "observed_delta_raw_nm": 132.0,
-          "run_id": "run_20261006_094331_d9a96b8d"
-        },
-        {
-          "cut_id": 11,
-          "observed_delta_raw_nm": 132.0,
-          "run_id": "run_20261006_094331_d9a96b8d"
-        },
-        {
-          "cut_id": 12,
-          "observed_delta_raw_nm": 132.0,
-          "run_id": "run_20261006_094331_d9a96b8d"
-        },
-        {
-          "cut_id": 13,
-          "observed_delta_raw_nm": 132.0,
-          "run_id": "run_20261006_094331_d9a96b8d"
-        },
-        {
-          "cut_id": 14,
-          "observed_delta_raw_nm": 132.0,
-          "run_id": "run_20261006_094331_d9a96b8d"
-        },
-        {
-          "cut_id": 15,
-          "observed_delta_raw_nm": 132.0,
-          "run_id": "run_20261006_094331_d9a96b8d"
-        },
-        {
-          "cut_id": 16,
-          "observed_delta_raw_nm": 132.0,
-          "run_id": "run_20261006_094331_d9a96b8d"
-        },
-        {
-          "cut_id": 17,
-          "observed_delta_raw_nm": 132.0,
-          "run_id": "run_20261006_094331_d9a96b8d"
         },
         {
           "cut_id": 49,
@@ -1559,336 +1243,6 @@
           "run_id": "run_20261009_152128_ce494939"
         },
         {
-          "cut_id": 135,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 136,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 137,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 138,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 139,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 140,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 141,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 142,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 143,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 144,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 145,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 146,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 147,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 148,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 149,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 150,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 151,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 152,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 153,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 154,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 155,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 156,
-          "observed_delta_raw_nm": 187.0,
-          "run_id": "run_20261114_061424_bd9e4805"
-        },
-        {
-          "cut_id": 80,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 81,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 82,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 83,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 84,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 85,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 86,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 87,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 88,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 89,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 90,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 91,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 92,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 93,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 94,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 95,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 96,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 97,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 98,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 99,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 100,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 101,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 102,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 103,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 104,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 105,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 106,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 107,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 108,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 109,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 110,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 111,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 112,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 113,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 114,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 115,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 116,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 117,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 118,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 119,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 120,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 121,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 122,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
-          "cut_id": 123,
-          "observed_delta_raw_nm": -112.0,
-          "run_id": "run_20261114_084401_8940fe07"
-        },
-        {
           "cut_id": 371,
           "observed_delta_raw_nm": -240.0,
           "run_id": "run_20261114_122700_a1956dc4"
@@ -1934,28 +1288,388 @@
           "run_id": "run_20261114_122700_a1956dc4"
         },
         {
-          "cut_id": 380,
-          "observed_delta_raw_nm": -180.0,
-          "run_id": "run_20261114_122700_a1956dc4"
-        },
-        {
-          "cut_id": 381,
-          "observed_delta_raw_nm": -170.0,
-          "run_id": "run_20261114_122700_a1956dc4"
-        },
-        {
-          "cut_id": 382,
-          "observed_delta_raw_nm": -150.0,
-          "run_id": "run_20261114_122700_a1956dc4"
-        },
-        {
-          "cut_id": 383,
-          "observed_delta_raw_nm": -130.0,
-          "run_id": "run_20261114_122700_a1956dc4"
-        },
-        {
           "cut_id": 192,
           "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 193,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 194,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 195,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 196,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 197,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 198,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 199,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 200,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 201,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 202,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 203,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 204,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 205,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 206,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 207,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 208,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 209,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 210,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 211,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 212,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 213,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 214,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 215,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 216,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 217,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 218,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 219,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 220,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 221,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 222,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 223,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 224,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 225,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 226,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 227,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 228,
+          "observed_delta_raw_nm": 344.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 229,
+          "observed_delta_raw_nm": 346.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 230,
+          "observed_delta_raw_nm": 346.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 231,
+          "observed_delta_raw_nm": 346.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 232,
+          "observed_delta_raw_nm": 346.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 233,
+          "observed_delta_raw_nm": 346.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 234,
+          "observed_delta_raw_nm": 346.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 235,
+          "observed_delta_raw_nm": 346.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 236,
+          "observed_delta_raw_nm": 346.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 237,
+          "observed_delta_raw_nm": 346.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 238,
+          "observed_delta_raw_nm": 346.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 239,
+          "observed_delta_raw_nm": 346.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 240,
+          "observed_delta_raw_nm": 346.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 241,
+          "observed_delta_raw_nm": 346.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 242,
+          "observed_delta_raw_nm": 350.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 243,
+          "observed_delta_raw_nm": 350.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 244,
+          "observed_delta_raw_nm": 350.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 245,
+          "observed_delta_raw_nm": 350.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 246,
+          "observed_delta_raw_nm": 350.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 247,
+          "observed_delta_raw_nm": 350.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 248,
+          "observed_delta_raw_nm": 350.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 249,
+          "observed_delta_raw_nm": 350.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 250,
+          "observed_delta_raw_nm": 350.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 251,
+          "observed_delta_raw_nm": 350.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 252,
+          "observed_delta_raw_nm": 352.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 253,
+          "observed_delta_raw_nm": 354.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 254,
+          "observed_delta_raw_nm": 354.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 255,
+          "observed_delta_raw_nm": 354.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 256,
+          "observed_delta_raw_nm": 354.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 257,
+          "observed_delta_raw_nm": 354.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 258,
+          "observed_delta_raw_nm": 356.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 259,
+          "observed_delta_raw_nm": 356.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 260,
+          "observed_delta_raw_nm": 360.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 261,
+          "observed_delta_raw_nm": 360.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 262,
+          "observed_delta_raw_nm": 360.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 263,
+          "observed_delta_raw_nm": 360.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 264,
+          "observed_delta_raw_nm": 360.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 265,
+          "observed_delta_raw_nm": 360.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 266,
+          "observed_delta_raw_nm": 360.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 267,
+          "observed_delta_raw_nm": 360.0,
+          "run_id": "run_20261117_175330_b8a10527"
+        },
+        {
+          "cut_id": 268,
+          "observed_delta_raw_nm": 360.0,
           "run_id": "run_20261117_175330_b8a10527"
         }
       ],
@@ -2153,22 +1867,22 @@
     {
       "accepted": 1120,
       "accepted_cut_gap_count": 967,
-      "accepted_rate_pct": 56.366381479617516,
+      "accepted_rate_pct": 54.28986912263694,
       "complete": 1079,
-      "complete_rate_pct": 54.30296930045294,
-      "cuts": 1987,
+      "complete_rate_pct": 52.302472127968976,
+      "cuts": 2063,
       "median_accepted_cut_gap_sec": 16.702362024,
       "median_attach_time_sec": 0.0,
-      "median_cut_gap_sec": 32.852049617999995,
+      "median_cut_gap_sec": 31.360997638,
       "median_detector_confidence": 0.0,
       "median_ns_accepted_delta_nm": 0.0,
       "median_separation_time_sec": 2.875711,
-      "missed": 867,
-      "missed_no_section": 867,
-      "missed_rate_pct": 43.633618520382484,
+      "missed": 943,
+      "missed_no_section": 943,
+      "missed_rate_pct": 45.71013087736306,
       "outcome_counts": {
         "manual_override": 2,
-        "missed_no_section": 852,
+        "missed_no_section": 928,
         "partial_section": 41,
         "preempted": 7,
         "success": 1079,
@@ -2176,10 +1890,10 @@
         "timeout": 5
       },
       "partial": 41,
-      "partial_rate_pct": 2.06341217916457,
+      "partial_rate_pct": 1.9873969946679593,
       "partial_section": 41,
       "separated": 1120,
-      "separated_rate_pct": 56.366381479617516,
+      "separated_rate_pct": 54.28986912263694,
       "thickness_nm": 60
     },
     {
