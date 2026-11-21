@@ -96,29 +96,30 @@
       }
       .chart-axis {
         display: grid;
-        grid-template-rows: 1fr 1fr 1fr;
-        align-items: start;
+        grid-template-rows: repeat(3, 0);
+        row-gap: 110px;
+        height: 220px;
+        margin-top: 40px;
+        align-self: start;
+        align-items: center;
         justify-items: end;
         color: var(--muted);
         font-size: 12px;
-        padding-top: 22px;
-        padding-bottom: 48px;
       }
-      .chart-axis span:last-child { align-self: end; }
       .chart-plot {
         display: grid;
         grid-auto-flow: column;
         grid-auto-columns: minmax(168px, 1fr);
         gap: 18px;
-        align-items: end;
+        align-items: start;
         overflow-x: auto;
         overflow-y: hidden;
-        min-height: 330px;
-        padding: 22px 6px 0 0;
+        min-height: 350px;
+        padding: 40px 6px 16px 0;
         border-left: 1px solid var(--line);
         border-bottom: 1px solid var(--line);
         background:
-          linear-gradient(to bottom, var(--bar-track) 1px, transparent 1px) 0 22px / 100% 80px repeat-y;
+          linear-gradient(to bottom, var(--bar-track) 1px, transparent 1px) 0 40px / 100% 110px repeat-y;
       }
       .cycle-bar-group {
         display: grid;
