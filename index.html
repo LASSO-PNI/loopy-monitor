@@ -295,6 +295,7 @@
       td { font-size: 13px; white-space: nowrap; }
       tbody tr:hover { background: var(--hover); }
       .table-wrap { overflow-x: auto; }
+      #run-reviews-panel th { white-space: normal; overflow-wrap: anywhere; }
       .timing-table { margin-top: 16px; }
       .timing-table table { min-width: 860px; }
       .site-footer {
@@ -494,6 +495,18 @@
       <section class="panel">
         <h2>Daily Throughput</h2>
         <div id="cycle-chart" class="muted">Loading</div>
+      </section>
+
+      <section class="panel" id="run-reviews-panel" hidden>
+        <h2>Full Auto run reviews</h2>
+        <p class="muted">Runs with more than 25 consecutive Full Auto cycles under the existing dashboard counter. Manual recovery does not reset that counter. Detailed pages require tailnet access.</p>
+        <div class="table-wrap">
+          <table style="table-layout:fixed;min-width:1000px;width:100%">
+            <thead><tr><th>Date</th><th>Start (Eastern)</th><th>End (Eastern)</th><th>Production commit</th><th>Completed cycles</th><th>Longest consecutive</th><th>Manual recoveries</th><th>Top failure mode</th><th>Details</th></tr></thead>
+            <tbody id="run-review-rows"></tbody>
+          </table>
+        </div>
+        <p class="muted">Manual recoveries count recovery windows opened; individual actions and intervention episodes are listed in each detailed page.</p>
       </section>
 
       <section class="panel">
@@ -2145,6 +2158,17 @@
         document.getElementById("day-rows").innerHTML = days.length ? days.map(row).join("") :
           '<tr><td colspan="12" class="muted">No counter history available</td></tr>';
         document.getElementById("cycle-chart").innerHTML = cycleChart(days);
+        var runReviews = payload.run_reviews || [];
+        document.getElementById("run-reviews-panel").hidden = !runReviews.length;
+        document.getElementById("run-review-rows").innerHTML = runReviews.map(function(run) {
+          return '<tr><td>' + esc(run.date) + '</td><td>' + esc(run.start.slice(11, 19)) +
+            '</td><td style="white-space:normal">' + esc(run.end ? run.end.slice(0, 19) : 'Running') +
+            '</td><td><code title="' + esc(run.production_commit) + '">' + esc(run.production_commit.slice(0, 8)) + '</code>' +
+            '</td><td>' + esc(run.cycles) + '</td><td>' + esc(run.longest_consecutive_cycles) +
+            '</td><td>' + esc(run.manual_recoveries) + '</td><td style="white-space:normal">' + esc(run.top_failure_mode) +
+            ' (' + esc(run.top_failure_count) + ')</td><td><a href="' + esc(run.detail_url) +
+            '">View run</a></td></tr>';
+        }).join('');
         document.getElementById("timing-summary").innerHTML = timingLatestCards(timing);
         document.getElementById("timing-chart").innerHTML = timingChart(timing);
         document.getElementById("timing-method").textContent = timing.method || "";
